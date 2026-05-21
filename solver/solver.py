@@ -30,10 +30,18 @@ VERIFIER_REFINE_K = int((HERE / "VERIFIER_REFINE_K").read_text().strip()) if (HE
 
 
 def l1_syntactic(eq1: str, eq2: str) -> str | None:
-    """Layer 1: free. Return Lean proof if Eq1 == Eq2 modulo whitespace."""
+    """Layer 1: free. Identical-equation case (Eq1 ≡ Eq2): the hypothesis IS
+    the goal, so `exact h` closes it. Real upstream judge expects a theorem
+    with the equation as a `Magma` predicate; we emit the canonical shape and
+    let `intros; exact h` discharge it.
+    """
     if eq1.replace(" ", "") == eq2.replace(" ", ""):
-        return ("theorem implication (G : Type*) [Magma G] "
-                "(h : True) : True := trivial")
+        return (
+            "-- L1: Eq1 ≡ Eq2 syntactically; hypothesis is the goal\n"
+            "theorem implication {G : Type*} [Magma G]\n"
+            f"    (h : ∀ x y z w, {eq1}) : ∀ x y z w, {eq2} := by\n"
+            "  intros; exact h _ _ _ _\n"
+        )
     return None
 
 
