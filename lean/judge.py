@@ -76,8 +76,9 @@ def _mock_judge(lean_code: str) -> Verdict:
         return Verdict(status="incomplete_proof")
     if "theorem" not in lean_code and "example" not in lean_code:
         return Verdict(status="malformed")
-    if "rfl" in lean_code or "decide" in lean_code:
-        return Verdict(status="accepted", message="mock accepted on rfl/decide")
+    for tac in ("rfl", "decide", "trivial", "aesop"):
+        if tac in lean_code:
+            return Verdict(status="accepted", message=f"mock accepted on {tac}")
     return Verdict(status="incorrect", message="mock: no obvious tactic")
 
 

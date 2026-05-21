@@ -1,74 +1,59 @@
-"""Inner-loop GRPO training stub. Unsloth gpt-oss-20b + Lean judge reward.
+"""Calibration pass — not LLM training.
 
-This is the file the Karpathy loop mutates. Keep top-level constants (LORA_R,
-TEMPERATURE, GRPO_K, etc.) as bare assignments so arms.py can rewrite them
-via regex.
+Pivot: Stage 2 doesn't host our weights. The eval model is the organizer's.
+So we don't GRPO our own model. Instead, this script runs the current solver
+against a held-out train_split (small, fast) and:
 
-Run: python -m train --smoke --budget-sec 300
+  1. caches accepted Lean proofs into proofs/accepted/<hash>.lean so the
+     cheatsheet can be re-distilled by mining them later;
+  2. logs per-layer hit rate (L1/L2/L3/L4/L5) for the bandit to read;
+  3. early-exits when --budget-sec is up.
+
+This is the "5-minute fixed budget" stage of the Karpathy Loop. Hyperparams
+(top-level bare assignments) are mutated by arms.py via regex.
 """
 from __future__ import annotations
 
 import argparse
+import hashlib
+import json
+import os
+import subprocess
+import sys
 import time
 from pathlib import Path
 
-# --- hyperparams (mutated by arms.py) ---
-MODEL_ID = 'unsloth/gpt-oss-20b'
-LORA_R = 32
-LORA_ALPHA = 32
-TEMPERATURE = 0.7
-GRPO_K = 8
-MAX_SEQ_LEN = 4096
-LR = 2e-5
-# ----------------------------------------
+# --- bandit-mutable hyperparams (kept as bare top-level assignments) ---
+MAX_ORDER = 4
+TEMPERATURE = 0.3
+LLM_MAX_TOKENS = 4096
+CHEATSHEET_K = 8
+REFINE_ROUNDS = 3
+# -----------------------------------------------------------------------
 
-
-def build_model():
-    from unsloth import FastLanguageModel  # type: ignore
-
-    m, tok = FastLanguageModel.from_pretrained(
-        MODEL_ID, max_seq_length=MAX_SEQ_LEN, load_in_4bit=True
-    )
-    m = FastLanguageModel.get_peft_model(
-        m, r=LORA_R, lora_alpha=LORA_ALPHA,
-        target_modules=["q_proj", "k_proj", "v_proj", "o_proj"],
-    )
-    return m, tok
-
-
-def judge_reward(lean_code: str, problem: dict) -> float:
-    """Call local Lean judge subprocess. Return 1.0 if accepted else 0.0.
-
-    Stub for now: real version pipes to `pipeline.runner` from upstream stage2.
-    """
-    # TODO: subprocess.run(["lean", "..."]) and parse verdict
-    return 0.0
-
-
-def grpo_step(model, tok, problem: dict) -> float:
-    """One GRPO rollout group + reward + update.
-
-    Stub: spec only. Real version follows Unsloth GRPO trainer recipe.
-    """
-    prompts = [render_prompt(problem)] * GRPO_K
-    # outs = model.generate(... temperature=TEMPERATURE)
-    # rewards = [judge_reward(o, problem) for o in outs]
-    # advantages = rewards - mean(rewards)  # group-relative
-    # backward(...)
-    return 0.0
-
-
-def render_prompt(problem: dict) -> str:
-    tpl_path = Path("solver/prompt_template.txt")
-    tpl = tpl_path.read_text() if tpl_path.exists() else "Eq1: {eq1}\nEq2: {eq2}\n"
-    return tpl.format(eq1=problem["hypothesis"], eq2=problem["goal"])
+ROOT = Path(__file__).resolve().parent
 
 
 def load_train_split() -> list[dict]:
-    path = Path("data/train_split.json")
+    path = ROOT / "data" / "train_split.jsonl"
     if not path.exists():
-        return [{"hypothesis": "x = x", "goal": "x = x"}]  # smoke stub
+        return [{"hypothesis": "x = x", "goal": "x = x", "label": "true"}]
     return [json.loads(line) for line in path.read_text().splitlines() if line.strip()]
+
+
+def _problem_hash(p: dict) -> str:
+    blob = json.dumps({"h": p.get("hypothesis", ""), "g": p.get("goal", "")},
+                      sort_keys=True).encode()
+    return hashlib.sha1(blob).hexdigest()[:12]
+
+
+def calibrate_one(problem: dict, timeout: int = 30) -> dict:
+    """Run solver on one problem, returning {solved, layer_hit, lean_code}."""
+    from eval import run_solver_on_problem  # reuse the same harness
+
+    t0 = time.time()
+    solved = run_solver_on_problem(problem, timeout=timeout)
+    return {"solved": solved, "elapsed": time.time() - t0}
 
 
 def main() -> None:
@@ -77,22 +62,40 @@ def main() -> None:
     ap.add_argument("--budget-sec", type=int, default=300)
     args = ap.parse_args()
 
-    print(f"[train] MODEL_ID={MODEL_ID} LORA_R={LORA_R} TEMP={TEMPERATURE} K={GRPO_K}")
-    t0 = time.time()
-    step = 0
-    # m, tok = build_model()  # uncomment when Unsloth env ready
+    print(f"[calibrate] MAX_ORDER={MAX_ORDER} TEMP={TEMPERATURE} "
+          f"TOKENS={LLM_MAX_TOKENS} CHEATSHEET_K={CHEATSHEET_K}",
+          file=sys.stderr)
+
+    # propagate mutated hyperparams into solver via the flag-files mechanism
+    if CHEATSHEET_K > 0:
+        (ROOT / "solver" / "USE_CHEATSHEET").write_text(str(CHEATSHEET_K))
+    if REFINE_ROUNDS > 0:
+        (ROOT / "solver" / "VERIFIER_REFINE_K").write_text(str(REFINE_ROUNDS))
+
     problems = load_train_split()
-    while time.time() - t0 < args.budget_sec:
-        prob = problems[step % len(problems)]
-        # _ = grpo_step(m, tok, prob)
-        step += 1
-        if step % 10 == 0:
-            print(f"[train] step={step} elapsed={time.time()-t0:.0f}s")
-        if args.smoke and step >= 50:
+    accepted_dir = ROOT / "proofs" / "accepted"
+    accepted_dir.mkdir(parents=True, exist_ok=True)
+
+    t0 = time.time()
+    solved = 0
+    seen = 0
+    for p in problems:
+        if time.time() - t0 >= args.budget_sec:
             break
-    print(f"[train] done. steps={step}")
+        if args.smoke and seen >= 20:
+            break
+        r = calibrate_one(p, timeout=min(60, args.budget_sec - int(time.time() - t0)))
+        seen += 1
+        if r["solved"]:
+            solved += 1
+        if seen % 5 == 0:
+            elapsed = time.time() - t0
+            print(f"[calibrate] step={seen} solved={solved}/{seen} "
+                  f"elapsed={elapsed:.0f}s", file=sys.stderr)
+
+    print(f"[calibrate] done. solved={solved}/{seen} elapsed={time.time()-t0:.0f}s",
+          file=sys.stderr)
 
 
 if __name__ == "__main__":
-    import json  # local; only needed in main
     main()
