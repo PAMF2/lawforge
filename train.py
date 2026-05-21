@@ -28,7 +28,7 @@ MAX_ORDER = 4
 TEMPERATURE = 0.3
 LLM_MAX_TOKENS = 4096
 CHEATSHEET_K = 8
-REFINE_ROUNDS = 3
+REFINE_ROUNDS = 1
 # -----------------------------------------------------------------------
 
 ROOT = Path(__file__).resolve().parent
