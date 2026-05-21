@@ -1,0 +1,37 @@
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+venv/
+env/
+.env
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+*.egg-info/
+build/
+dist/
+
+# data + weights (too large for git)
+data/hf/
+data/cache/
+data/*.json
+data/*.jsonl
+proofs/cache/
+*.safetensors
+*.gguf
+*.bin
+*.pt
+*.pth
+*.onnx
+
+# loop state (machine-local; rebuild)
+evolve/meta_state.json
+evolve/last_metric.json
+evolve/autoresearch/seen.json
+
+# IDE / OS
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
