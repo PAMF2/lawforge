@@ -28,4 +28,4 @@ def test_build_arm_library(tmp_path: Path):
     assert "prompt_kimina" in names
     assert "max_order_5" in names
     assert "mace4_first" in names
-    assert len(arms) >= 20
+    assert len(arms) >= 15

@@ -21,6 +21,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 UPSTREAM_JUDGE = ROOT / "upstream" / "scripts" / "judge.sh"
+_JUDGE_AVAILABLE = UPSTREAM_JUDGE.exists()
 
 
 @dataclass
@@ -38,7 +39,7 @@ def judge(lean_code: str, expected_verdict: str = "true", problem_id: str = "") 
 
     expected_verdict: "true" (proof of implication) or "false" (counterexample).
     """
-    if not UPSTREAM_JUDGE.exists():
+    if not _JUDGE_AVAILABLE:
         return _mock_judge(lean_code)
 
     with tempfile.NamedTemporaryFile("w", suffix=".json", delete=False) as f:

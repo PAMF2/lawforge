@@ -124,45 +124,14 @@ def arm_aesop_prelude(root: Path) -> None:
         cs.write_text(src + block)
 
 
-def arm_curriculum_easy(root: Path) -> None:
-    (root / "solver" / "CURRICULUM_TAG").write_text("normal")
-
-
-def arm_curriculum_hard(root: Path) -> None:
-    (root / "solver" / "CURRICULUM_TAG").write_text("hard1")
-
-
-def arm_reward_shaping_on(root: Path) -> None:
-    (root / "solver" / "REWARD_SHAPING").write_text("1")
-
-
-def arm_reward_shaping_off(root: Path) -> None:
-    f = root / "solver" / "REWARD_SHAPING"
-    if f.exists():
-        f.unlink()
-
-
-def _load_autoresearch_proposals(root: Path) -> list[Arm]:
-    path = root / "evolve" / "autoresearch" / "proposals.jsonl"
-    if not path.exists():
-        return []
-    arms = []
-    for line in path.read_text().splitlines():
-        if not line.strip():
-            continue
-        prop = json.loads(line)
-        name = prop["suggested_arm_name"]
-
-        def make(prop=prop):
-            def apply(root: Path) -> None:
-                log = root / "evolve" / "autoresearch" / "applied.log"
-                log.parent.mkdir(parents=True, exist_ok=True)
-                with log.open("a") as f:
-                    f.write(json.dumps(prop) + "\n")
-            return apply
-
-        arms.append(Arm(name=name, apply=make()))
-    return arms
+# Removed arms: curriculum_easy/hard, reward_shaping_on/off — the flag files
+# (CURRICULUM_TAG, REWARD_SHAPING) were written but never read, so pulling
+# these arms gave zero-signal reward and poisoned the bandit.
+#
+# Removed: _load_autoresearch_proposals — the proposals.jsonl arms only
+# appended to applied.log without mutating any pipeline file, so pulling them
+# was also zero-signal. Re-add once a real code-edit agent translates
+# proposals into actual patches.
 
 
 CORE_ARMS = [
@@ -184,14 +153,8 @@ CORE_ARMS = [
     ("cheatsheet_16", arm_cheatsheet_16),
     ("cheatsheet_off", arm_cheatsheet_off),
     ("aesop_prelude", arm_aesop_prelude),
-    ("curriculum_easy", arm_curriculum_easy),
-    ("curriculum_hard", arm_curriculum_hard),
-    ("reward_shaping_on", arm_reward_shaping_on),
-    ("reward_shaping_off", arm_reward_shaping_off),
 ]
 
 
 def build_arm_library(root: Path) -> list[Arm]:
-    arms = [Arm(name=n, apply=f) for n, f in CORE_ARMS]
-    arms.extend(_load_autoresearch_proposals(root))
-    return arms
+    return [Arm(name=n, apply=f) for n, f in CORE_ARMS]

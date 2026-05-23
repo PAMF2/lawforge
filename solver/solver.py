@@ -13,11 +13,12 @@ files so the Karpathy outer loop can mutate them without touching this file.
 from __future__ import annotations
 
 import json
+import os
 import sys
 import time
 from pathlib import Path
 
-from solver.counterex import collect_vars, emit_lean_counterex, parse_eq, search_counterex
+from solver.counterex import emit_lean_counterex, search_counterex, vars_of
 from solver.proxy_client import call_llm, submit_judge
 
 HERE = Path(__file__).resolve().parent
@@ -27,23 +28,13 @@ CHEATSHEET = (HERE / "cheatsheet.md").read_text()
 USE_MACE4_FIRST = (HERE / "USE_MACE4_FIRST").exists()
 USE_CHEATSHEET = int((HERE / "USE_CHEATSHEET").read_text().strip()) if (HERE / "USE_CHEATSHEET").exists() else 0
 VERIFIER_REFINE_K = int((HERE / "VERIFIER_REFINE_K").read_text().strip()) if (HERE / "VERIFIER_REFINE_K").exists() else 0
-
-
-def _vars_of(eq1: str, eq2: str) -> list[str]:
-    """Collect free vars across both sides of both equations, sorted."""
-    try:
-        lhs1, rhs1 = parse_eq(eq1)
-        lhs2, rhs2 = parse_eq(eq2)
-        return sorted(collect_vars(lhs1) | collect_vars(rhs1)
-                      | collect_vars(lhs2) | collect_vars(rhs2))
-    except Exception:
-        return ["x", "y", "z", "w"]
+LLM_MAX_TOKENS = int(os.environ.get("LAWFORGE_LLM_MAX_TOKENS", "1024"))
 
 
 def l1_syntactic(eq1: str, eq2: str) -> str | None:
     """Layer 1: free. Identical-equation case."""
     if eq1.replace(" ", "") == eq2.replace(" ", ""):
-        vars_ = _vars_of(eq1, eq2)
+        vars_ = vars_of(eq1, eq2)
         vs = " ".join(vars_) or "x"
         holes = " ".join("_" for _ in vars_) or "_"
         return (
@@ -66,7 +57,7 @@ def l3_tactic_ladder(eq1: str, eq2: str) -> str:
     prompt = PROMPT_TPL.format(eq1=eq1, eq2=eq2,
                                 cheatsheet=CHEATSHEET if USE_CHEATSHEET else "(none)",
                                 ce_hint="not searched yet")
-    resp = call_llm(prompt, max_tokens=1024, temperature=0.3)
+    resp = call_llm(prompt, max_tokens=LLM_MAX_TOKENS, temperature=0.3)
     return _extract_code(resp.text)
 
 
@@ -79,7 +70,7 @@ def l4_subgoal_decomp(eq1: str, eq2: str) -> str:
         + "\n\nDecompose into 2-3 subgoals (as Lean lemma signatures) "
           "before proving the main implication. Emit only the final Lean code."
     )
-    resp = call_llm(prompt, max_tokens=1024, temperature=0.3)
+    resp = call_llm(prompt, max_tokens=LLM_MAX_TOKENS, temperature=0.3)
     return _extract_code(resp.text)
 
 
@@ -91,7 +82,7 @@ def l5_refine(eq1: str, eq2: str, prior_code: str, error_msg: str) -> str:
         f"Eq1: {eq1}\nEq2: {eq2}\n\n"
         "Emit a corrected Lean 4 certificate. Output only the code."
     )
-    resp = call_llm(prompt, max_tokens=1024, temperature=0.5)
+    resp = call_llm(prompt, max_tokens=LLM_MAX_TOKENS, temperature=0.5)
     return _extract_code(resp.text)
 
 
@@ -130,19 +121,22 @@ def solve(problem: dict) -> dict:
     if v.get("status") == "accepted":
         return v
     last_err = v.get("message", "")
+    llm_dead = code.startswith("# LLM timeout") or code.startswith("# LLM error")
 
-    code4 = l4_subgoal_decomp(eq1, eq2)
-    v = submit_judge("true", code4)
-    if v.get("status") == "accepted":
-        return v
-    last_err = v.get("message", last_err)
-
-    for _ in range(VERIFIER_REFINE_K):
-        code = l5_refine(eq1, eq2, code4, last_err)
-        v = submit_judge("true", code)
+    code4 = code
+    if not llm_dead:
+        code4 = l4_subgoal_decomp(eq1, eq2)
+        v = submit_judge("true", code4)
         if v.get("status") == "accepted":
             return v
         last_err = v.get("message", last_err)
+
+        for _ in range(VERIFIER_REFINE_K):
+            code4 = l5_refine(eq1, eq2, code4, last_err)
+            v = submit_judge("true", code4)
+            if v.get("status") == "accepted":
+                return v
+            last_err = v.get("message", last_err)
 
     ce_code = l2_counterex(eq1, eq2, max_order=4)
     if ce_code:

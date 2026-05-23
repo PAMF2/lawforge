@@ -100,9 +100,28 @@ def random_tables(n: int, k: int, seed: int = 0) -> Iterable[list[list[int]]]:
         yield [[rng.randrange(n) for _ in range(n)] for _ in range(n)]
 
 
-def satisfies(eq: tuple[Term, Term], table: list[list[int]], n: int) -> bool:
+DEFAULT_VARS = ["x", "y", "z", "w"]
+
+
+def vars_of(*eq_sources: str) -> list[str]:
+    """Union of free vars across any number of equation source strings.
+    Falls back to DEFAULT_VARS on parse error."""
+    try:
+        seen: set[str] = set()
+        for s in eq_sources:
+            lhs, rhs = parse_eq(s)
+            seen |= collect_vars(lhs)
+            seen |= collect_vars(rhs)
+        return sorted(seen)
+    except Exception:
+        return list(DEFAULT_VARS)
+
+
+def satisfies(eq: tuple[Term, Term], table: list[list[int]], n: int,
+              vars_: list[str] | None = None) -> bool:
     lhs, rhs = eq
-    vars_ = sorted(collect_vars(lhs) | collect_vars(rhs))
+    if vars_ is None:
+        vars_ = sorted(collect_vars(lhs) | collect_vars(rhs))
     for assignment in itertools.product(range(n), repeat=len(vars_)):
         env = dict(zip(vars_, assignment))
         if eval_term(lhs, table, env) != eval_term(rhs, table, env):
@@ -110,8 +129,9 @@ def satisfies(eq: tuple[Term, Term], table: list[list[int]], n: int) -> bool:
     return True
 
 
-def violates(eq: tuple[Term, Term], table: list[list[int]], n: int) -> bool:
-    return not satisfies(eq, table, n)
+def violates(eq: tuple[Term, Term], table: list[list[int]], n: int,
+             vars_: list[str] | None = None) -> bool:
+    return not satisfies(eq, table, n, vars_)
 
 
 # ---------- counterexample search ----------
@@ -135,6 +155,8 @@ def search_counterex(
     except Exception:
         return None
 
+    v1 = sorted(collect_vars(eq1[0]) | collect_vars(eq1[1]))
+    v2 = sorted(collect_vars(eq2[0]) | collect_vars(eq2[1]))
     for n in range(2, max_order + 1):
         t0 = time.time()
         total = n ** (n * n)
@@ -143,7 +165,7 @@ def search_counterex(
         for table in gen:
             if time.time() - t0 > timeout_per_order:
                 break
-            if satisfies(eq1, table, n) and violates(eq2, table, n):
+            if satisfies(eq1, table, n, v1) and violates(eq2, table, n, v2):
                 return CounterEx(order=n, table=table)
     return None
 
@@ -157,15 +179,7 @@ def emit_lean_counterex(ce: CounterEx, eq1_src: str, eq2_src: str) -> str:
     judge's expected schema (see equational-theories-lean-stage2 examples).
     """
     n = ce.order
-    # Variables actually present across both equations
-    try:
-        lhs1, rhs1 = parse_eq(eq1_src)
-        lhs2, rhs2 = parse_eq(eq2_src)
-        vars_ = sorted(collect_vars(lhs1) | collect_vars(rhs1)
-                       | collect_vars(lhs2) | collect_vars(rhs2))
-    except Exception:
-        vars_ = ["x", "y", "z", "w"]
-    vs = " ".join(vars_) or "x"
+    vs = " ".join(vars_of(eq1_src, eq2_src)) or "x"
     rows_match = "\n    ".join(
         f"| {i}, {j} => {ce.table[i][j]}"
         for i in range(n) for j in range(n)

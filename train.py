@@ -35,10 +35,8 @@ ROOT = Path(__file__).resolve().parent
 
 
 def load_train_split() -> list[dict]:
-    path = ROOT / "data" / "train_split.jsonl"
-    if not path.exists():
-        return [{"hypothesis": "x = x", "goal": "x = x", "label": "true"}]
-    return [json.loads(line) for line in path.read_text().splitlines() if line.strip()]
+    from eval import load_split
+    return load_split("train")
 
 
 def _problem_hash(p: dict) -> str:
@@ -66,12 +64,12 @@ def main() -> None:
           f"TOKENS={LLM_MAX_TOKENS} CHEATSHEET_K={CHEATSHEET_K}",
           file=sys.stderr)
 
-    # propagate mutated hyperparams into solver via the flag-files mechanism
-    if CHEATSHEET_K > 0:
-        (ROOT / "solver" / "USE_CHEATSHEET").write_text(str(CHEATSHEET_K))
-    if REFINE_ROUNDS > 0:
-        (ROOT / "solver" / "VERIFIER_REFINE_K").write_text(str(REFINE_ROUNDS))
+    # Propagate bandit-mutable hyperparams to the solver subprocess via env.
+    os.environ["LAWFORGE_LLM_MAX_TOKENS"] = str(LLM_MAX_TOKENS)
+    os.environ["LAWFORGE_LLM_TEMPERATURE"] = str(TEMPERATURE)
 
+    # Bandit arms own solver/USE_CHEATSHEET, solver/VERIFIER_REFINE_K etc.
+    # Don't stomp them here.
     problems = load_train_split()
     accepted_dir = ROOT / "proofs" / "accepted"
     accepted_dir.mkdir(parents=True, exist_ok=True)

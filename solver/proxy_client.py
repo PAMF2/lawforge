@@ -29,7 +29,7 @@ def call_llm(prompt: str, max_tokens: int = 4096, temperature: float = 0.3) -> L
     mode = os.environ.get("LAWFORGE_PROXY_MODE", "live")
     if mode == "live":
         return _call_live(prompt, max_tokens, temperature)
-    return _call_local(prompt, max_tokens, temperature)
+    return call_local(prompt, max_tokens, temperature)
 
 
 def _call_live(prompt: str, max_tokens: int, temperature: float) -> LLMResponse:
@@ -45,19 +45,25 @@ def _call_live(prompt: str, max_tokens: int, temperature: float) -> LLMResponse:
     return LLMResponse(text=resp.get("text", ""), tokens=resp.get("tokens", 0))
 
 
-def _call_local(prompt: str, max_tokens: int, temperature: float) -> LLMResponse:
-    """OpenAI-compatible endpoint client. Hard 25s timeout, no retry."""
+DEFAULT_LLM_TIMEOUT_S = 25.0
+DEFAULT_LLM_URL = "http://localhost:11434/v1/chat/completions"
+DEFAULT_LLM_MODEL = "gpt-oss:20b"
+
+
+def call_local(prompt: str, max_tokens: int, temperature: float) -> LLMResponse:
+    """OpenAI-compatible endpoint client. Hard timeout via LAWFORGE_LLM_TIMEOUT
+    (default 25s). No retry. The caller controls max_tokens — no silent cap."""
     import socket
     import urllib.request
 
-    url = os.environ.get("LAWFORGE_LLM_URL", "http://localhost:11434/v1/chat/completions")
-    model = os.environ.get("LAWFORGE_LLM_MODEL", "gpt-oss:20b")
+    url = os.environ.get("LAWFORGE_LLM_URL", DEFAULT_LLM_URL)
+    model = os.environ.get("LAWFORGE_LLM_MODEL", DEFAULT_LLM_MODEL)
     key = os.environ.get("LAWFORGE_LLM_KEY", "no-key")
-    timeout = float(os.environ.get("LAWFORGE_LLM_TIMEOUT", "25"))
+    timeout = float(os.environ.get("LAWFORGE_LLM_TIMEOUT", str(DEFAULT_LLM_TIMEOUT_S)))
     body = json.dumps({
         "model": model,
         "messages": [{"role": "user", "content": prompt}],
-        "max_tokens": min(max_tokens, 1024),  # cap to keep latency bounded
+        "max_tokens": max_tokens,
         "temperature": temperature,
     }).encode()
     req = urllib.request.Request(

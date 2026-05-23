@@ -16,14 +16,26 @@ import sys
 import time
 from pathlib import Path
 
+from lean.judge import judge as run_judge
+from solver.proxy_client import call_local
+
 ROOT = Path(__file__).resolve().parent
 
 
-def load_split(name: str) -> list[dict]:
+def load_split(name: str, limit: int | None = None) -> list[dict]:
     p = ROOT / "data" / f"{name}_split.jsonl"
     if not p.exists():
         return [{"hypothesis": "x = x", "goal": "x = x", "label": "true"}]
-    return [json.loads(line) for line in p.read_text().splitlines() if line.strip()]
+    rows = []
+    with p.open() as f:
+        for line in f:
+            line = line.strip()
+            if not line:
+                continue
+            rows.append(json.loads(line))
+            if limit is not None and len(rows) >= limit:
+                break
+    return rows
 
 
 def _kill(proc: subprocess.Popen) -> None:
@@ -54,9 +66,6 @@ def _read_line_with_deadline(proc: subprocess.Popen, deadline: float) -> str | N
 
 def run_solver_on_problem(problem: dict, timeout: int = 30) -> bool:
     """Drive the solver subprocess on one problem; hard kill on timeout."""
-    from lean.judge import judge as run_judge
-    from solver.proxy_client import _call_local
-
     env = os.environ.copy()
     env["LAWFORGE_PROXY_MODE"] = "live"
     env["PYTHONPATH"] = str(ROOT)
@@ -87,7 +96,7 @@ def run_solver_on_problem(problem: dict, timeout: int = 30) -> bool:
                     solved = True
                     break
             elif call == "llm":
-                r = _call_local(req["prompt"], req.get("max_tokens", 2048),
+                r = call_local(req["prompt"], req.get("max_tokens", 2048),
                                 req.get("temperature", 0.3))
                 proc.stdin.write(json.dumps({"text": r.text, "tokens": r.tokens}) + "\n")
                 proc.stdin.flush()
@@ -106,7 +115,7 @@ def main() -> None:
                     help="per-problem hard wall-clock cap (seconds)")
     args = ap.parse_args()
 
-    problems = load_split(args.split)[: args.limit]
+    problems = load_split(args.split, limit=args.limit)
     solved = 0
     t0 = time.time()
     for i, p in enumerate(problems, 1):
