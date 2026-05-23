@@ -157,7 +157,15 @@ def emit_lean_counterex(ce: CounterEx, eq1_src: str, eq2_src: str) -> str:
     judge's expected schema (see equational-theories-lean-stage2 examples).
     """
     n = ce.order
-    # Emit op as a nested match. Mathlib4 expects `Magma G := { op := · * · }`.
+    # Variables actually present across both equations
+    try:
+        lhs1, rhs1 = parse_eq(eq1_src)
+        lhs2, rhs2 = parse_eq(eq2_src)
+        vars_ = sorted(collect_vars(lhs1) | collect_vars(rhs1)
+                       | collect_vars(lhs2) | collect_vars(rhs2))
+    except Exception:
+        vars_ = ["x", "y", "z", "w"]
+    vs = " ".join(vars_) or "x"
     rows_match = "\n    ".join(
         f"| {i}, {j} => {ce.table[i][j]}"
         for i in range(n) for j in range(n)
@@ -169,7 +177,7 @@ def cex_op : Fin {n} -> Fin {n} -> Fin {n}
 
 instance cex_magma : Magma (Fin {n}) := {{ op := cex_op }}
 
-example : (∀ x y z w : Fin {n}, {eq1_src}) ∧ ¬ (∀ x y z w : Fin {n}, {eq2_src}) := by
+example : (∀ {vs} : Fin {n}, {eq1_src}) ∧ ¬ (∀ {vs} : Fin {n}, {eq2_src}) := by
   refine ⟨?_, ?_⟩
   · decide
   · decide

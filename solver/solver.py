@@ -17,7 +17,7 @@ import sys
 import time
 from pathlib import Path
 
-from solver.counterex import emit_lean_counterex, search_counterex
+from solver.counterex import collect_vars, emit_lean_counterex, parse_eq, search_counterex
 from solver.proxy_client import call_llm, submit_judge
 
 HERE = Path(__file__).resolve().parent
@@ -29,18 +29,28 @@ USE_CHEATSHEET = int((HERE / "USE_CHEATSHEET").read_text().strip()) if (HERE / "
 VERIFIER_REFINE_K = int((HERE / "VERIFIER_REFINE_K").read_text().strip()) if (HERE / "VERIFIER_REFINE_K").exists() else 0
 
 
+def _vars_of(eq1: str, eq2: str) -> list[str]:
+    """Collect free vars across both sides of both equations, sorted."""
+    try:
+        lhs1, rhs1 = parse_eq(eq1)
+        lhs2, rhs2 = parse_eq(eq2)
+        return sorted(collect_vars(lhs1) | collect_vars(rhs1)
+                      | collect_vars(lhs2) | collect_vars(rhs2))
+    except Exception:
+        return ["x", "y", "z", "w"]
+
+
 def l1_syntactic(eq1: str, eq2: str) -> str | None:
-    """Layer 1: free. Identical-equation case (Eq1 ≡ Eq2): the hypothesis IS
-    the goal, so `exact h` closes it. Real upstream judge expects a theorem
-    with the equation as a `Magma` predicate; we emit the canonical shape and
-    let `intros; exact h` discharge it.
-    """
+    """Layer 1: free. Identical-equation case."""
     if eq1.replace(" ", "") == eq2.replace(" ", ""):
+        vars_ = _vars_of(eq1, eq2)
+        vs = " ".join(vars_) or "x"
+        holes = " ".join("_" for _ in vars_) or "_"
         return (
             "-- L1: Eq1 ≡ Eq2 syntactically; hypothesis is the goal\n"
             "theorem implication {G : Type*} [Magma G]\n"
-            f"    (h : ∀ x y z w, {eq1}) : ∀ x y z w, {eq2} := by\n"
-            "  intros; exact h _ _ _ _\n"
+            f"    (h : ∀ {vs} : G, {eq1}) : ∀ {vs} : G, {eq2} := by\n"
+            f"  intros; exact h {holes}\n"
         )
     return None
 
