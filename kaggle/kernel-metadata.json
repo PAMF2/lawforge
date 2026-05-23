@@ -1,0 +1,15 @@
+{
+  "id": "pedroafonso2/lawforge-vllm-proxy",
+  "title": "lawforge-vllm-proxy",
+  "code_file": "lawforge_vllm_proxy.ipynb",
+  "language": "python",
+  "kernel_type": "notebook",
+  "is_private": "true",
+  "enable_gpu": "true",
+  "enable_tpu": "false",
+  "enable_internet": "true",
+  "dataset_sources": [],
+  "competition_sources": [],
+  "kernel_sources": [],
+  "model_sources": []
+}

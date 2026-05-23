@@ -35,3 +35,12 @@ evolve/autoresearch/seen.json
 .vscode/
 .DS_Store
 Thumbs.db
+
+# loop runtime state (rebuilt each session, never tracked)
+evolve/results.tsv
+evolve/loop_run.log
+evolve/autoresearch/proposals.jsonl
+evolve/autoresearch/applied.log
+
+# kaggle notebook with hardcoded HF token (local-only)
+kaggle/lawforge_vllm_proxy.ipynb
