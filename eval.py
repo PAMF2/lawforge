@@ -108,25 +108,33 @@ def run_solver_on_problem(problem: dict, timeout: int = 30) -> bool:
 
 
 def main() -> None:
+    import concurrent.futures as cf
+
     ap = argparse.ArgumentParser()
     ap.add_argument("--split", default="dev")
     ap.add_argument("--limit", type=int, default=20)
     ap.add_argument("--timeout", type=int, default=45,
                     help="per-problem hard wall-clock cap (seconds)")
+    ap.add_argument("--workers", type=int, default=4,
+                    help="parallel solver subprocesses (I/O-bound on LLM)")
     args = ap.parse_args()
 
     problems = load_split(args.split, limit=args.limit)
     solved = 0
+    done = 0
     t0 = time.time()
-    for i, p in enumerate(problems, 1):
-        if run_solver_on_problem(p, args.timeout):
-            solved += 1
-        if i % 5 == 0:
-            print(f"[eval] {i}/{len(problems)} solved={solved} "
-                  f"elapsed={time.time()-t0:.0f}s", file=sys.stderr)
+    with cf.ThreadPoolExecutor(max_workers=args.workers) as ex:
+        futures = [ex.submit(run_solver_on_problem, p, args.timeout) for p in problems]
+        for fut in cf.as_completed(futures):
+            done += 1
+            if fut.result():
+                solved += 1
+            if done % 5 == 0:
+                print(f"[eval] {done}/{len(problems)} solved={solved} "
+                      f"elapsed={time.time()-t0:.0f}s", file=sys.stderr)
     rate = solved / max(1, len(problems))
     print(f"[eval] split={args.split} solved={solved}/{len(problems)} "
-          f"elapsed={time.time()-t0:.0f}s", file=sys.stderr)
+          f"elapsed={time.time()-t0:.0f}s workers={args.workers}", file=sys.stderr)
     print(f"SOLVED_RATE={rate:.4f}")
 
 

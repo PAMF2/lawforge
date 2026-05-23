@@ -24,14 +24,26 @@ UPSTREAM_JUDGE = ROOT / "upstream" / "scripts" / "judge.sh"
 _JUDGE_AVAILABLE = UPSTREAM_JUDGE.exists()
 
 
+# Stage 2 spec verdict strings — single source of truth, no typos.
+ACCEPTED = "accepted"
+UNPARSED = "unparsed"
+MALFORMED = "malformed"
+INCOMPLETE_PROOF = "incomplete_proof"
+INCORRECT = "incorrect"
+
+# Expected-verdict flags (what we're claiming Eq1 -> Eq2 status is).
+TRUE = "true"
+FALSE = "false"
+
+
 @dataclass
 class Verdict:
-    status: str           # accepted | unparsed | malformed | incomplete_proof | incorrect
+    status: str  # one of: accepted/unparsed/malformed/incomplete_proof/incorrect
     message: str = ""
 
     @property
     def accepted(self) -> bool:
-        return self.status == "accepted"
+        return self.status == ACCEPTED
 
 
 def judge(lean_code: str, expected_verdict: str = "true", problem_id: str = "") -> Verdict:
@@ -62,11 +74,11 @@ def judge(lean_code: str, expected_verdict: str = "true", problem_id: str = "") 
         last = out[-1]
         try:
             data = json.loads(last)
-            return Verdict(status=data.get("status", "unparsed"), message=data.get("message", ""))
+            return Verdict(status=data.get("status", UNPARSED), message=data.get("message", ""))
         except json.JSONDecodeError:
-            return Verdict(status="unparsed", message=last[:500])
+            return Verdict(status=UNPARSED, message=last[:500])
     except subprocess.TimeoutExpired:
-        return Verdict(status="incorrect", message="judge timeout")
+        return Verdict(status=INCORRECT, message="judge timeout")
     finally:
         os.unlink(payload_path)
 
@@ -74,13 +86,13 @@ def judge(lean_code: str, expected_verdict: str = "true", problem_id: str = "") 
 def _mock_judge(lean_code: str) -> Verdict:
     """Heuristic mock for offline / CI testing without Lean installed."""
     if "sorry" in lean_code or "admit" in lean_code:
-        return Verdict(status="incomplete_proof")
+        return Verdict(status=INCOMPLETE_PROOF)
     if "theorem" not in lean_code and "example" not in lean_code:
-        return Verdict(status="malformed")
+        return Verdict(status=MALFORMED)
     for tac in ("rfl", "decide", "trivial", "aesop"):
         if tac in lean_code:
-            return Verdict(status="accepted", message=f"mock accepted on {tac}")
-    return Verdict(status="incorrect", message="mock: no obvious tactic")
+            return Verdict(status=ACCEPTED, message=f"mock accepted on {tac}")
+    return Verdict(status=INCORRECT, message="mock: no obvious tactic")
 
 
 def reward(verdict: Verdict, shaping: bool = False) -> float:
@@ -97,6 +109,8 @@ def reward(verdict: Verdict, shaping: bool = False) -> float:
     return {
         "incorrect": 0.10,
         "incomplete_proof": 0.05,
-        "malformed": 0.02,
-        "unparsed": 0.0,
+        INCORRECT: 0.10,
+        INCOMPLETE_PROOF: 0.05,
+        MALFORMED: 0.02,
+        UNPARSED: 0.0,
     }.get(verdict.status, 0.0)

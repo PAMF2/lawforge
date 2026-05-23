@@ -96,16 +96,18 @@ def propose_arm(paper: Paper, score_v: int) -> dict:
 
 
 def run(out_dir: Path, threshold: int = 10):
+    import concurrent.futures as cf
+
     out_dir.mkdir(parents=True, exist_ok=True)
     seen_path = out_dir / "seen.json"
     proposals_path = out_dir / "proposals.jsonl"
     seen = set(json.loads(seen_path.read_text())) if seen_path.exists() else set()
     new_count = 0
-    for q in QUERIES:
-        try:
-            papers = fetch_arxiv(q)
-        except Exception as e:
-            print(f"[autoresearch] query failed {q!r}: {e}")
+    with cf.ThreadPoolExecutor(max_workers=3) as ex:
+        # arxiv ToS: <= 3 req/s; 3 concurrent workers is the cap.
+        results = list(ex.map(_safe_fetch, QUERIES))
+    for q, papers in zip(QUERIES, results):
+        if papers is None:
             continue
         for p in papers:
             if p.id in seen:
@@ -118,9 +120,16 @@ def run(out_dir: Path, threshold: int = 10):
                     f.write(json.dumps(prop) + "\n")
                 new_count += 1
                 print(f"[autoresearch] proposal: {p.title[:80]} (score={s})")
-        time.sleep(3)  # be polite to arxiv
     seen_path.write_text(json.dumps(sorted(seen)))
     print(f"[autoresearch] new proposals: {new_count}")
+
+
+def _safe_fetch(q: str) -> list[Paper] | None:
+    try:
+        return fetch_arxiv(q)
+    except Exception as e:
+        print(f"[autoresearch] query failed {q!r}: {e}")
+        return None
 
 
 if __name__ == "__main__":

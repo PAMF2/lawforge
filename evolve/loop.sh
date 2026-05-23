@@ -24,9 +24,11 @@ DEADLINE_EPOCH=$(date -d "2026-08-25 23:59" +%s 2>/dev/null || echo 9999999999)
 PLATEAU_LIMIT=10
 AUTORESEARCH_EVERY=5
 SMOKE_BUDGET_SEC=300
+GEN_HARD_CAP_S=3600  # 1h max per generation; nothing runs longer
 
 plateau=0
 gen=0
+last_progress=$(date +%s)
 
 while true; do
   gen=$((gen + 1))
@@ -39,17 +41,27 @@ while true; do
     echo "[loop] plateau ($plateau gens no-improve), stop"
     break
   fi
+  if [ $((now - last_progress)) -ge 7200 ]; then
+    echo "[loop] >2h since last generation completed, abort"
+    break
+  fi
 
   echo "==== gen $gen ===="
 
   if [ $((gen % AUTORESEARCH_EVERY)) -eq 1 ]; then
-    python3 evolve/autoresearch.py || echo "[loop] autoresearch failed, continuing"
+    timeout 120 python3 evolve/autoresearch.py || echo "[loop] autoresearch failed, continuing"
   fi
 
-  # python driver does: select arm -> apply -> commit -> smoke train -> eval -> keep|reset -> update meta
-  python3 -m evolve.driver --gen "$gen" --smoke-sec "$SMOKE_BUDGET_SEC"
+  # Wall-clock cap on driver: select arm -> apply -> commit -> smoke train -> eval -> keep|reset.
+  timeout --kill-after=30 "$GEN_HARD_CAP_S" \
+    python3 -m evolve.driver --gen "$gen" --smoke-sec "$SMOKE_BUDGET_SEC"
+  rc=$?
+  if [ $rc -eq 124 ] || [ $rc -eq 137 ]; then
+    echo "[loop] gen $gen exceeded ${GEN_HARD_CAP_S}s — killed"
+  fi
+  last_progress=$(date +%s)
 
-  improved=$(tail -1 evolve/results.tsv | awk -F'\t' '{print $5}')
+  improved=$(tail -1 evolve/results.tsv 2>/dev/null | awk -F'\t' '{print $5}')
   if [ "$improved" = "1" ]; then
     plateau=0
   else

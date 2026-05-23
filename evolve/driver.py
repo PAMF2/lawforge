@@ -7,6 +7,7 @@ from __future__ import annotations
 import argparse
 import json
 import subprocess
+import sys
 import time
 from pathlib import Path
 
@@ -23,18 +24,30 @@ def git(*args: str) -> str:
     return subprocess.check_output(["git", *args], cwd=ROOT, text=True).strip()
 
 
+# Hard wall-clock caps so no single generation can stall the loop.
+TRAIN_HARD_CAP_S = 900   # 15 min, double the configured budget-sec
+EVAL_HARD_CAP_S = 1500   # 25 min, covers 20 problems x 45s x 1/4 workers worst case
+
+
 def run_smoke(budget_sec: int) -> None:
-    subprocess.run(
-        ["python3", "-m", "train", "--smoke", "--budget-sec", str(budget_sec)],
-        cwd=ROOT, check=False,
-    )
+    try:
+        subprocess.run(
+            ["python3", "-m", "train", "--smoke", "--budget-sec", str(budget_sec)],
+            cwd=ROOT, check=False, timeout=TRAIN_HARD_CAP_S,
+        )
+    except subprocess.TimeoutExpired:
+        print(f"[driver] train.py exceeded {TRAIN_HARD_CAP_S}s — killed", file=sys.stderr)
 
 
 def run_eval() -> float:
-    out = subprocess.check_output(
-        ["python3", "-m", "eval", "--split", "dev"], cwd=ROOT, text=True
-    )
-    # eval prints final line "SOLVED_RATE=<float>"
+    try:
+        out = subprocess.check_output(
+            ["python3", "-m", "eval", "--split", "dev"], cwd=ROOT, text=True,
+            timeout=EVAL_HARD_CAP_S,
+        )
+    except subprocess.TimeoutExpired:
+        print(f"[driver] eval.py exceeded {EVAL_HARD_CAP_S}s — using 0.0", file=sys.stderr)
+        return 0.0
     for line in out.splitlines()[::-1]:
         if line.startswith("SOLVED_RATE="):
             return float(line.split("=", 1)[1])
