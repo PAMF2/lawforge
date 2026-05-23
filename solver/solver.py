@@ -66,25 +66,20 @@ def l3_tactic_ladder(eq1: str, eq2: str) -> str:
     prompt = PROMPT_TPL.format(eq1=eq1, eq2=eq2,
                                 cheatsheet=CHEATSHEET if USE_CHEATSHEET else "(none)",
                                 ce_hint="not searched yet")
-    resp = call_llm(prompt, max_tokens=4096, temperature=0.3)
+    resp = call_llm(prompt, max_tokens=1024, temperature=0.3)
     return _extract_code(resp.text)
 
 
 def l4_subgoal_decomp(eq1: str, eq2: str) -> str:
-    """Layer 4: DeepSeek-Prover-V2 style. Ask LLM to list subgoals, prove each."""
-    plan_prompt = (
-        "Decompose proving the following equational implication into 3 subgoals. "
-        "List the subgoals as Lean 4 lemma statements, no proofs yet.\n"
-        f"Eq1: {eq1}\nEq2: {eq2}\n"
-    )
-    plan = call_llm(plan_prompt, max_tokens=2048, temperature=0.3).text
-    full_prompt = (
+    """Layer 4: DeepSeek-Prover-V2 style — single combined prompt (no planner)."""
+    prompt = (
         PROMPT_TPL.format(eq1=eq1, eq2=eq2,
                           cheatsheet=CHEATSHEET if USE_CHEATSHEET else "(none)",
                           ce_hint="not searched yet")
-        + "\n\nSubgoal decomposition:\n" + plan
+        + "\n\nDecompose into 2-3 subgoals (as Lean lemma signatures) "
+          "before proving the main implication. Emit only the final Lean code."
     )
-    resp = call_llm(full_prompt, max_tokens=8192, temperature=0.3)
+    resp = call_llm(prompt, max_tokens=1024, temperature=0.3)
     return _extract_code(resp.text)
 
 
@@ -96,7 +91,7 @@ def l5_refine(eq1: str, eq2: str, prior_code: str, error_msg: str) -> str:
         f"Eq1: {eq1}\nEq2: {eq2}\n\n"
         "Emit a corrected Lean 4 certificate. Output only the code."
     )
-    resp = call_llm(prompt, max_tokens=8192, temperature=0.5)
+    resp = call_llm(prompt, max_tokens=1024, temperature=0.5)
     return _extract_code(resp.text)
 
 

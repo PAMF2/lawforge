@@ -46,16 +46,18 @@ def _call_live(prompt: str, max_tokens: int, temperature: float) -> LLMResponse:
 
 
 def _call_local(prompt: str, max_tokens: int, temperature: float) -> LLMResponse:
-    """Local OpenAI-compatible endpoint for the Karpathy loop."""
+    """OpenAI-compatible endpoint client. Hard 25s timeout, no retry."""
+    import socket
     import urllib.request
 
     url = os.environ.get("LAWFORGE_LLM_URL", "http://localhost:11434/v1/chat/completions")
     model = os.environ.get("LAWFORGE_LLM_MODEL", "gpt-oss:20b")
     key = os.environ.get("LAWFORGE_LLM_KEY", "no-key")
+    timeout = float(os.environ.get("LAWFORGE_LLM_TIMEOUT", "25"))
     body = json.dumps({
         "model": model,
         "messages": [{"role": "user", "content": prompt}],
-        "max_tokens": max_tokens,
+        "max_tokens": min(max_tokens, 1024),  # cap to keep latency bounded
         "temperature": temperature,
     }).encode()
     req = urllib.request.Request(
@@ -63,13 +65,15 @@ def _call_local(prompt: str, max_tokens: int, temperature: float) -> LLMResponse
         headers={"Content-Type": "application/json", "Authorization": f"Bearer {key}"},
     )
     try:
-        with urllib.request.urlopen(req, timeout=120) as r:
+        with urllib.request.urlopen(req, timeout=timeout) as r:
             data = json.loads(r.read())
         text = data["choices"][0]["message"]["content"]
         tokens = data.get("usage", {}).get("total_tokens", 0)
         return LLMResponse(text=text, tokens=tokens)
+    except (socket.timeout, TimeoutError):
+        return LLMResponse(text="# LLM timeout", tokens=0)
     except Exception as e:
-        return LLMResponse(text=f"# LLM error: {e}", tokens=0)
+        return LLMResponse(text=f"# LLM error: {type(e).__name__}: {e}", tokens=0)
 
 
 def submit_judge(verdict: str, code: str) -> dict:

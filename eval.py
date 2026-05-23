@@ -1,41 +1,59 @@
-"""Evaluation harness: run lawforge solver on a split, return solved rate.
+"""Evaluation harness: run solver on a dev split, print SOLVED_RATE=<float>.
 
-For the Karpathy outer loop. We run the solver in a single in-process pass
-against a mocked proxy (so we don't have to spin up an LLM server per
-generation). The mocked proxy:
-  - judge: calls lean.judge.judge() (real Lean if available, mock otherwise).
-  - llm:   calls solver.proxy_client._call_local() against the configured
-           LAWFORGE_LLM_URL endpoint (e.g. Colab gpt-oss-20b via vLLM, or
-           OpenRouter).
-
-Final line printed: SOLVED_RATE=<float>  (parsed by evolve/driver.py).
+Key invariant: a single problem MUST exit within `--timeout` seconds, even if
+the solver subprocess or the LLM endpoint hangs. We enforce this by polling
+the subprocess stdout via `select` and killing the process group on overshoot.
 """
 from __future__ import annotations
 
 import argparse
 import json
 import os
+import select
+import signal
 import subprocess
 import sys
+import time
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent
 
 
 def load_split(name: str) -> list[dict]:
-    path = ROOT / "data" / f"{name}_split.jsonl"
-    if not path.exists():
+    p = ROOT / "data" / f"{name}_split.jsonl"
+    if not p.exists():
         return [{"hypothesis": "x = x", "goal": "x = x", "label": "true"}]
-    return [json.loads(line) for line in path.read_text().splitlines() if line.strip()]
+    return [json.loads(line) for line in p.read_text().splitlines() if line.strip()]
 
 
-def run_solver_on_problem(problem: dict, timeout: int = 60) -> bool:
-    """Drive the solver subprocess on a single problem. Returns True if solved.
+def _kill(proc: subprocess.Popen) -> None:
+    try:
+        os.killpg(os.getpgid(proc.pid), signal.SIGTERM)
+        proc.wait(timeout=3)
+    except (ProcessLookupError, subprocess.TimeoutExpired):
+        try:
+            os.killpg(os.getpgid(proc.pid), signal.SIGKILL)
+        except ProcessLookupError:
+            pass
 
-    We wrap stdin/stdout to play both 'proxy' and 'judge' roles: every line
-    the solver writes is parsed, dispatched to either lean.judge or local LLM,
-    and the response written back to its stdin.
-    """
+
+def _read_line_with_deadline(proc: subprocess.Popen, deadline: float) -> str | None:
+    """Block until proc.stdout has a line OR deadline passes. None on timeout."""
+    while True:
+        remaining = deadline - time.time()
+        if remaining <= 0:
+            return None
+        r, _, _ = select.select([proc.stdout], [], [], min(1.0, remaining))
+        if not r:
+            if proc.poll() is not None:
+                return None
+            continue
+        line = proc.stdout.readline()
+        return line or None
+
+
+def run_solver_on_problem(problem: dict, timeout: int = 30) -> bool:
+    """Drive the solver subprocess on one problem; hard kill on timeout."""
     from lean.judge import judge as run_judge
     from solver.proxy_client import _call_local
 
@@ -44,18 +62,18 @@ def run_solver_on_problem(problem: dict, timeout: int = 60) -> bool:
     env["PYTHONPATH"] = str(ROOT)
     proc = subprocess.Popen(
         [sys.executable, "-m", "solver.solver"],
-        stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
-        cwd=ROOT, env=env, text=True, bufsize=1,
+        stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.DEVNULL,
+        cwd=ROOT, env=env, text=True, bufsize=1, start_new_session=True,
     )
-    proc.stdin.write(json.dumps(problem) + "\n")
-    proc.stdin.flush()
-
+    deadline = time.time() + timeout
     solved = False
     try:
+        proc.stdin.write(json.dumps(problem) + "\n")
+        proc.stdin.flush()
         while True:
-            line = proc.stdout.readline()
-            if not line:
-                break
+            line = _read_line_with_deadline(proc, deadline)
+            if line is None:
+                break  # timeout or EOF
             try:
                 req = json.loads(line)
             except json.JSONDecodeError:
@@ -63,42 +81,43 @@ def run_solver_on_problem(problem: dict, timeout: int = 60) -> bool:
             call = req.get("call")
             if call == "judge":
                 v = run_judge(req.get("code", ""), expected_verdict=req.get("verdict", "true"))
-                resp = {"status": v.status, "message": v.message}
-                proc.stdin.write(json.dumps(resp) + "\n")
+                proc.stdin.write(json.dumps({"status": v.status, "message": v.message}) + "\n")
                 proc.stdin.flush()
                 if v.accepted:
                     solved = True
                     break
             elif call == "llm":
-                r = _call_local(req["prompt"], req.get("max_tokens", 4096),
+                r = _call_local(req["prompt"], req.get("max_tokens", 2048),
                                 req.get("temperature", 0.3))
-                resp = {"text": r.text, "tokens": r.tokens}
-                proc.stdin.write(json.dumps(resp) + "\n")
+                proc.stdin.write(json.dumps({"text": r.text, "tokens": r.tokens}) + "\n")
                 proc.stdin.flush()
             else:
                 break
     finally:
-        proc.terminate()
-        try:
-            proc.wait(timeout=5)
-        except subprocess.TimeoutExpired:
-            proc.kill()
+        _kill(proc)
     return solved
 
 
 def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--split", default="dev")
-    ap.add_argument("--limit", type=int, default=50,
-                    help="cap problems per smoke eval to keep latency bounded")
-    ap.add_argument("--timeout", type=int, default=60)
+    ap.add_argument("--limit", type=int, default=20)
+    ap.add_argument("--timeout", type=int, default=45,
+                    help="per-problem hard wall-clock cap (seconds)")
     args = ap.parse_args()
 
     problems = load_split(args.split)[: args.limit]
-    solved = sum(1 for p in problems if run_solver_on_problem(p, args.timeout))
-    n = max(1, len(problems))
-    rate = solved / n
-    print(f"[eval] split={args.split} solved={solved}/{n}", file=sys.stderr)
+    solved = 0
+    t0 = time.time()
+    for i, p in enumerate(problems, 1):
+        if run_solver_on_problem(p, args.timeout):
+            solved += 1
+        if i % 5 == 0:
+            print(f"[eval] {i}/{len(problems)} solved={solved} "
+                  f"elapsed={time.time()-t0:.0f}s", file=sys.stderr)
+    rate = solved / max(1, len(problems))
+    print(f"[eval] split={args.split} solved={solved}/{len(problems)} "
+          f"elapsed={time.time()-t0:.0f}s", file=sys.stderr)
     print(f"SOLVED_RATE={rate:.4f}")
 
 
