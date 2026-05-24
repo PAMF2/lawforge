@@ -89,10 +89,18 @@ def _to_diamond(text: str) -> str:
     return text.replace("*", "◇") if text else text
 
 
+_STAGE2_ALLOWED_AXIOMS = ("propext", "Quot.sound", "Classical.choice")
+
+
 def _build_upstream_problem(p: dict | None, expected_verdict: str) -> dict:
     """Translate our internal problem dict to upstream PROBLEM_KEYS shape.
 
     Converts `*` -> `◇` in equations so the judge regex doesn't reject them.
+
+    Attaches a Stage 2 default proof_policy allowing the three canonical
+    axioms (propext, Quot.sound, Classical.choice). Without this, judge
+    defaults to allowed_axioms=() and every `decide`/`simp`/`aesop`-derived
+    proof gets rejected as `incomplete_proof: proof uses disallowed axioms`.
     """
     p = p or {}
     return {
@@ -102,6 +110,9 @@ def _build_upstream_problem(p: dict | None, expected_verdict: str) -> dict:
         "equation1": _to_diamond(p.get("equation1", p.get("hypothesis", ""))),
         "equation2": _to_diamond(p.get("equation2", p.get("goal", ""))),
         "answer": expected_verdict == TRUE,
+        "proof_policy": {
+            "allowed_axioms": list(_STAGE2_ALLOWED_AXIOMS),
+        },
     }
 
 
