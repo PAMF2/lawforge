@@ -16,13 +16,14 @@ import sys
 import time
 from pathlib import Path
 
-from lean.judge import judge as run_judge
+from lawforge_utils import env_bool
 from lean.judge import judge_or_score
 from solver.proxy_client import call_local
 
-# When LAWFORGE_LLM_JUDGE=1, eval falls back to LLM-as-judge if Lean unavailable
-# (instead of the simpler mock). Useful during dev to get richer reward signal.
-_USE_LLM_JUDGE = os.environ.get("LAWFORGE_LLM_JUDGE", "0") == "1"
+# LAWFORGE_LLM_JUDGE=1: when Lean unavailable, fall back to LLM-as-judge for
+# richer reward. Cost: ~5 extra LLM calls per problem (one per solver L1..L5
+# judge submission). With --workers 4 --limit 20: ~300s extra per gen.
+_USE_LLM_JUDGE = env_bool("LAWFORGE_LLM_JUDGE")
 
 ROOT = Path(__file__).resolve().parent
 
@@ -94,14 +95,13 @@ def run_solver_on_problem(problem: dict, timeout: int = 30) -> bool:
                 continue
             call = req.get("call")
             if call == "judge":
-                code = req.get("code", "")
-                exp = req.get("verdict", "true")
-                if _USE_LLM_JUDGE:
-                    v = judge_or_score(code, expected_verdict=exp,
-                                       eq1=str(problem.get("hypothesis", "")),
-                                       eq2=str(problem.get("goal", "")))
-                else:
-                    v = run_judge(code, expected_verdict=exp)
+                v = judge_or_score(
+                    req.get("code", ""),
+                    expected_verdict=req.get("verdict", "true"),
+                    eq1=str(problem.get("hypothesis", "")),
+                    eq2=str(problem.get("goal", "")),
+                    use_llm_fallback=_USE_LLM_JUDGE,
+                )
                 proc.stdin.write(json.dumps({"status": v.status, "message": v.message}) + "\n")
                 proc.stdin.flush()
                 if v.accepted:

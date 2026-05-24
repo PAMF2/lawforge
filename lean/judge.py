@@ -95,16 +95,18 @@ def _mock_judge(lean_code: str) -> Verdict:
     return Verdict(status=INCORRECT, message="mock: no obvious tactic")
 
 
+# LLM-judge calibration thresholds (used by judge_or_score). Tune via env.
+ACCEPT_THRESHOLD = float(os.environ.get("LAWFORGE_JUDGE_ACCEPT", "0.85"))
+MALFORMED_THRESHOLD = float(os.environ.get("LAWFORGE_JUDGE_MALFORMED", "0.1"))
+
+
 def llm_judge_score(lean_code: str, eq1: str = "", eq2: str = "",
                     expected_verdict: str = TRUE) -> float:
     """RULER-style continuous reward 0..1 via LLM-as-judge.
 
-    Single-shot scoring (no group ranking). For group-relative scoring used
-    by GRPO, see train_grpo.ruler_score(). Use this when you need a soft
-    reward for one isolated candidate (e.g. cheatsheet distill ranking).
-
     Returns 0.0 if the LLM call fails or returns malformed JSON.
     """
+    from lawforge_utils import extract_json
     from solver.proxy_client import call_local
     prompt = (
         "You are scoring a Lean 4 proof candidate for the equational-implication task.\n"
@@ -115,51 +117,46 @@ def llm_judge_score(lean_code: str, eq1: str = "", eq2: str = "",
         'Output ONLY JSON: {"score": <float 0..1>}'
     )
     resp = call_local(prompt, max_tokens=128, temperature=0.0)
-    s = resp.text.strip()
-    if "```" in s:
-        parts = s.split("```")
-        s = parts[1] if len(parts) > 1 else s
-        if s.startswith("json"):
-            s = s[4:]
+    data = extract_json(resp.text)
+    if not data:
+        return 0.0
     try:
-        return max(0.0, min(1.0, float(json.loads(s)["score"])))
-    except Exception:
+        return max(0.0, min(1.0, float(data["score"])))
+    except (KeyError, ValueError, TypeError):
         return 0.0
 
 
 def judge_or_score(lean_code: str, expected_verdict: str = TRUE,
                    eq1: str = "", eq2: str = "",
                    use_llm_fallback: bool = True) -> Verdict:
-    """Cascaded reward: real Lean -> LLM-as-judge -> mock.
-
-    Use this when you want a richer signal than binary mock during dev
-    (before Lean toolchain is installed).
-    """
+    """Cascaded reward: real Lean -> LLM-as-judge -> mock."""
     if _JUDGE_AVAILABLE:
         return judge(lean_code, expected_verdict)
     if not use_llm_fallback:
         return _mock_judge(lean_code)
     score = llm_judge_score(lean_code, eq1, eq2, expected_verdict)
-    status = ACCEPTED if score >= 0.85 else (INCORRECT if score >= 0.2 else MALFORMED)
+    if score >= ACCEPT_THRESHOLD:
+        status = ACCEPTED
+    elif score < MALFORMED_THRESHOLD:
+        status = MALFORMED
+    else:
+        status = INCORRECT
     return Verdict(status=status, message=f"llm-judge score={score:.3f}")
 
 
-def reward(verdict: Verdict, shaping: bool = False) -> float:
-    """Convert verdict to RL reward.
+_SHAPED_REWARDS = {
+    ACCEPTED: 1.0,
+    INCORRECT: 0.10,
+    INCOMPLETE_PROOF: 0.05,
+    MALFORMED: 0.02,
+    UNPARSED: 0.0,
+}
 
-    Default: binary (1.0 accepted, 0.0 else) = pure RLVR signal.
-    Shaping: small partial credit for proof-that-compiles-but-wrong (incorrect)
-    vs total garbage (unparsed). Use with caution; can reward-hack.
-    """
+
+def reward(verdict: Verdict, shaping: bool = False) -> float:
+    """Convert verdict to RL reward. Binary by default; shaped if requested."""
     if verdict.accepted:
         return 1.0
     if not shaping:
         return 0.0
-    return {
-        "incorrect": 0.10,
-        "incomplete_proof": 0.05,
-        INCORRECT: 0.10,
-        INCOMPLETE_PROOF: 0.05,
-        MALFORMED: 0.02,
-        UNPARSED: 0.0,
-    }.get(verdict.status, 0.0)
+    return _SHAPED_REWARDS.get(verdict.status, 0.0)

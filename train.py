@@ -15,10 +15,8 @@ This is the "5-minute fixed budget" stage of the Karpathy Loop. Hyperparams
 from __future__ import annotations
 
 import argparse
-import hashlib
 import json
 import os
-import subprocess
 import sys
 import time
 from pathlib import Path
@@ -39,10 +37,7 @@ def load_train_split() -> list[dict]:
     return load_split("train")
 
 
-def _problem_hash(p: dict) -> str:
-    blob = json.dumps({"h": p.get("hypothesis", ""), "g": p.get("goal", "")},
-                      sort_keys=True).encode()
-    return hashlib.sha1(blob).hexdigest()[:12]
+from lawforge_utils import problem_hash as _problem_hash  # noqa: E402,F401
 
 
 def calibrate_one(problem: dict, timeout: int = 30) -> dict:

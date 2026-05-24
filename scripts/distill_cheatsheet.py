@@ -28,27 +28,25 @@ OUT = ROOT / "solver" / "cheatsheet.md"
 
 TACTIC_KEYS = ["rfl", "decide", "trivial", "aesop", "calc", "simp", "polyrith",
                "nlinarith", "ring", "refine", "constructor", "exact"]
+_TACTIC_RE = re.compile(r"\b(" + "|".join(TACTIC_KEYS) + r")\b")
 
 
 def _dominant_tactic(code: str) -> str:
     counts: dict[str, int] = {}
-    for tac in TACTIC_KEYS:
-        n = len(re.findall(rf"\b{tac}\b", code))
-        if n:
-            counts[tac] = n
-    if not counts:
-        return "other"
-    return max(counts, key=lambda k: counts[k])
+    for match in _TACTIC_RE.finditer(code):
+        tac = match.group(1)
+        counts[tac] = counts.get(tac, 0) + 1
+    return max(counts, key=lambda k: counts[k]) if counts else "other"
 
 
 def _load_accepted(path: Path) -> dict[str, list[str]]:
     groups: dict[str, list[str]] = defaultdict(list)
     if not path.exists():
-        return groups
+        return dict(groups)
     for f in sorted(path.glob("*.lean")):
         code = f.read_text()
         groups[_dominant_tactic(code)].append(code)
-    return groups
+    return dict(groups)
 
 
 def _shortest_k(items: list[str], k: int) -> list[str]:
@@ -70,6 +68,9 @@ def distill(accepted_dir: Path, out: Path, k_per_group: int = 3,
         lines.append(header + block)
         total += len(header) + len(block)
     out.parent.mkdir(parents=True, exist_ok=True)
+    # Overwrite warning: the seed cheatsheet's hand-written semantic patterns
+    # (identity-reflexive, etc.) and any aesop_prelude arm injections will be
+    # replaced by these tactic-grouped patterns. Re-apply arms after distill.
     out.write_text("".join(lines))
     n_groups = len(groups)
     n_proofs = sum(len(v) for v in groups.values())
