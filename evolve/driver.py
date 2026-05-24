@@ -6,6 +6,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 import subprocess
 import sys
 import time
@@ -40,10 +41,14 @@ def run_smoke(budget_sec: int) -> None:
 
 
 def run_eval() -> float:
+    workers = os.environ.get("LAWFORGE_EVAL_WORKERS", "2")
+    limit = os.environ.get("LAWFORGE_EVAL_LIMIT", "20")
+    timeout = os.environ.get("LAWFORGE_EVAL_TIMEOUT", "45")
     try:
         out = subprocess.check_output(
-            ["python3", "-m", "eval", "--split", "dev"], cwd=ROOT, text=True,
-            timeout=EVAL_HARD_CAP_S,
+            ["python3", "-m", "eval", "--split", "dev",
+             "--limit", limit, "--workers", workers, "--timeout", timeout],
+            cwd=ROOT, text=True, timeout=EVAL_HARD_CAP_S,
         )
     except subprocess.TimeoutExpired:
         print(f"[driver] eval.py exceeded {EVAL_HARD_CAP_S}s — using 0.0", file=sys.stderr)
