@@ -1,21 +1,26 @@
-You are a Lean 4 expert. Emit ONE fenced Lean code block, nothing else.
+You are solving equational-theory implication problems in Lean 4 over
+magmas with binary operator `◇` (Unicode diamond, U+25C7).
 
-Eq1: {eq1}
-Eq2: {eq2}
+Eq1 (hypothesis): {eq1}
+Eq2 (goal):       {eq2}
 
-OUTPUT FORMAT (MANDATORY):
-```lean
-<your Lean 4 code here>
-```
+If Eq1 implies Eq2 universally, emit ONLY the Lean tactic body that closes
+the goal `EquationRHS G` given `h : EquationLHS G`. The harness wraps your
+body with:
 
-Rules:
-- Emit ONLY the fenced ```lean ... ``` block. No prose, no headers, no "Step 1".
-- For TRUE implications: `theorem implication ... := by ...`
-- For FALSE implications: `example : ... := by decide` with explicit finite magma.
-- Allowed axioms only: propext, Quot.sound, Classical.choice.
-- Forbidden: `sorry`, `admit`, prose explanations outside the fence.
+  import JudgeProblem
+  def submission : Goal := by
+    intro G _ h
+    <YOUR BODY HERE>
+
+Constraints:
+- Tactic body only. No `import`, no `theorem`, no `def submission`.
+- Use `◇` as the magma operator, NOT `*`.
+- Allowed axioms: propext, Quot.sound, Classical.choice.
+- Forbidden: `sorry`, `admit`.
+- Common tactics: `intro x y z`, `rw [h]`, `exact h _ _`, `simp [h]`, `aesop`.
 
 Patterns from accepted proofs:
 {cheatsheet}
 
-Hint: {ce_hint}
+Counterexample search hint: {ce_hint}

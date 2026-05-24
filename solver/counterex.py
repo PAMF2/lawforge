@@ -16,6 +16,7 @@ Examples:
 from __future__ import annotations
 
 import itertools
+import json
 import random
 import re
 from dataclasses import dataclass
@@ -173,26 +174,28 @@ def search_counterex(
 # ---------- Lean emission ----------
 
 def emit_lean_counterex(ce: CounterEx, eq1_src: str, eq2_src: str) -> str:
-    """Emit Lean 4 code declaring a finite magma instance witnessing FALSE.
+    """Emit Lean 4 FALSE certificate matching upstream `def submission : Goal`
+    contract (Stage 2 baseline solver shape — see equational-theories-lean-
+    stage2 examples/solo/demos/baseline/solver.py:make_false_code).
 
-    Skeleton: depends on the exact mathlib4 Magma class and the upstream
-    judge's expected schema (see equational-theories-lean-stage2 examples).
+    Goal expands to ∃ (G : Type) (_ : Magma G), EquationLHS G ∧ ¬EquationRHS G.
+    We provide Fin n with the searched Cayley table as the witness magma and
+    discharge both conjuncts via `decideFin!` (judge-provided macro).
     """
     n = ce.order
-    vs = " ".join(vars_of(eq1_src, eq2_src)) or "x"
-    rows_match = "\n    ".join(
-        f"| {i}, {j} => {ce.table[i][j]}"
-        for i in range(n) for j in range(n)
+    # finOpTable strips non-digits and reads as flat list; nested or flat both
+    # work but upstream baseline uses nested `[[r0c0,r0c1],[r1c0,r1c1]]`.
+    # Stays valid for n <= 9 (single-digit cells); we never search higher.
+    table_str = json.dumps(ce.table)
+    return (
+        "import JudgeProblem\n"
+        "import JudgeDecide.DecideBang\n"
+        "import JudgeFinOp.MemoFinOp\n"
+        "open MemoFinOp\n\n"
+        "def submission : Goal := by\n"
+        f"  let m : Magma (Fin {n}) := {{\n"
+        f"    op := finOpTable \"{table_str}\"\n"
+        f"  }}\n"
+        f"  refine ⟨Fin {n}, m, ?_⟩\n"
+        f"  decideFin!\n"
     )
-    return f"""-- L2: finite-magma counterexample, order {n}
--- Satisfies Eq1 ({eq1_src}) but violates Eq2 ({eq2_src})
-def cex_op : Fin {n} -> Fin {n} -> Fin {n}
-  {rows_match}
-
-instance cex_magma : Magma (Fin {n}) := {{ op := cex_op }}
-
-example : (∀ {vs} : Fin {n}, {eq1_src}) ∧ ¬ (∀ {vs} : Fin {n}, {eq2_src}) := by
-  refine ⟨?_, ?_⟩
-  · decide
-  · decide
-"""

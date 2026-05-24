@@ -53,9 +53,12 @@ def _build_prompt(gen: int) -> str:
     grpo_tail = "\n".join(_tail(GRPO_LOG, 5)) or "(no grpo log)"
     return f"""You are a code-mutation agent for a Lean 4 proof loop.
 
-Goal: increase `solved_rate` on dev set. The solver emits Lean 4 fenced
-blocks; a real Lean judge verifies them. Allowed axioms: propext, Quot.sound,
-Classical.choice. Forbidden: sorry, admit, prose outside fences.
+Goal: increase `solved_rate` on the SAIR Stage 2 dev set. The solver emits
+a tactic body that the harness wraps as `def submission : Goal := by
+intro G _ h\\n  <body>`. The upstream judge compiles and checks it.
+
+Magma operator is `◇` (NOT `*`). Allowed axioms only: propext, Quot.sound,
+Classical.choice. Forbidden: sorry, admit, import, theorem, def submission.
 
 Recent generations (gen,arm,before,after,kept,sha):
 {recent}
@@ -83,8 +86,9 @@ Propose ONE concrete mutation. Output strict JSON only, no commentary:
 Constraints:
 - file in {sorted(ALLOWED_FILES)}.
 - op in {sorted(ALLOWED_OPS)}; replace only if current content clearly broken.
-- payload: if file=cheatsheet.md, only Lean 4 code in ```lean fences (no prose).
-  if file=prompt_template.txt, terse English rules.
+- payload: if file=cheatsheet.md, ONE Lean tactic-body snippet inside a ```lean
+  fence (NO `theorem`, NO `import`, NO `def submission` header — just the body).
+  if file=prompt_template.txt, terse English rules (no Lean code).
 - prefer append. Be minimal. One mutation.
 """
 

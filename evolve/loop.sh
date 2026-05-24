@@ -21,7 +21,7 @@ cd "$REPO_ROOT"
 
 MODE="${1:-smoke}"
 DEADLINE_EPOCH=$(date -d "2026-08-25 23:59" +%s 2>/dev/null || echo 9999999999)
-PLATEAU_LIMIT=10
+PLATEAU_LIMIT=25
 ARXIV_EVERY=10                # arxiv pull is slow + rate-limited; keep sparse
 SMOKE_BUDGET_SEC=300
 GEN_HARD_CAP_S=3600           # 1h max per generation; nothing runs longer

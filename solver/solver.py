@@ -14,6 +14,7 @@ from __future__ import annotations
 
 import json
 import os
+import re
 import sys
 import time
 from pathlib import Path
@@ -31,18 +32,37 @@ VERIFIER_REFINE_K = int((HERE / "VERIFIER_REFINE_K").read_text().strip()) if (HE
 LLM_MAX_TOKENS = int(os.environ.get("LAWFORGE_LLM_MAX_TOKENS", "1024"))
 
 
+def _wrap_true_submission(proof_body: str) -> str:
+    """Wrap a tactic body as TRUE submission matching upstream contract.
+
+    Mirror of equational-theories-lean-stage2/examples/solo/demos/baseline/
+    solver.py:make_true_code. Goal expands to
+      ∀ (G : Type) [Magma G], EquationLHS G → EquationRHS G
+    so we `intro G _ h` and let the body close the implication.
+    """
+    body = proof_body.strip()
+    body = re.sub(r"^:?=?\s*by\s+", "", body)
+    body = re.sub(r"^\s*import\s+.*\n?", "", body, flags=re.MULTILINE)
+    lines = body.split("\n")
+    # Strip the common leading indent so the wrapper's 2-space prefix yields
+    # a uniformly-indented tactic block (Lean is whitespace-sensitive).
+    non_empty = [l for l in lines if l.strip()]
+    if non_empty:
+        min_indent = min(len(l) - len(l.lstrip()) for l in non_empty)
+        lines = [l[min_indent:] if len(l) > min_indent else l for l in lines]
+    indented = "\n".join("  " + l if l.strip() else "" for l in lines)
+    return (
+        "import JudgeProblem\n\n"
+        "def submission : Goal := by\n"
+        "  intro G _ h\n"
+        f"{indented}\n"
+    )
+
+
 def l1_syntactic(eq1: str, eq2: str) -> str | None:
-    """Layer 1: free. Identical-equation case."""
+    """Layer 1: free. Eq1 ≡ Eq2 syntactically -> hypothesis IS the goal."""
     if eq1.replace(" ", "") == eq2.replace(" ", ""):
-        vars_ = vars_of(eq1, eq2)
-        vs = " ".join(vars_) or "x"
-        holes = " ".join("_" for _ in vars_) or "_"
-        return (
-            "-- L1: Eq1 ≡ Eq2 syntactically; hypothesis is the goal\n"
-            "theorem implication {G : Type*} [Magma G]\n"
-            f"    (h : ∀ {vs} : G, {eq1}) : ∀ {vs} : G, {eq2} := by\n"
-            f"  intros; exact h {holes}\n"
-        )
+        return _wrap_true_submission("exact h")
     return None
 
 
@@ -53,12 +73,12 @@ def l2_counterex(eq1: str, eq2: str, max_order: int = 4) -> str | None:
 
 
 def l3_tactic_ladder(eq1: str, eq2: str) -> str:
-    """Layer 3: ask LLM for a one-shot tactic-driven proof."""
+    """Layer 3: ask LLM for a tactic body, wrap as submission."""
     prompt = PROMPT_TPL.format(eq1=eq1, eq2=eq2,
                                 cheatsheet=CHEATSHEET if USE_CHEATSHEET else "(none)",
                                 ce_hint="not searched yet")
     resp = call_llm(prompt, max_tokens=LLM_MAX_TOKENS, temperature=0.3)
-    return _extract_code(resp.text)
+    return _wrap_true_submission(_extract_body(resp.text))
 
 
 def l4_subgoal_decomp(eq1: str, eq2: str) -> str:
@@ -68,10 +88,10 @@ def l4_subgoal_decomp(eq1: str, eq2: str) -> str:
                           cheatsheet=CHEATSHEET if USE_CHEATSHEET else "(none)",
                           ce_hint="not searched yet")
         + "\n\nDecompose into 2-3 subgoals (as Lean lemma signatures) "
-          "before proving the main implication. Emit only the final Lean code."
+          "before proving the main implication. Emit only the final tactic body."
     )
     resp = call_llm(prompt, max_tokens=LLM_MAX_TOKENS, temperature=0.3)
-    return _extract_code(resp.text)
+    return _wrap_true_submission(_extract_body(resp.text))
 
 
 def l5_refine(eq1: str, eq2: str, prior_code: str, error_msg: str) -> str:
@@ -80,23 +100,40 @@ def l5_refine(eq1: str, eq2: str, prior_code: str, error_msg: str) -> str:
         f"The following Lean 4 proof attempt failed:\n```\n{prior_code}\n```\n"
         f"Judge feedback: {error_msg}\n\n"
         f"Eq1: {eq1}\nEq2: {eq2}\n\n"
-        "Emit a corrected Lean 4 certificate. Output only the code."
+        "Emit a corrected Lean 4 tactic body only (no imports, no theorem)."
     )
     resp = call_llm(prompt, max_tokens=LLM_MAX_TOKENS, temperature=0.5)
-    return _extract_code(resp.text)
+    return _wrap_true_submission(_extract_body(resp.text))
 
 
-def _extract_code(text: str) -> str:
-    """Pull Lean code from LLM output. Accepts fenced ```lean blocks or raw."""
-    if "```lean" in text:
-        a = text.index("```lean") + len("```lean")
-        b = text.index("```", a)
-        return text[a:b].strip()
-    if "```" in text:
-        a = text.index("```") + 3
-        b = text.index("```", a)
-        return text[a:b].strip()
-    return text.strip()
+def _extract_body(text: str) -> str:
+    """Pull tactic body from LLM output. Accepts fenced ```lean blocks, raw,
+    or upstream-style JSON {verdict, proof}. Returns body suitable for
+    _wrap_true_submission (no imports, no theorem/def header)."""
+    s = text.strip()
+    s = re.sub(r"<think>[\s\S]*?</think>", "", s).strip()
+    # try JSON first (upstream PROMPT contract)
+    m = re.search(r"\{[\s\S]*\}", s)
+    if m:
+        try:
+            obj = json.loads(m.group())
+            if isinstance(obj, dict) and "proof" in obj:
+                s = str(obj["proof"])
+        except (json.JSONDecodeError, ValueError):
+            pass
+    # strip fences if any
+    fm = re.search(r"```(?:lean4?|Lean4?)?\s*\n?(.*?)```", s, re.DOTALL)
+    if fm:
+        s = fm.group(1)
+    # drop a leading `def submission` / `theorem` wrapper if the model emitted one
+    s = re.sub(r"^\s*(?:import\s+\S+\n)+", "", s)
+    s = re.sub(r"^\s*(?:def\s+submission|theorem\s+\w+|example)\b[^\n]*?:=\s*by\b",
+               "", s)
+    # If the LLM also emitted `intro G _ h` (or its variants), strip — the
+    # wrapper adds this exact line and a second intro would error
+    # "no introducible binders left".
+    s = re.sub(r"^\s*intro\s+G\s+\S+\s+h\s*$", "", s, count=1, flags=re.MULTILINE)
+    return s.strip() or "sorry"
 
 
 def solve(problem: dict) -> dict:

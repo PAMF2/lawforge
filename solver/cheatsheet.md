@@ -1,65 +1,70 @@
 # Lawforge Cheatsheet (seed)
 
-Worked Lean 4 patterns for equational implications over magmas.
+Worked Lean 4 tactic-body patterns for SAIR Stage 2 equational implications
+over magmas. The harness wraps each body inside
+`def submission : Goal := by intro G _ h\n  <body>`.
 
 The Karpathy loop edits this file. Lines starting with `## PATTERN` are
 auto-indexed by `arms.arm_cheatsheet_inject` and selected by similarity to
 the problem at hand.
 
-## PATTERN: identity-reflexive
+## PATTERN: identity (eq1 ≡ eq2)
 
-If `Eq1` is `x = x` (always true), every `Eq2` is implied iff `Eq2` is itself
-universally true. Try `rfl` first; if it fails, the implication is false.
+When the two equations are syntactically identical, `h` already is the goal.
 
 ```lean
-theorem implication (G : Type*) [Magma G] (h : ∀ x : G, x = x) :
-    ∀ x : G, x = x := by
-  intros; rfl
+exact h
 ```
 
-## PATTERN: idempotent absorbs
+## PATTERN: direct rewrite
 
-If `Eq1 ≡ x = x*y` (right-absorbing under `*`), then `x*x = x` follows by
-specializing `y := x`.
+When `EquationRHS G` follows by a single rewrite using the hypothesis.
 
 ```lean
-theorem implication (G : Type*) [Magma G] (h : ∀ x y : G, x = x * y) :
-    ∀ x : G, x = x * x := by
-  intro x; exact h x x
+intro x y z
+rw [h]
 ```
 
-## PATTERN: small finite counterexample
+## PATTERN: simp closure
 
-When the implication is FALSE, we ship a finite magma. The counterex.py
-search produces a Cayley table; the Lean proof instantiates `Fin n` as the
-carrier and proves `Eq1` holds (by `decide`) and `Eq2` fails (by `decide`).
+Throw the hypothesis at `simp` and let it close the goal.
 
 ```lean
--- carrier of order 2
-example : ∃ (G : Type) (_ : Magma G), (∀ x y : G, ...) ∧ ¬ (∀ x : G, ...) := by
-  refine ⟨Fin 2, ⟨fun a b => ...⟩, ?_, ?_⟩
-  · decide
-  · decide
+intro x y
+simp [h]
 ```
 
 ## PATTERN: aesop fallback
 
-For straightforward derivations the model should always attempt:
+For algebraic chains where the exact tactic sequence isn't obvious.
 
 ```lean
-theorem implication ... := by intros; aesop
+intros
+aesop
 ```
 
-`aesop` is allowed and very strong for simple equational rearrangements.
+## PATTERN: existential elim with rewrite
 
-## PATTERN: trans / subst chain
-
-Equational chains can be assembled by `calc` blocks:
+For longer derivations: peel variables, apply hypothesis with explicit args.
 
 ```lean
-theorem implication ... := by
-  intros
-  calc lhs = mid1 := by rw [h]
-       _ = mid2 := by rw [h]
-       _ = rhs  := by ...
+intro x y z
+have h1 := h x y z
+exact h1
+```
+
+## PATTERN: counterexample reminder (FALSE only)
+
+FALSE certificates are emitted by counterex.py, not by the LLM. They use:
+
+```lean
+import JudgeProblem
+import JudgeDecide.DecideBang
+import JudgeFinOp.MemoFinOp
+open MemoFinOp
+
+def submission : Goal := by
+  let m : Magma (Fin 2) := { op := finOpTable "[[0,0],[1,1]]" }
+  refine ⟨Fin 2, m, ?_⟩
+  decideFin!
 ```

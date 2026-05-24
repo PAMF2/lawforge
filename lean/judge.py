@@ -78,17 +78,38 @@ def _load_real_judge() -> bool:
         return False
 
 
+def _to_diamond(text: str) -> str:
+    """Convert magma operator `*` -> `◇` (U+25C7).
+
+    The HF SAIRfoundation/equational-theories-selected-problems dataset ships
+    equations with `*`. The upstream Stage 2 judge's regex
+    `^[\\sa-zA-Z0-9◇=()]+$` REJECTS `*` outright with JudgeConfigurationError.
+    Single source of conversion to avoid drift across solver/eval/judge paths.
+    """
+    return text.replace("*", "◇") if text else text
+
+
 def _build_upstream_problem(p: dict | None, expected_verdict: str) -> dict:
-    """Translate our internal problem dict to upstream PROBLEM_KEYS shape."""
+    """Translate our internal problem dict to upstream PROBLEM_KEYS shape.
+
+    Converts `*` -> `◇` in equations so the judge regex doesn't reject them.
+    """
     p = p or {}
     return {
         "id": p.get("id", p.get("problem_id", "lawforge_x")),
         "eq1_id": int(p.get("eq1_id", 0)),
         "eq2_id": int(p.get("eq2_id", 0)),
-        "equation1": p.get("equation1", p.get("hypothesis", "")),
-        "equation2": p.get("equation2", p.get("goal", "")),
+        "equation1": _to_diamond(p.get("equation1", p.get("hypothesis", ""))),
+        "equation2": _to_diamond(p.get("equation2", p.get("goal", ""))),
         "answer": expected_verdict == TRUE,
     }
+
+
+def _normalize_lean_code(code: str) -> str:
+    """Replace `*` magma operator with `◇` in submitted Lean code so it
+    matches the Magma class infix notation built by the judge. Safe to apply
+    repeatedly (idempotent on `◇`)."""
+    return code.replace("*", "◇") if code else code
 
 
 def judge(lean_code: str, expected_verdict: str = TRUE,
@@ -109,7 +130,10 @@ def judge(lean_code: str, expected_verdict: str = TRUE,
         )
 
     upstream_problem = _build_upstream_problem(problem, expected_verdict)
-    raw_answer = json.dumps({"verdict": expected_verdict, "code": lean_code})
+    raw_answer = json.dumps({
+        "verdict": expected_verdict,
+        "code": _normalize_lean_code(lean_code),
+    })
     try:
         result = _VERIFY_FN(upstream_problem, raw_answer, config=_JUDGE_CONFIG)
         return Verdict(status=result.get("status", UNPARSED),

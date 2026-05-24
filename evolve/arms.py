@@ -25,22 +25,23 @@ from evolve.agent57 import Arm
 # loose versions cause DeepSeek-Prover to emit prose and tank the baseline.
 # Differences across variants live in reasoning scaffolding only.
 
-_STRICT_FOOTER = """OUTPUT FORMAT (MANDATORY):
-```lean
-<your Lean 4 code here>
-```
+_STRICT_FOOTER = """OUTPUT (tactic body only, no imports, no def/theorem header):
+The harness wraps your body with:
+  import JudgeProblem
+  def submission : Goal := by
+    intro G _ h
+    <YOUR BODY HERE>
 
 Rules:
-- Emit ONLY the fenced ```lean ... ``` block. No prose, no headers, no "Step 1".
-- For TRUE implications: `theorem implication ... := by ...`
-- For FALSE implications: `example : ... := by decide` with explicit finite magma.
-- Allowed axioms only: propext, Quot.sound, Classical.choice.
-- Forbidden: `sorry`, `admit`, prose explanations outside the fence.
+- Tactic body only. Plain Lean lines (one tactic per line).
+- Use `◇` as the magma operator, NOT `*`.
+- Allowed axioms: propext, Quot.sound, Classical.choice.
+- Forbidden: `sorry`, `admit`, `import`, `theorem`, `def submission`.
 
-Patterns from accepted proofs:
+Patterns:
 {cheatsheet}
 
-Hint: {ce_hint}
+CE hint: {ce_hint}
 """
 
 PROMPT_BASE = """You are a Lean 4 expert in equational theories of magmas.
