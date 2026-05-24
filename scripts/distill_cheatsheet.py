@@ -44,17 +44,24 @@ _THEOREM_BLOCK_RE = re.compile(
     r"(theorem\s+\w[\w\s\S]*?:=\s*by[\s\S]*?(?=\n(?:theorem|example|def|--|\Z))"
     r"|example[\s\S]*?:=\s*by[\s\S]*?(?=\n(?:theorem|example|def|--|\Z)))",
 )
+_LEAN_VALID_RE = re.compile(r"\b(theorem|example|def|instance|lemma|:=\s*by)\b")
+
+
+def _looks_like_lean(block: str) -> bool:
+    """Reject prose that happens to be inside ```lean fences (mined bench
+    runs are prose like 'VERDICT: FALSE\\nREASONING: ...'). Real Lean has
+    at least one of theorem/example/def/instance/lemma or `:= by`."""
+    return bool(_LEAN_VALID_RE.search(block))
 
 
 def _extract_lean(text: str) -> list[str]:
     """Pull Lean code blocks out of a free-form LLM response. Tries fenced
-    code blocks first; falls back to theorem/example patterns."""
+    code blocks first; falls back to theorem/example patterns. Drops blocks
+    that contain no Lean keywords (prose contamination)."""
     blocks = [m.group(1).strip() for m in _LEAN_FENCE_RE.finditer(text)]
-    if blocks:
-        return blocks
-    # No fences — try anchored declarations
-    blocks = [m.group(0).strip() for m in _THEOREM_BLOCK_RE.finditer(text)]
-    return blocks
+    if not blocks:
+        blocks = [m.group(0).strip() for m in _THEOREM_BLOCK_RE.finditer(text)]
+    return [b for b in blocks if _looks_like_lean(b)]
 
 
 def _load_accepted(path: Path) -> dict[str, list[str]]:
@@ -62,12 +69,9 @@ def _load_accepted(path: Path) -> dict[str, list[str]]:
     if not path.exists():
         return dict(groups)
     for f in sorted(path.glob("*.lean")):
-        raw = f.read_text()
-        lean_blocks = _extract_lean(raw) or [raw]  # fallback: keep raw
-        for blk in lean_blocks:
-            if not blk.strip():
-                continue
-            groups[_dominant_tactic(blk)].append(blk)
+        for blk in _extract_lean(f.read_text()):
+            if blk.strip():
+                groups[_dominant_tactic(blk)].append(blk)
     return dict(groups)
 
 
@@ -78,6 +82,10 @@ def _shortest_k(items: list[str], k: int) -> list[str]:
 def distill(accepted_dir: Path, out: Path, k_per_group: int = 3,
             max_bytes: int = 8192) -> None:
     groups = _load_accepted(accepted_dir)
+    n_proofs = sum(len(v) for v in groups.values())
+    if n_proofs == 0:
+        print(f"[distill] no valid Lean blocks in {accepted_dir} — preserving seed {out}")
+        return
     lines = ["# Lawforge Cheatsheet (distilled from accepted proofs)\n"]
     total = len(lines[0])
     for tac, items in sorted(groups.items(), key=lambda x: -len(x[1])):
@@ -94,9 +102,7 @@ def distill(accepted_dir: Path, out: Path, k_per_group: int = 3,
     # (identity-reflexive, etc.) and any aesop_prelude arm injections will be
     # replaced by these tactic-grouped patterns. Re-apply arms after distill.
     out.write_text("".join(lines))
-    n_groups = len(groups)
-    n_proofs = sum(len(v) for v in groups.values())
-    print(f"[distill] groups={n_groups} proofs={n_proofs} bytes={total} -> {out}")
+    print(f"[distill] groups={len(groups)} proofs={n_proofs} bytes={total} -> {out}")
 
 
 def main() -> None:
