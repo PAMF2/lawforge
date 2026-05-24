@@ -11,7 +11,6 @@ Outputs
 from __future__ import annotations
 
 import argparse
-import concurrent.futures as _cf
 import json
 import os
 import sys
@@ -23,12 +22,16 @@ sys.path.insert(0, str(ROOT))
 
 from lawforge_utils import problem_hash, render_prompt  # noqa: E402
 
-GRPO_GROUP = 4
-MAX_RESPONSE_LEN = 1024
-MAX_CANDIDATE_CHARS = 1200  # cap per-candidate text in RULER prompt
+# NOTE: server is single-threaded (transformers.generate is not thread-safe on
+# one model instance). Parallel client requests just queue + hit per-call
+# timeout. Keep GRPO_GROUP small + tokens bounded so each rollout stays under
+# LAWFORGE_LLM_TIMEOUT.
+GRPO_GROUP = 2
+MAX_RESPONSE_LEN = 512
+MAX_CANDIDATE_CHARS = 800
 ROLLOUT_TEMP = 0.7
-JUDGE_MAX_TOKENS = 512
-ACCEPT_REWARD = 0.85       # mirror lean.judge.ACCEPT_THRESHOLD
+JUDGE_MAX_TOKENS = 256
+ACCEPT_REWARD = 0.85
 JUDGE_FALLBACK_SCORE = 0.5
 
 MODEL_ID = os.environ.get("LAWFORGE_LLM_MODEL", "deepseek-ai/DeepSeek-Prover-V2-7B")
@@ -132,10 +135,10 @@ def main() -> None:
                            p.get("goal", p.get("equation2", "")))
     print(f"[grpo-smoke] problem={p.get('id', '?')}", file=sys.stderr)
 
-    with _cf.ThreadPoolExecutor(max_workers=GRPO_GROUP) as ex:
-        futs = [ex.submit(call_local, prompt, MAX_RESPONSE_LEN, ROLLOUT_TEMP)
+    # Sequential rollouts: the local LLM server is single-threaded; concurrent
+    # client requests just queue and individually time out.
+    rollouts = [call_local(prompt, MAX_RESPONSE_LEN, ROLLOUT_TEMP)
                 for _ in range(GRPO_GROUP)]
-        rollouts = [f.result() for f in futs]
     responses = [r.text for r in rollouts]
     expected = [str(p.get("label", "true")).lower()] * GRPO_GROUP
     rewards = _score_group(prompt, responses, expected)
