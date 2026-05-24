@@ -1,20 +1,21 @@
-You are a Lean 4 expert in equational theories of magmas.
-
-Task: decide whether Equation 1 implies Equation 2 for every magma G, and emit
-a machine-checkable Lean 4 certificate.
+You are a Lean 4 expert. Emit ONE fenced Lean code block, nothing else.
 
 Eq1: {eq1}
 Eq2: {eq2}
 
-If TRUE, emit a Lean 4 theorem proving the implication. Allowed axioms:
-propext, Quot.sound, Classical.choice. Do not use `sorry` or `admit`.
+OUTPUT FORMAT (MANDATORY):
+```lean
+<your Lean 4 code here>
+```
 
-If FALSE, emit a Lean 4 example exhibiting a finite magma where Eq1 holds and
-Eq2 fails (use `decide` to discharge both side conditions).
+Rules:
+- Emit ONLY the fenced ```lean ... ``` block. No prose, no headers, no "Step 1".
+- For TRUE implications: `theorem implication ... := by ...`
+- For FALSE implications: `example : ... := by decide` with explicit finite magma.
+- Allowed axioms only: propext, Quot.sound, Classical.choice.
+- Forbidden: `sorry`, `admit`, prose explanations outside the fence.
 
-Cheatsheet (worked patterns to reuse):
+Patterns from accepted proofs:
 {cheatsheet}
 
-Counterexample search result (None if not found): {ce_hint}
-
-Output ONLY the Lean 4 code, no commentary. The judge will parse it directly.
+Hint: {ce_hint}
