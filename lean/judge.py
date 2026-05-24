@@ -1,27 +1,26 @@
 """Lean judge wrapper.
 
-Calls the upstream Stage 2 judge subprocess (the deterministic Lean verifier
-shipped in github.com/SAIRcompetition/equational-theories-lean-stage2) and
-parses its verdict.
+Calls the upstream Stage 2 judge (`judge.verify.verify_answer`) shipped in
+github.com/SAIRcompetition/equational-theories-lean-stage2. Activated when
+`upstream/.env.judge` and `upstream/judge/verify.py` exist (after running
+`bash upstream/scripts/setup.sh` which installs Lean toolchain + mathlib +
+builds judge modules). Falls back to a mock when upstream is missing.
 
 Status enum from competition spec:
   accepted | unparsed | malformed | incomplete_proof | incorrect
-
-Stub: tries upstream/scripts/judge.sh first, falls back to a mock if absent
-(so unit tests pass without Lean installed).
 """
 from __future__ import annotations
 
 import json
 import os
-import subprocess
-import tempfile
 from dataclasses import dataclass
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
-UPSTREAM_JUDGE = ROOT / "upstream" / "scripts" / "judge.sh"
-_JUDGE_AVAILABLE = UPSTREAM_JUDGE.exists()
+UPSTREAM = ROOT / "upstream"
+UPSTREAM_JUDGE = UPSTREAM / "scripts" / "judge.sh"  # legacy probe (not used)
+UPSTREAM_ENV = UPSTREAM / ".env.judge"
+_JUDGE_AVAILABLE = UPSTREAM_ENV.exists() and (UPSTREAM / "judge" / "verify.py").exists()
 
 
 # Stage 2 spec verdict strings — single source of truth, no typos.
@@ -46,41 +45,62 @@ class Verdict:
         return self.status == ACCEPTED
 
 
-def judge(lean_code: str, expected_verdict: str = "true", problem_id: str = "") -> Verdict:
-    """Run the upstream Lean judge on a candidate proof.
+_VERIFY_FN = None
+_JUDGE_CONFIG = None
+_JUDGE_LOAD_TRIED = False
 
-    expected_verdict: "true" (proof of implication) or "false" (counterexample).
+
+def _load_real_judge() -> bool:
+    """Import upstream judge.verify lazily; cache config. Idempotent."""
+    global _VERIFY_FN, _JUDGE_CONFIG, _JUDGE_LOAD_TRIED
+    if _VERIFY_FN is not None:
+        return True
+    if _JUDGE_LOAD_TRIED:
+        return False
+    _JUDGE_LOAD_TRIED = True
+    import sys as _sys
+    if str(UPSTREAM) not in _sys.path:
+        _sys.path.insert(0, str(UPSTREAM))
+    try:
+        from judge.verify import _resolve_config, verify_answer
+        _JUDGE_CONFIG = _resolve_config(None)
+        _VERIFY_FN = verify_answer
+        return True
+    except Exception as e:
+        print(f"[judge] failed to load upstream verify: {e}", file=__import__("sys").stderr)
+        return False
+
+
+def _build_upstream_problem(p: dict | None, expected_verdict: str) -> dict:
+    """Translate our internal problem dict to upstream PROBLEM_KEYS shape."""
+    p = p or {}
+    return {
+        "id": p.get("id", p.get("problem_id", "lawforge_x")),
+        "eq1_id": int(p.get("eq1_id", 0)),
+        "eq2_id": int(p.get("eq2_id", 0)),
+        "equation1": p.get("equation1", p.get("hypothesis", "")),
+        "equation2": p.get("equation2", p.get("goal", "")),
+        "answer": expected_verdict == TRUE,
+    }
+
+
+def judge(lean_code: str, expected_verdict: str = TRUE,
+          problem: dict | None = None) -> Verdict:
+    """Run upstream Lean judge.verify on a candidate proof.
+
+    `problem` should include equation1/equation2/eq1_id/eq2_id/id (HF schema).
     """
-    if not _JUDGE_AVAILABLE:
+    if not _JUDGE_AVAILABLE or not _load_real_judge():
         return _mock_judge(lean_code)
 
-    with tempfile.NamedTemporaryFile("w", suffix=".json", delete=False) as f:
-        json.dump({
-            "call": "judge",
-            "verdict": expected_verdict,
-            "code": lean_code,
-            "problem_id": problem_id,
-        }, f)
-        payload_path = f.name
-
+    upstream_problem = _build_upstream_problem(problem, expected_verdict)
+    raw_answer = json.dumps({"verdict": expected_verdict, "code": lean_code})
     try:
-        r = subprocess.run(
-            ["bash", str(UPSTREAM_JUDGE), payload_path],
-            capture_output=True, text=True, timeout=300,
-        )
-        out = r.stdout.strip().splitlines()
-        if not out:
-            return Verdict(status="unparsed", message=r.stderr[:500])
-        last = out[-1]
-        try:
-            data = json.loads(last)
-            return Verdict(status=data.get("status", UNPARSED), message=data.get("message", ""))
-        except json.JSONDecodeError:
-            return Verdict(status=UNPARSED, message=last[:500])
-    except subprocess.TimeoutExpired:
-        return Verdict(status=INCORRECT, message="judge timeout")
-    finally:
-        os.unlink(payload_path)
+        result = _VERIFY_FN(upstream_problem, raw_answer, config=_JUDGE_CONFIG)
+        return Verdict(status=result.get("status", UNPARSED),
+                       message=(result.get("message") or result.get("error_code") or "")[:500])
+    except Exception as e:
+        return Verdict(status=INCORRECT, message=f"judge error: {type(e).__name__}: {e}")
 
 
 def _mock_judge(lean_code: str) -> Verdict:
@@ -128,10 +148,11 @@ def llm_judge_score(lean_code: str, eq1: str = "", eq2: str = "",
 
 def judge_or_score(lean_code: str, expected_verdict: str = TRUE,
                    eq1: str = "", eq2: str = "",
-                   use_llm_fallback: bool = True) -> Verdict:
+                   use_llm_fallback: bool = True,
+                   problem: dict | None = None) -> Verdict:
     """Cascaded reward: real Lean -> LLM-as-judge -> mock."""
     if _JUDGE_AVAILABLE:
-        return judge(lean_code, expected_verdict)
+        return judge(lean_code, expected_verdict, problem=problem)
     if not use_llm_fallback:
         return _mock_judge(lean_code)
     score = llm_judge_score(lean_code, eq1, eq2, expected_verdict)

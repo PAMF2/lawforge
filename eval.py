@@ -101,6 +101,7 @@ def run_solver_on_problem(problem: dict, timeout: int = 30) -> bool:
                     eq1=str(problem.get("hypothesis", "")),
                     eq2=str(problem.get("goal", "")),
                     use_llm_fallback=_USE_LLM_JUDGE,
+                    problem=problem,
                 )
                 proc.stdin.write(json.dumps({"status": v.status, "message": v.message}) + "\n")
                 proc.stdin.flush()

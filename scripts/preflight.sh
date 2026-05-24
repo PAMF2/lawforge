@@ -95,11 +95,11 @@ else
 fi
 
 echo "[7/7] Lean judge"
-if [ -x upstream/scripts/judge.sh ]; then
-  printf "  PASS  upstream Lean judge found\n"
+if [ -f upstream/.env.judge ] && [ -f upstream/judge/verify.py ]; then
+  printf "  PASS  upstream Lean judge ready (.env.judge + judge/verify.py)\n"
   pass=$((pass + 1))
 else
-  note "upstream/scripts/judge.sh missing — using mock (run: bash scripts/setup.sh)"
+  note "upstream Lean judge missing — using mock (run: bash scripts/setup.sh from upstream)"
 fi
 
 echo "---"

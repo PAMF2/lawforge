@@ -41,12 +41,14 @@ ACCEPTED_DIR.mkdir(parents=True, exist_ok=True)
 GRPO_LOG.parent.mkdir(parents=True, exist_ok=True)
 
 
-def _score_group(prompt: str, responses: list[str], expected: list[str]) -> list[float]:
+def _score_group(prompt: str, responses: list[str], expected: list[str],
+                 problem: dict | None = None) -> list[float]:
     """Score K rollouts. Cascade: real Lean (per-response) -> RULER (group)."""
     from lean.judge import _JUDGE_AVAILABLE, judge_or_score, reward as r2reward
 
     if _JUDGE_AVAILABLE:
-        return [r2reward(judge_or_score(r, expected_verdict=exp, use_llm_fallback=False))
+        return [r2reward(judge_or_score(r, expected_verdict=exp,
+                                         use_llm_fallback=False, problem=problem))
                 for r, exp in zip(responses, expected)]
     return ruler_score(prompt, responses, expected[0])
 
@@ -141,7 +143,7 @@ def main() -> None:
                 for _ in range(GRPO_GROUP)]
     responses = [r.text for r in rollouts]
     expected = [str(p.get("label", "true")).lower()] * GRPO_GROUP
-    rewards = _score_group(prompt, responses, expected)
+    rewards = _score_group(prompt, responses, expected, problem=p)
 
     accepted = 0
     for i, (r, rew) in enumerate(zip(responses, rewards)):
