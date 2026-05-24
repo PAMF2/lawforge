@@ -21,47 +21,53 @@ from pathlib import Path
 from evolve.agent57 import Arm
 
 
+# All three prompt variants MUST enforce the single-fenced-Lean-block contract;
+# loose versions cause DeepSeek-Prover to emit prose and tank the baseline.
+# Differences across variants live in reasoning scaffolding only.
+
+_STRICT_FOOTER = """OUTPUT FORMAT (MANDATORY):
+```lean
+<your Lean 4 code here>
+```
+
+Rules:
+- Emit ONLY the fenced ```lean ... ``` block. No prose, no headers, no "Step 1".
+- For TRUE implications: `theorem implication ... := by ...`
+- For FALSE implications: `example : ... := by decide` with explicit finite magma.
+- Allowed axioms only: propext, Quot.sound, Classical.choice.
+- Forbidden: `sorry`, `admit`, prose explanations outside the fence.
+
+Patterns from accepted proofs:
+{cheatsheet}
+
+Hint: {ce_hint}
+"""
+
 PROMPT_BASE = """You are a Lean 4 expert in equational theories of magmas.
-Decide if Equation 1 implies Equation 2. Emit a Lean certificate.
-Eq1: {eq1}
-Eq2: {eq2}
-Cheatsheet:
-{cheatsheet}
-CE hint: {ce_hint}
-"""
-
-PROMPT_KIMINA = """You are a Lean 4 formal-reasoning expert.
-
-<think>
-Plan the proof. Consider both directions:
-  - TRUE: find a Lean tactic chain (rfl, simp, decide, aesop, polyrith).
-  - FALSE: find a small finite magma where Eq1 holds and Eq2 fails.
-</think>
 
 Eq1: {eq1}
 Eq2: {eq2}
 
-Cheatsheet:
-{cheatsheet}
-CE hint: {ce_hint}
+""" + _STRICT_FOOTER
 
-Emit only the Lean 4 code.
-"""
-
-PROMPT_SUBGOAL = """You are a Lean 4 expert. To prove Eq1 implies Eq2:
-1. List 3 candidate subgoals (Lean lemma signatures).
-2. Prove each subgoal.
-3. Compose into the final certificate.
+PROMPT_KIMINA = """You are a Lean 4 formal-reasoning expert. Think briefly,
+then emit ONLY the Lean code. Consider both directions:
+  - TRUE: tactic chain (rfl, simp, decide, aesop, polyrith).
+  - FALSE: small finite magma where Eq1 holds and Eq2 fails (use `decide`).
 
 Eq1: {eq1}
 Eq2: {eq2}
 
-Cheatsheet:
-{cheatsheet}
-CE hint: {ce_hint}
+""" + _STRICT_FOOTER
 
-Emit only the Lean 4 code.
-"""
+PROMPT_SUBGOAL = """You are a Lean 4 expert. Decompose into ≤3 subgoals
+internally, compose into one final certificate. Do NOT print intermediate
+prose; only the final fenced Lean.
+
+Eq1: {eq1}
+Eq2: {eq2}
+
+""" + _STRICT_FOOTER
 
 
 def _patch_prompt(root: Path, new: str) -> None:
@@ -156,5 +162,49 @@ CORE_ARMS = [
 ]
 
 
+def _load_dynamic_arms(root: Path) -> list[Arm]:
+    """Load LLM-proposed mutations from evolve/dynamic_arms/*.json.
+
+    Each JSON: {name, file, op (append|prepend|replace), payload}.
+    Files restricted to solver/prompt_template.txt or solver/cheatsheet.md
+    (validated by autoresearch_llm). Bandit treats them as ordinary arms;
+    bad mutations get reverted by the loop's keep/reset rule."""
+    dyn_dir = root / "evolve" / "dynamic_arms"
+    if not dyn_dir.exists():
+        return []
+    allowed_files = {"solver/prompt_template.txt", "solver/cheatsheet.md"}
+    allowed_ops = {"append", "prepend", "replace"}
+    out: list[Arm] = []
+    # Cap library at last 20 dynamic arms to avoid bandit dilution as gens grow.
+    for jf in sorted(dyn_dir.glob("*.json"))[-20:]:
+        try:
+            spec = json.loads(jf.read_text())
+        except json.JSONDecodeError:
+            continue
+        if spec.get("file") not in allowed_files or spec.get("op") not in allowed_ops:
+            continue
+        name = f"dyn_{spec.get('name', jf.stem)}"
+        rel = spec["file"]
+        op = spec["op"]
+        payload = spec["payload"]
+
+        def _apply(root_: Path, _rel=rel, _op=op, _payload=payload) -> None:
+            target = root_ / _rel
+            cur = target.read_text() if target.exists() else ""
+            if _op == "append":
+                new = cur + ("\n" if cur and not cur.endswith("\n") else "") + _payload
+            elif _op == "prepend":
+                new = _payload + ("\n" if not _payload.endswith("\n") else "") + cur
+            else:  # replace
+                new = _payload
+            target.parent.mkdir(parents=True, exist_ok=True)
+            target.write_text(new)
+
+        out.append(Arm(name=name, apply=_apply))
+    return out
+
+
 def build_arm_library(root: Path) -> list[Arm]:
-    return [Arm(name=n, apply=f) for n, f in CORE_ARMS]
+    arms = [Arm(name=n, apply=f) for n, f in CORE_ARMS]
+    arms.extend(_load_dynamic_arms(root))
+    return arms

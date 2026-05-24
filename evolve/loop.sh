@@ -22,9 +22,10 @@ cd "$REPO_ROOT"
 MODE="${1:-smoke}"
 DEADLINE_EPOCH=$(date -d "2026-08-25 23:59" +%s 2>/dev/null || echo 9999999999)
 PLATEAU_LIMIT=10
-AUTORESEARCH_EVERY=5
+ARXIV_EVERY=10                # arxiv pull is slow + rate-limited; keep sparse
 SMOKE_BUDGET_SEC=300
-GEN_HARD_CAP_S=3600  # 1h max per generation; nothing runs longer
+GEN_HARD_CAP_S=3600           # 1h max per generation; nothing runs longer
+AUTORESEARCH_LLM_TIMEOUT=120
 
 plateau=0
 gen=0
@@ -48,11 +49,26 @@ while true; do
 
   echo "==== gen $gen ===="
 
-  if [ $((gen % AUTORESEARCH_EVERY)) -eq 1 ]; then
-    timeout 120 python3 evolve/autoresearch.py || echo "[loop] autoresearch failed, continuing"
-  fi
+  # 0. Pick up upstream fixes if the worker has a fresh remote. No-op locally.
+  git pull --rebase --autostash 2>/dev/null || true
 
-  # Wall-clock cap on driver: select arm -> apply -> commit -> smoke train -> eval -> keep|reset.
+  # 1a. LLM autoresearch: every gen ask local LLM for ONE concrete mutation.
+  #     Persists evolve/dynamic_arms/g<gen>.json which arms.py picks up next gen.
+  #     Run in parallel with arxiv fetch (when scheduled) — both write to disk
+  #     and have no read deps between themselves.
+  ( timeout "$AUTORESEARCH_LLM_TIMEOUT" python3 -m evolve.autoresearch_llm --gen "$gen" \
+      || echo "[loop] autoresearch_llm failed, continuing" ) &
+  llm_pid=$!
+
+  # 1b. Arxiv pull (sparse cadence; ToS-friendly).
+  if [ $((gen % ARXIV_EVERY)) -eq 1 ]; then
+    ( timeout 120 python3 evolve/autoresearch.py \
+        || echo "[loop] arxiv autoresearch failed, continuing" ) &
+  fi
+  wait "$llm_pid" || true
+  wait || true
+
+  # 2. Wall-clock cap on driver: select arm -> apply -> commit -> smoke -> eval -> keep|reset.
   timeout --kill-after=30 "$GEN_HARD_CAP_S" \
     python3 -m evolve.driver --gen "$gen" --smoke-sec "$SMOKE_BUDGET_SEC"
   rc=$?
