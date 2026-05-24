@@ -95,6 +95,55 @@ def _mock_judge(lean_code: str) -> Verdict:
     return Verdict(status=INCORRECT, message="mock: no obvious tactic")
 
 
+def llm_judge_score(lean_code: str, eq1: str = "", eq2: str = "",
+                    expected_verdict: str = TRUE) -> float:
+    """RULER-style continuous reward 0..1 via LLM-as-judge.
+
+    Single-shot scoring (no group ranking). For group-relative scoring used
+    by GRPO, see train_grpo.ruler_score(). Use this when you need a soft
+    reward for one isolated candidate (e.g. cheatsheet distill ranking).
+
+    Returns 0.0 if the LLM call fails or returns malformed JSON.
+    """
+    from solver.proxy_client import call_local
+    prompt = (
+        "You are scoring a Lean 4 proof candidate for the equational-implication task.\n"
+        f"Eq1: {eq1}\nEq2: {eq2}\nExpected verdict: {expected_verdict}\n\n"
+        f"Candidate proof:\n```lean\n{lean_code[:4000]}\n```\n\n"
+        "Score 0..1 based on: syntactic validity, tactic correctness, "
+        "type-correctness, and whether the goal is closed.\n"
+        'Output ONLY JSON: {"score": <float 0..1>}'
+    )
+    resp = call_local(prompt, max_tokens=128, temperature=0.0)
+    s = resp.text.strip()
+    if "```" in s:
+        parts = s.split("```")
+        s = parts[1] if len(parts) > 1 else s
+        if s.startswith("json"):
+            s = s[4:]
+    try:
+        return max(0.0, min(1.0, float(json.loads(s)["score"])))
+    except Exception:
+        return 0.0
+
+
+def judge_or_score(lean_code: str, expected_verdict: str = TRUE,
+                   eq1: str = "", eq2: str = "",
+                   use_llm_fallback: bool = True) -> Verdict:
+    """Cascaded reward: real Lean -> LLM-as-judge -> mock.
+
+    Use this when you want a richer signal than binary mock during dev
+    (before Lean toolchain is installed).
+    """
+    if _JUDGE_AVAILABLE:
+        return judge(lean_code, expected_verdict)
+    if not use_llm_fallback:
+        return _mock_judge(lean_code)
+    score = llm_judge_score(lean_code, eq1, eq2, expected_verdict)
+    status = ACCEPTED if score >= 0.85 else (INCORRECT if score >= 0.2 else MALFORMED)
+    return Verdict(status=status, message=f"llm-judge score={score:.3f}")
+
+
 def reward(verdict: Verdict, shaping: bool = False) -> float:
     """Convert verdict to RL reward.
 

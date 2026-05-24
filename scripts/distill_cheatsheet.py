@@ -1,0 +1,90 @@
+"""Distill accepted Lean proofs into the shipped cheatsheet (Honda 2025 pattern).
+
+Inputs:  proofs/accepted/*.lean   (mined by train_grpo or by the Karpathy loop)
+Output:  solver/cheatsheet.md     (overwritten — gets re-emitted with pattern blocks)
+
+Strategy (single-pass, deterministic):
+  1. Group accepted proofs by their dominant tactic chain (rfl / decide / aesop / calc / refine).
+  2. For each group, pick the K=3 shortest exemplars (favor compact, transferable).
+  3. Emit one PATTERN block per group with the exemplars inline.
+  4. Cap total bytes at MAX_CHEATSHEET (default 8 KB so it fits comfortably in
+     the 100 KB Lean-code-per-call limit even with prompt + cheatsheet).
+
+A more sophisticated distill (Honda-style learned compression) would use an
+LLM to summarize each group. That requires another LLM call per group; we
+defer it. Current approach: pick-and-package, no LLM needed.
+"""
+from __future__ import annotations
+
+import argparse
+import json
+import re
+from collections import defaultdict
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parent.parent
+ACCEPTED = ROOT / "proofs" / "accepted"
+OUT = ROOT / "solver" / "cheatsheet.md"
+
+TACTIC_KEYS = ["rfl", "decide", "trivial", "aesop", "calc", "simp", "polyrith",
+               "nlinarith", "ring", "refine", "constructor", "exact"]
+
+
+def _dominant_tactic(code: str) -> str:
+    counts: dict[str, int] = {}
+    for tac in TACTIC_KEYS:
+        n = len(re.findall(rf"\b{tac}\b", code))
+        if n:
+            counts[tac] = n
+    if not counts:
+        return "other"
+    return max(counts, key=lambda k: counts[k])
+
+
+def _load_accepted(path: Path) -> dict[str, list[str]]:
+    groups: dict[str, list[str]] = defaultdict(list)
+    if not path.exists():
+        return groups
+    for f in sorted(path.glob("*.lean")):
+        code = f.read_text()
+        groups[_dominant_tactic(code)].append(code)
+    return groups
+
+
+def _shortest_k(items: list[str], k: int) -> list[str]:
+    return sorted(items, key=len)[:k]
+
+
+def distill(accepted_dir: Path, out: Path, k_per_group: int = 3,
+            max_bytes: int = 8192) -> None:
+    groups = _load_accepted(accepted_dir)
+    lines = ["# Lawforge Cheatsheet (distilled from accepted proofs)\n"]
+    total = len(lines[0])
+    for tac, items in sorted(groups.items(), key=lambda x: -len(x[1])):
+        header = f"\n## PATTERN: {tac}-chain ({len(items)} accepted)\n\n"
+        block = ""
+        for ex in _shortest_k(items, k_per_group):
+            block += f"```lean\n{ex.strip()}\n```\n\n"
+        if total + len(header) + len(block) > max_bytes:
+            break
+        lines.append(header + block)
+        total += len(header) + len(block)
+    out.parent.mkdir(parents=True, exist_ok=True)
+    out.write_text("".join(lines))
+    n_groups = len(groups)
+    n_proofs = sum(len(v) for v in groups.values())
+    print(f"[distill] groups={n_groups} proofs={n_proofs} bytes={total} -> {out}")
+
+
+def main() -> None:
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--from-dir", default=str(ACCEPTED))
+    ap.add_argument("--out", default=str(OUT))
+    ap.add_argument("--k", type=int, default=3)
+    ap.add_argument("--max-bytes", type=int, default=8192)
+    args = ap.parse_args()
+    distill(Path(args.from_dir), Path(args.out), args.k, args.max_bytes)
+
+
+if __name__ == "__main__":
+    main()
