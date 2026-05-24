@@ -1,12 +1,12 @@
-from lean.judge import Verdict, _mock_judge, judge, reward
+from lean.judge import Verdict, _mock_judge, reward
 
 
 def test_mock_accepts_rfl_proof():
-    # Use judge() — works on both mock and real (real may classify rfl as
-    # accepted or incorrect depending on the surrounding theorem statement).
+    # Pin directly to _mock_judge: production `judge()` raises when real Lean
+    # is missing (no silent fallback). Mock heuristics are exercised here.
     code = "theorem t : True := by rfl"
-    v = judge(code, expected_verdict="true")
-    assert v.status in {"accepted", "incorrect", "incomplete_proof", "malformed", "unparsed"}
+    v = _mock_judge(code)
+    assert v.status == "accepted"
 
 
 def test_mock_flags_sorry_as_incomplete():

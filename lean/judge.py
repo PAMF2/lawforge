@@ -4,7 +4,12 @@ Calls the upstream Stage 2 judge (`judge.verify.verify_answer`) shipped in
 github.com/SAIRcompetition/equational-theories-lean-stage2. Activated when
 `upstream/.env.judge` and `upstream/judge/verify.py` exist (after running
 `bash upstream/scripts/setup.sh` which installs Lean toolchain + mathlib +
-builds judge modules). Falls back to a mock when upstream is missing.
+builds judge modules).
+
+Mock policy: the heuristic mock is for unit tests ONLY and never fires in
+production paths. judge() / judge_or_score() raise RuntimeError when the
+upstream judge is unavailable. To opt in for offline runs (CI, dev box
+without Lean), set LAWFORGE_ALLOW_MOCK=1.
 
 Status enum from competition spec:
   accepted | unparsed | malformed | incomplete_proof | incorrect
@@ -13,6 +18,7 @@ from __future__ import annotations
 
 import json
 import os
+import sys as _sys_mod
 from dataclasses import dataclass
 from pathlib import Path
 
@@ -21,6 +27,7 @@ UPSTREAM = ROOT / "upstream"
 UPSTREAM_JUDGE = UPSTREAM / "scripts" / "judge.sh"  # legacy probe (not used)
 UPSTREAM_ENV = UPSTREAM / ".env.judge"
 _JUDGE_AVAILABLE = UPSTREAM_ENV.exists() and (UPSTREAM / "judge" / "verify.py").exists()
+_ALLOW_MOCK = os.environ.get("LAWFORGE_ALLOW_MOCK", "0") == "1"
 
 
 # Stage 2 spec verdict strings — single source of truth, no typos.
@@ -89,9 +96,17 @@ def judge(lean_code: str, expected_verdict: str = TRUE,
     """Run upstream Lean judge.verify on a candidate proof.
 
     `problem` should include equation1/equation2/eq1_id/eq2_id/id (HF schema).
+    Raises RuntimeError when the upstream judge is unavailable, unless
+    LAWFORGE_ALLOW_MOCK=1 (CI/dev escape hatch).
     """
     if not _JUDGE_AVAILABLE or not _load_real_judge():
-        return _mock_judge(lean_code)
+        if _ALLOW_MOCK:
+            return _mock_judge(lean_code)
+        raise RuntimeError(
+            "Lean judge unavailable: run `bash upstream/scripts/setup.sh` "
+            f"(missing {UPSTREAM_ENV} or upstream/judge/verify.py). Set "
+            "LAWFORGE_ALLOW_MOCK=1 only for offline tests."
+        )
 
     upstream_problem = _build_upstream_problem(problem, expected_verdict)
     raw_answer = json.dumps({"verdict": expected_verdict, "code": lean_code})
@@ -100,11 +115,15 @@ def judge(lean_code: str, expected_verdict: str = TRUE,
         return Verdict(status=result.get("status", UNPARSED),
                        message=(result.get("message") or result.get("error_code") or "")[:500])
     except Exception as e:
+        print(f"[judge] verify_answer raised {type(e).__name__}: {e}",
+              file=_sys_mod.stderr)
         return Verdict(status=INCORRECT, message=f"judge error: {type(e).__name__}: {e}")
 
 
 def _mock_judge(lean_code: str) -> Verdict:
-    """Heuristic mock for offline / CI testing without Lean installed."""
+    """Heuristic mock — TESTS ONLY. Never called from production paths
+    (judge / judge_or_score raise instead). Kept for unit-test fixtures
+    that explicitly import _mock_judge."""
     if "sorry" in lean_code or "admit" in lean_code:
         return Verdict(status=INCOMPLETE_PROOF)
     if "theorem" not in lean_code and "example" not in lean_code:
@@ -150,19 +169,26 @@ def judge_or_score(lean_code: str, expected_verdict: str = TRUE,
                    eq1: str = "", eq2: str = "",
                    use_llm_fallback: bool = True,
                    problem: dict | None = None) -> Verdict:
-    """Cascaded reward: real Lean -> LLM-as-judge -> mock."""
+    """Cascaded reward: real Lean -> LLM-as-judge (RULER). No mock in
+    production: when neither Lean nor `use_llm_fallback` is available, raises
+    unless LAWFORGE_ALLOW_MOCK=1."""
     if _JUDGE_AVAILABLE:
         return judge(lean_code, expected_verdict, problem=problem)
-    if not use_llm_fallback:
+    if use_llm_fallback:
+        score = llm_judge_score(lean_code, eq1, eq2, expected_verdict)
+        if score >= ACCEPT_THRESHOLD:
+            status = ACCEPTED
+        elif score < MALFORMED_THRESHOLD:
+            status = MALFORMED
+        else:
+            status = INCORRECT
+        return Verdict(status=status, message=f"llm-judge score={score:.3f}")
+    if _ALLOW_MOCK:
         return _mock_judge(lean_code)
-    score = llm_judge_score(lean_code, eq1, eq2, expected_verdict)
-    if score >= ACCEPT_THRESHOLD:
-        status = ACCEPTED
-    elif score < MALFORMED_THRESHOLD:
-        status = MALFORMED
-    else:
-        status = INCORRECT
-    return Verdict(status=status, message=f"llm-judge score={score:.3f}")
+    raise RuntimeError(
+        "judge_or_score: Lean unavailable and use_llm_fallback=False. "
+        "Run `bash upstream/scripts/setup.sh` or set LAWFORGE_ALLOW_MOCK=1."
+    )
 
 
 _SHAPED_REWARDS = {
