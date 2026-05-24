@@ -39,13 +39,35 @@ def _dominant_tactic(code: str) -> str:
     return max(counts, key=lambda k: counts[k]) if counts else "other"
 
 
+_LEAN_FENCE_RE = re.compile(r"```(?:lean4?|Lean4?)\s*\n(.*?)```", re.DOTALL)
+_THEOREM_BLOCK_RE = re.compile(
+    r"(theorem\s+\w[\w\s\S]*?:=\s*by[\s\S]*?(?=\n(?:theorem|example|def|--|\Z))"
+    r"|example[\s\S]*?:=\s*by[\s\S]*?(?=\n(?:theorem|example|def|--|\Z)))",
+)
+
+
+def _extract_lean(text: str) -> list[str]:
+    """Pull Lean code blocks out of a free-form LLM response. Tries fenced
+    code blocks first; falls back to theorem/example patterns."""
+    blocks = [m.group(1).strip() for m in _LEAN_FENCE_RE.finditer(text)]
+    if blocks:
+        return blocks
+    # No fences — try anchored declarations
+    blocks = [m.group(0).strip() for m in _THEOREM_BLOCK_RE.finditer(text)]
+    return blocks
+
+
 def _load_accepted(path: Path) -> dict[str, list[str]]:
     groups: dict[str, list[str]] = defaultdict(list)
     if not path.exists():
         return dict(groups)
     for f in sorted(path.glob("*.lean")):
-        code = f.read_text()
-        groups[_dominant_tactic(code)].append(code)
+        raw = f.read_text()
+        lean_blocks = _extract_lean(raw) or [raw]  # fallback: keep raw
+        for blk in lean_blocks:
+            if not blk.strip():
+                continue
+            groups[_dominant_tactic(blk)].append(blk)
     return dict(groups)
 
 

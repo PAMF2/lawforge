@@ -30,30 +30,54 @@ TRAIN_HARD_CAP_S = 900   # 15 min, double the configured budget-sec
 EVAL_HARD_CAP_S = 1500   # 25 min, covers 20 problems x 45s x 1/4 workers worst case
 
 
-def run_smoke(budget_sec: int) -> None:
+def _run_with_pg_kill(argv: list[str], timeout_s: int) -> subprocess.CompletedProcess | None:
+    """Like subprocess.run with timeout, but kills the full process group on
+    timeout (not just the parent). Without this, child threads/subprocesses
+    can keep running past the deadline (observed: Lean judge subprocesses
+    holding open file descriptors after eval.py timed out)."""
+    import signal as _signal
+    proc = subprocess.Popen(
+        argv, cwd=ROOT, stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
+        text=True, start_new_session=True,
+    )
     try:
-        subprocess.run(
-            ["python3", "-m", "train", "--smoke", "--budget-sec", str(budget_sec)],
-            cwd=ROOT, check=False, timeout=TRAIN_HARD_CAP_S,
-        )
+        out, _ = proc.communicate(timeout=timeout_s)
+        return subprocess.CompletedProcess(argv, proc.returncode, stdout=out, stderr="")
     except subprocess.TimeoutExpired:
-        print(f"[driver] train.py exceeded {TRAIN_HARD_CAP_S}s — killed", file=sys.stderr)
+        try:
+            os.killpg(os.getpgid(proc.pid), _signal.SIGTERM)
+            proc.wait(timeout=5)
+        except (ProcessLookupError, subprocess.TimeoutExpired):
+            try:
+                os.killpg(os.getpgid(proc.pid), _signal.SIGKILL)
+            except ProcessLookupError:
+                pass
+        return None
+
+
+def run_smoke(budget_sec: int) -> None:
+    r = _run_with_pg_kill(
+        ["python3", "-m", "train", "--smoke", "--budget-sec", str(budget_sec)],
+        TRAIN_HARD_CAP_S,
+    )
+    if r is None:
+        print(f"[driver] train.py exceeded {TRAIN_HARD_CAP_S}s — killed pg", file=sys.stderr)
 
 
 def run_eval() -> float:
     workers = os.environ.get("LAWFORGE_EVAL_WORKERS", "2")
     limit = os.environ.get("LAWFORGE_EVAL_LIMIT", "20")
     timeout = os.environ.get("LAWFORGE_EVAL_TIMEOUT", "45")
-    try:
-        out = subprocess.check_output(
-            ["python3", "-m", "eval", "--split", "dev",
-             "--limit", limit, "--workers", workers, "--timeout", timeout],
-            cwd=ROOT, text=True, timeout=EVAL_HARD_CAP_S,
-        )
-    except subprocess.TimeoutExpired:
-        print(f"[driver] eval.py exceeded {EVAL_HARD_CAP_S}s — using 0.0", file=sys.stderr)
+    r = _run_with_pg_kill(
+        ["python3", "-m", "eval", "--split", "dev",
+         "--limit", limit, "--workers", workers, "--timeout", timeout],
+        EVAL_HARD_CAP_S,
+    )
+    if r is None:
+        print(f"[driver] eval.py exceeded {EVAL_HARD_CAP_S}s — killed pg, using 0.0",
+              file=sys.stderr)
         return 0.0
-    for line in out.splitlines()[::-1]:
+    for line in r.stdout.splitlines()[::-1]:
         if line.startswith("SOLVED_RATE="):
             return float(line.split("=", 1)[1])
     return 0.0
