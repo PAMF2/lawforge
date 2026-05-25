@@ -145,8 +145,8 @@ class CounterEx:
 
 def search_counterex(
     eq1_src: str, eq2_src: str,
-    max_order: int = 4, max_samples_per_order: int = 50_000,
-    timeout_per_order: float = 8.0,
+    max_order: int = 4, max_samples_per_order: int = 100_000,
+    timeout_per_order: float = 15.0,
 ) -> CounterEx | None:
     """Find a magma satisfying eq1 but not eq2. Return None if none in budget."""
     import time

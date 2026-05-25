@@ -147,7 +147,7 @@ def solve(problem: dict) -> dict:
             return v
 
     if USE_MACE4_FIRST:
-        ce_code = l2_counterex(eq1, eq2, max_order=3)
+        ce_code = l2_counterex(eq1, eq2, max_order=5)
         if ce_code:
             v = submit_judge("false", ce_code)
             if v.get("status") == "accepted":
@@ -175,7 +175,7 @@ def solve(problem: dict) -> dict:
                 return v
             last_err = v.get("message", last_err)
 
-    ce_code = l2_counterex(eq1, eq2, max_order=4)
+    ce_code = l2_counterex(eq1, eq2, max_order=5)
     if ce_code:
         v = submit_judge("false", ce_code)
         if v.get("status") == "accepted":

@@ -27,7 +27,7 @@ def git(*args: str) -> str:
 
 # Hard wall-clock caps so no single generation can stall the loop.
 TRAIN_HARD_CAP_S = 900   # 15 min, double the configured budget-sec
-EVAL_HARD_CAP_S = 1500   # 25 min, covers 20 problems x 45s x 1/4 workers worst case
+EVAL_HARD_CAP_S = 2700   # 45 min, covers 20 problems x 90s x 1/4 workers worst case
 
 
 def _run_with_pg_kill(argv: list[str], timeout_s: int) -> subprocess.CompletedProcess | None:
