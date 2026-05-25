@@ -30,6 +30,7 @@ AUTORESEARCH_LLM_TIMEOUT=120
 plateau=0
 gen=0
 last_progress=$(date +%s)
+prev_lines=0
 
 while true; do
   gen=$((gen + 1))
@@ -76,6 +77,15 @@ while true; do
     echo "[loop] gen $gen exceeded ${GEN_HARD_CAP_S}s — killed"
   fi
   last_progress=$(date +%s)
+
+  # Update `last_progress` only when a gen ACTUALLY appended a row. Without
+  # this the 2h no-progress guard at the top of the loop never trips on a
+  # genuinely-hung driver — `timeout` returns and the loop just iterates.
+  cur_lines=$(wc -l < evolve/results.tsv 2>/dev/null || echo 0)
+  if [ "${prev_lines:-0}" != "$cur_lines" ]; then
+    last_progress=$(date +%s)
+    prev_lines=$cur_lines
+  fi
 
   improved=$(tail -1 evolve/results.tsv 2>/dev/null | awk -F'\t' '{print $5}')
   if [ "$improved" = "1" ]; then
