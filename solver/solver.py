@@ -10,7 +10,6 @@ Strategy ladder (L1 -> L5). Each layer is cheap-to-expensive in token cost.
 Bandit-edited components (cheatsheet, prompt, thresholds) are loaded from
 files so the Karpathy outer loop can mutate them without touching this file.
 """
-from __future__ import annotations
 
 import json
 import os
@@ -19,7 +18,7 @@ import sys
 import time
 from pathlib import Path
 
-from solver.counterex import emit_lean_counterex, search_counterex, vars_of
+from solver.counterex import emit_lean_counterex, search_counterex
 from solver.proxy_client import call_llm, submit_judge
 
 HERE = Path(__file__).resolve().parent
@@ -27,8 +26,16 @@ PROMPT_TPL = (HERE / "prompt_template.txt").read_text()
 CHEATSHEET = (HERE / "cheatsheet.md").read_text()
 
 USE_MACE4_FIRST = (HERE / "USE_MACE4_FIRST").exists()
-USE_CHEATSHEET = int((HERE / "USE_CHEATSHEET").read_text().strip()) if (HERE / "USE_CHEATSHEET").exists() else 0
-VERIFIER_REFINE_K = int((HERE / "VERIFIER_REFINE_K").read_text().strip()) if (HERE / "VERIFIER_REFINE_K").exists() else 0
+USE_CHEATSHEET = (
+    int((HERE / "USE_CHEATSHEET").read_text().strip())
+    if (HERE / "USE_CHEATSHEET").exists()
+    else 0
+)
+VERIFIER_REFINE_K = (
+    int((HERE / "VERIFIER_REFINE_K").read_text().strip())
+    if (HERE / "VERIFIER_REFINE_K").exists()
+    else 0
+)
 LLM_MAX_TOKENS = int(os.environ.get("LAWFORGE_LLM_MAX_TOKENS", "1024"))
 
 
@@ -74,9 +81,12 @@ def l2_counterex(eq1: str, eq2: str, max_order: int = 4) -> str | None:
 
 def l3_tactic_ladder(eq1: str, eq2: str) -> str:
     """Layer 3: ask LLM for a tactic body, wrap as submission."""
-    prompt = PROMPT_TPL.format(eq1=eq1, eq2=eq2,
-                                cheatsheet=CHEATSHEET if USE_CHEATSHEET else "(none)",
-                                ce_hint="not searched yet")
+    prompt = PROMPT_TPL.format(
+        eq1=eq1,
+        eq2=eq2,
+        cheatsheet=CHEATSHEET if USE_CHEATSHEET else "(none)",
+        ce_hint="not searched yet",
+    )
     resp = call_llm(prompt, max_tokens=LLM_MAX_TOKENS, temperature=0.3)
     return _wrap_true_submission(_extract_body(resp.text))
 
@@ -84,11 +94,14 @@ def l3_tactic_ladder(eq1: str, eq2: str) -> str:
 def l4_subgoal_decomp(eq1: str, eq2: str) -> str:
     """Layer 4: DeepSeek-Prover-V2 style — single combined prompt (no planner)."""
     prompt = (
-        PROMPT_TPL.format(eq1=eq1, eq2=eq2,
-                          cheatsheet=CHEATSHEET if USE_CHEATSHEET else "(none)",
-                          ce_hint="not searched yet")
+        PROMPT_TPL.format(
+            eq1=eq1,
+            eq2=eq2,
+            cheatsheet=CHEATSHEET if USE_CHEATSHEET else "(none)",
+            ce_hint="not searched yet",
+        )
         + "\n\nDecompose into 2-3 subgoals (as Lean lemma signatures) "
-          "before proving the main implication. Emit only the final tactic body."
+        "before proving the main implication. Emit only the final tactic body."
     )
     resp = call_llm(prompt, max_tokens=LLM_MAX_TOKENS, temperature=0.3)
     return _wrap_true_submission(_extract_body(resp.text))
@@ -127,8 +140,9 @@ def _extract_body(text: str) -> str:
         s = fm.group(1)
     # drop a leading `def submission` / `theorem` wrapper if the model emitted one
     s = re.sub(r"^\s*(?:import\s+\S+\n)+", "", s)
-    s = re.sub(r"^\s*(?:def\s+submission|theorem\s+\w+|example)\b[^\n]*?:=\s*by\b",
-               "", s)
+    s = re.sub(
+        r"^\s*(?:def\s+submission|theorem\s+\w+|example)\b[^\n]*?:=\s*by\b", "", s
+    )
     # If the LLM also emitted `intro G _ h` (or its variants), strip — the
     # wrapper adds this exact line and a second intro would error
     # "no introducible binders left".
@@ -192,8 +206,10 @@ def main() -> None:
     problem = json.loads(line)
     t0 = time.time()
     result = solve(problem)
-    sys.stderr.write(f"[solver] solved={result.get('status')=='accepted'} "
-                     f"t={time.time()-t0:.1f}s\n")
+    sys.stderr.write(
+        f"[solver] solved={result.get('status') == 'accepted'} "
+        f"t={time.time() - t0:.1f}s\n"
+    )
 
 
 if __name__ == "__main__":

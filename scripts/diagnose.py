@@ -17,10 +17,8 @@ Reading the output answers, in order:
   - If the judge rejects ours but accepts the hand-crafted, the failure mode
     is localized to our wrapping / extraction layer.
 """
-from __future__ import annotations
 
 import json
-import os
 import sys
 from pathlib import Path
 
@@ -35,8 +33,8 @@ from lean.judge import (  # noqa: E402
     _to_diamond,
     judge,
 )
-from solver.counterex import emit_lean_counterex, search_counterex  # noqa: E402
-from solver.solver import _wrap_true_submission  # noqa: E402
+from solver.counterex import emit_lean_counterex, search_counterex
+from solver.solver import _wrap_true_submission
 
 
 def _baseline_true(proof_body: str) -> str:
@@ -61,7 +59,7 @@ def _baseline_false(n: int, table: list[list[int]]) -> str:
         "open MemoFinOp\n\n"
         "def submission : Goal := by\n"
         f"  let m : Magma (Fin {n}) := {{\n"
-        f"    op := finOpTable \"{table_str}\"\n"
+        f'    op := finOpTable "{table_str}"\n'
         f"  }}\n"
         f"  refine ⟨Fin {n}, m, ?_⟩\n"
         f"  decideFin!\n"
@@ -91,8 +89,11 @@ def _run(label: str, expected: str, candidate: str, problem: dict) -> None:
     print(f"--- candidate Lean ({label}, {len(candidate)} bytes) ---")
     print(norm)
     print("--- upstream problem dict ---")
-    print(json.dumps(_build_upstream_problem(problem, expected),
-                     ensure_ascii=False, indent=2))
+    print(
+        json.dumps(
+            _build_upstream_problem(problem, expected), ensure_ascii=False, indent=2
+        )
+    )
     v = judge(candidate, expected_verdict=expected, problem=problem)
     print(f"--- judge verdict: status={v.status} ---")
     print(f"message: {v.message[:1500]}")
@@ -142,9 +143,12 @@ def main() -> None:
     else:
         print(f"counterex order={ce.order} table={ce.table}")
         _print_section("D) our emit_lean_counterex (FALSE)")
-        _run("ours-false", "false",
-             emit_lean_counterex(ce, false_p["hypothesis"], false_p["goal"]),
-             false_p)
+        _run(
+            "ours-false",
+            "false",
+            emit_lean_counterex(ce, false_p["hypothesis"], false_p["goal"]),
+            false_p,
+        )
         _print_section("E) hand-crafted baseline (FALSE, same table)")
         _run("baseline-false", "false", _baseline_false(ce.order, ce.table), false_p)
 

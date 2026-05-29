@@ -4,7 +4,6 @@ Key invariant: a single problem MUST exit within `--timeout` seconds, even if
 the solver subprocess or the LLM endpoint hangs. We enforce this by polling
 the subprocess stdout via `select` and killing the process group on overshoot.
 """
-from __future__ import annotations
 
 import argparse
 import json
@@ -20,9 +19,6 @@ from lawforge_utils import env_bool
 from lean.judge import judge_or_score
 from solver.proxy_client import call_local
 
-# LAWFORGE_LLM_JUDGE=1: when Lean unavailable, fall back to LLM-as-judge for
-# richer reward. Cost: ~5 extra LLM calls per problem (one per solver L1..L5
-# judge submission). With --workers 4 --limit 20: ~300s extra per gen.
 _USE_LLM_JUDGE = env_bool("LAWFORGE_LLM_JUDGE")
 
 ROOT = Path(__file__).resolve().parent
@@ -77,8 +73,14 @@ def run_solver_on_problem(problem: dict, timeout: int = 30) -> bool:
     env["PYTHONPATH"] = str(ROOT)
     proc = subprocess.Popen(
         [sys.executable, "-m", "solver.solver"],
-        stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.DEVNULL,
-        cwd=ROOT, env=env, text=True, bufsize=1, start_new_session=True,
+        stdin=subprocess.PIPE,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.DEVNULL,
+        cwd=ROOT,
+        env=env,
+        text=True,
+        bufsize=1,
+        start_new_session=True,
     )
     deadline = time.time() + timeout
     solved = False
@@ -103,15 +105,22 @@ def run_solver_on_problem(problem: dict, timeout: int = 30) -> bool:
                     use_llm_fallback=_USE_LLM_JUDGE,
                     problem=problem,
                 )
-                proc.stdin.write(json.dumps({"status": v.status, "message": v.message}) + "\n")
+                proc.stdin.write(
+                    json.dumps({"status": v.status, "message": v.message}) + "\n"
+                )
                 proc.stdin.flush()
                 if v.accepted:
                     solved = True
                     break
             elif call == "llm":
-                r = call_local(req["prompt"], req.get("max_tokens", 2048),
-                                req.get("temperature", 0.3))
-                proc.stdin.write(json.dumps({"text": r.text, "tokens": r.tokens}) + "\n")
+                r = call_local(
+                    req["prompt"],
+                    req.get("max_tokens", 2048),
+                    req.get("temperature", 0.3),
+                )
+                proc.stdin.write(
+                    json.dumps({"text": r.text, "tokens": r.tokens}) + "\n"
+                )
                 proc.stdin.flush()
             else:
                 break
@@ -126,10 +135,18 @@ def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--split", default="dev")
     ap.add_argument("--limit", type=int, default=20)
-    ap.add_argument("--timeout", type=int, default=45,
-                    help="per-problem hard wall-clock cap (seconds)")
-    ap.add_argument("--workers", type=int, default=4,
-                    help="parallel solver subprocesses (I/O-bound on LLM)")
+    ap.add_argument(
+        "--timeout",
+        type=int,
+        default=45,
+        help="per-problem hard wall-clock cap (seconds)",
+    )
+    ap.add_argument(
+        "--workers",
+        type=int,
+        default=4,
+        help="parallel solver subprocesses (I/O-bound on LLM)",
+    )
     args = ap.parse_args()
 
     problems = load_split(args.split, limit=args.limit)
@@ -143,11 +160,17 @@ def main() -> None:
             if fut.result():
                 solved += 1
             if done % 5 == 0:
-                print(f"[eval] {done}/{len(problems)} solved={solved} "
-                      f"elapsed={time.time()-t0:.0f}s", file=sys.stderr)
+                print(
+                    f"[eval] {done}/{len(problems)} solved={solved} "
+                    f"elapsed={time.time() - t0:.0f}s",
+                    file=sys.stderr,
+                )
     rate = solved / max(1, len(problems))
-    print(f"[eval] split={args.split} solved={solved}/{len(problems)} "
-          f"elapsed={time.time()-t0:.0f}s workers={args.workers}", file=sys.stderr)
+    print(
+        f"[eval] split={args.split} solved={solved}/{len(problems)} "
+        f"elapsed={time.time() - t0:.0f}s workers={args.workers}",
+        file=sys.stderr,
+    )
     print(f"SOLVED_RATE={rate:.4f}")
 
 

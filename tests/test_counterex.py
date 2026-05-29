@@ -1,5 +1,12 @@
 from solver.counterex import (
-    App, Var, collect_vars, eval_term, parse_eq, satisfies, search_counterex, violates,
+    App,
+    Var,
+    collect_vars,
+    eval_term,
+    parse_eq,
+    satisfies,
+    search_counterex,
+    violates,
 )
 
 
@@ -21,7 +28,9 @@ def test_eval_const_table():
     # 2x2 table where * collapses to identity on x
     table = [[0, 0], [0, 1]]
     # at x=0,y=0: x=0, x*y=0  -> equal
-    assert eval_term(lhs, table, {"x": 0, "y": 0}) == eval_term(rhs, table, {"x": 0, "y": 0})
+    assert eval_term(lhs, table, {"x": 0, "y": 0}) == eval_term(
+        rhs, table, {"x": 0, "y": 0}
+    )
 
 
 def test_satisfies_trivial_reflexive():

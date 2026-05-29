@@ -13,7 +13,6 @@ Output written:
     {"name": "...", "file": "solver/prompt_template.txt|solver/cheatsheet.md",
      "op": "append|prepend|replace", "payload": "..."}
 """
-from __future__ import annotations
 
 import argparse
 import json
@@ -28,7 +27,9 @@ PROMPT = ROOT / "solver" / "prompt_template.txt"
 CHEATSHEET = ROOT / "solver" / "cheatsheet.md"
 GRPO_LOG = ROOT / "proofs" / "grpo_log.jsonl"
 DYN_DIR = ROOT / "evolve" / "dynamic_arms"
-LLM_URL = os.environ.get("LAWFORGE_LLM_URL", "http://127.0.0.1:8000/v1/chat/completions")
+LLM_URL = os.environ.get(
+    "LAWFORGE_LLM_URL", "http://127.0.0.1:8000/v1/chat/completions"
+)
 LLM_MODEL = os.environ.get("LAWFORGE_LLM_MODEL", "deepseek-ai/DeepSeek-Prover-V2-7B")
 LLM_KEY = os.environ.get("LAWFORGE_LLM_KEY", "no-key")
 TIMEOUT = int(os.environ.get("LAWFORGE_LLM_TIMEOUT", "60"))
@@ -94,16 +95,21 @@ Constraints:
 
 
 def _call_llm(prompt: str) -> str:
-    body = json.dumps({
-        "model": LLM_MODEL,
-        "messages": [{"role": "user", "content": prompt}],
-        "max_tokens": 600,
-        "temperature": 0.7,
-    }).encode()
+    body = json.dumps(
+        {
+            "model": LLM_MODEL,
+            "messages": [{"role": "user", "content": prompt}],
+            "max_tokens": 600,
+            "temperature": 0.7,
+        }
+    ).encode()
     req = urllib.request.Request(
-        LLM_URL, data=body,
-        headers={"Content-Type": "application/json",
-                 "Authorization": f"Bearer {LLM_KEY}"},
+        LLM_URL,
+        data=body,
+        headers={
+            "Content-Type": "application/json",
+            "Authorization": f"Bearer {LLM_KEY}",
+        },
     )
     with urllib.request.urlopen(req, timeout=TIMEOUT) as r:
         data = json.loads(r.read())
@@ -123,7 +129,7 @@ def _extract_json(text: str) -> dict | None:
             depth -= 1
             if depth == 0:
                 try:
-                    return json.loads(text[start:i + 1])
+                    return json.loads(text[start : i + 1])
                 except json.JSONDecodeError:
                     return None
     return None
@@ -154,8 +160,10 @@ def run(gen: int) -> int:
     DYN_DIR.mkdir(parents=True, exist_ok=True)
     out_path = DYN_DIR / f"g{gen:04d}.json"
     if out_path.exists():
-        print(f"[autoresearch_llm] gen{gen} already proposed -> {out_path.name}",
-              file=sys.stderr)
+        print(
+            f"[autoresearch_llm] gen{gen} already proposed -> {out_path.name}",
+            file=sys.stderr,
+        )
         return 0
     try:
         raw = _call_llm(_build_prompt(gen))
@@ -168,14 +176,18 @@ def run(gen: int) -> int:
         return 1
     ok, why = _validate(proposal)
     if not ok:
-        print(f"[autoresearch_llm] invalid proposal ({why}): {proposal}", file=sys.stderr)
+        print(
+            f"[autoresearch_llm] invalid proposal ({why}): {proposal}", file=sys.stderr
+        )
         return 1
     proposal["gen"] = gen
     out_path.write_text(json.dumps(proposal, indent=2))
-    print(f"[autoresearch_llm] gen{gen} arm={proposal['name']} "
-          f"file={proposal['file']} op={proposal['op']} "
-          f"payload_len={len(proposal['payload'])}",
-          file=sys.stderr)
+    print(
+        f"[autoresearch_llm] gen{gen} arm={proposal['name']} "
+        f"file={proposal['file']} op={proposal['op']} "
+        f"payload_len={len(proposal['payload'])}",
+        file=sys.stderr,
+    )
     return 0
 
 

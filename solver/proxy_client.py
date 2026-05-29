@@ -11,7 +11,6 @@ Two modes:
 LAWFORGE_PROXY_MODE env var picks. Default: 'live' in solver.py runtime;
 loop.sh exports 'local'.
 """
-from __future__ import annotations
 
 import json
 import os
@@ -25,7 +24,9 @@ class LLMResponse:
     tokens: int = 0
 
 
-def call_llm(prompt: str, max_tokens: int = 4096, temperature: float = 0.3) -> LLMResponse:
+def call_llm(
+    prompt: str, max_tokens: int = 4096, temperature: float = 0.3
+) -> LLMResponse:
     mode = os.environ.get("LAWFORGE_PROXY_MODE", "live")
     if mode == "live":
         return _call_live(prompt, max_tokens, temperature)
@@ -34,8 +35,12 @@ def call_llm(prompt: str, max_tokens: int = 4096, temperature: float = 0.3) -> L
 
 def _call_live(prompt: str, max_tokens: int, temperature: float) -> LLMResponse:
     """Stage 2 Solo protocol: ask the organizer's proxy via stdin/stdout."""
-    req = {"call": "llm", "prompt": prompt,
-           "max_tokens": max_tokens, "temperature": temperature}
+    req = {
+        "call": "llm",
+        "prompt": prompt,
+        "max_tokens": max_tokens,
+        "temperature": temperature,
+    }
     sys.stdout.write(json.dumps(req) + "\n")
     sys.stdout.flush()
     line = sys.stdin.readline()
@@ -60,14 +65,17 @@ def call_local(prompt: str, max_tokens: int, temperature: float) -> LLMResponse:
     model = os.environ.get("LAWFORGE_LLM_MODEL", DEFAULT_LLM_MODEL)
     key = os.environ.get("LAWFORGE_LLM_KEY", "no-key")
     timeout = float(os.environ.get("LAWFORGE_LLM_TIMEOUT", str(DEFAULT_LLM_TIMEOUT_S)))
-    body = json.dumps({
-        "model": model,
-        "messages": [{"role": "user", "content": prompt}],
-        "max_tokens": max_tokens,
-        "temperature": temperature,
-    }).encode()
+    body = json.dumps(
+        {
+            "model": model,
+            "messages": [{"role": "user", "content": prompt}],
+            "max_tokens": max_tokens,
+            "temperature": temperature,
+        }
+    ).encode()
     req = urllib.request.Request(
-        url, data=body,
+        url,
+        data=body,
         headers={"Content-Type": "application/json", "Authorization": f"Bearer {key}"},
     )
     try:

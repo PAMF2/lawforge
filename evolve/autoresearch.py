@@ -19,11 +19,9 @@ Storage:
   evolve/autoresearch/seen.json     -- arxiv IDs already considered
   evolve/autoresearch/proposals.jsonl  -- one JSON per new arm proposal
 """
-from __future__ import annotations
 
 import json
 import re
-import time
 from dataclasses import dataclass
 from pathlib import Path
 from urllib.parse import quote_plus
@@ -31,11 +29,31 @@ from urllib.request import Request, urlopen
 
 
 VOCAB = {
-    "reward": 2, "shaping": 2, "curriculum": 2, "subgoal": 3, "decomposition": 2,
-    "distill": 2, "cheat-sheet": 3, "cheatsheet": 3, "verifier": 2, "tactic": 3,
-    "counterexample": 3, "magma": 4, "equational": 4, "GRPO": 3, "RLOO": 3,
-    "PPO": 1, "DPO": 1, "MoE": 1, "LoRA": 2, "quantization": 1, "prompt": 1,
-    "Lean": 3, "miniF2F": 3, "proof": 2, "rollout": 1,
+    "reward": 2,
+    "shaping": 2,
+    "curriculum": 2,
+    "subgoal": 3,
+    "decomposition": 2,
+    "distill": 2,
+    "cheat-sheet": 3,
+    "cheatsheet": 3,
+    "verifier": 2,
+    "tactic": 3,
+    "counterexample": 3,
+    "magma": 4,
+    "equational": 4,
+    "GRPO": 3,
+    "RLOO": 3,
+    "PPO": 1,
+    "DPO": 1,
+    "MoE": 1,
+    "LoRA": 2,
+    "quantization": 1,
+    "prompt": 1,
+    "Lean": 3,
+    "miniF2F": 3,
+    "proof": 2,
+    "rollout": 1,
 }
 QUERIES = [
     "Lean 4 theorem proving",
@@ -65,7 +83,9 @@ def fetch_arxiv(query: str) -> list[Paper]:
     for entry in re.findall(r"<entry>(.*?)</entry>", xml, flags=re.S):
         aid = re.search(r"<id>(.*?)</id>", entry).group(1).strip()
         title = re.search(r"<title>(.*?)</title>", entry, flags=re.S).group(1).strip()
-        abstract = re.search(r"<summary>(.*?)</summary>", entry, flags=re.S).group(1).strip()
+        abstract = (
+            re.search(r"<summary>(.*?)</summary>", entry, flags=re.S).group(1).strip()
+        )
         out.append(Paper(id=aid, title=title, abstract=abstract, url=aid))
     return out
 

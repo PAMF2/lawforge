@@ -12,37 +12,31 @@ against a held-out train_split (small, fast) and:
 This is the "5-minute fixed budget" stage of the Karpathy Loop. Hyperparams
 (top-level bare assignments) are mutated by arms.py via regex.
 """
-from __future__ import annotations
 
 import argparse
-import json
 import os
 import sys
 import time
 from pathlib import Path
 
-# --- bandit-mutable hyperparams (kept as bare top-level assignments) ---
 MAX_ORDER = 4
 TEMPERATURE = 0.3
 LLM_MAX_TOKENS = 4096
 CHEATSHEET_K = 8
 REFINE_ROUNDS = 1
-# -----------------------------------------------------------------------
 
 ROOT = Path(__file__).resolve().parent
 
 
 def load_train_split() -> list[dict]:
     from eval import load_split
+
     return load_split("train")
-
-
-from lawforge_utils import problem_hash as _problem_hash  # noqa: E402,F401
 
 
 def calibrate_one(problem: dict, timeout: int = 30) -> dict:
     """Run solver on one problem, returning {solved, layer_hit, lean_code}."""
-    from eval import run_solver_on_problem  # reuse the same harness
+    from eval import run_solver_on_problem
 
     t0 = time.time()
     solved = run_solver_on_problem(problem, timeout=timeout)
@@ -55,9 +49,11 @@ def main() -> None:
     ap.add_argument("--budget-sec", type=int, default=300)
     args = ap.parse_args()
 
-    print(f"[calibrate] MAX_ORDER={MAX_ORDER} TEMP={TEMPERATURE} "
-          f"TOKENS={LLM_MAX_TOKENS} CHEATSHEET_K={CHEATSHEET_K}",
-          file=sys.stderr)
+    print(
+        f"[calibrate] MAX_ORDER={MAX_ORDER} TEMP={TEMPERATURE} "
+        f"TOKENS={LLM_MAX_TOKENS} CHEATSHEET_K={CHEATSHEET_K}",
+        file=sys.stderr,
+    )
 
     # Propagate bandit-mutable hyperparams to the solver subprocess via env.
     os.environ["LAWFORGE_LLM_MAX_TOKENS"] = str(LLM_MAX_TOKENS)
@@ -83,11 +79,16 @@ def main() -> None:
             solved += 1
         if seen % 5 == 0:
             elapsed = time.time() - t0
-            print(f"[calibrate] step={seen} solved={solved}/{seen} "
-                  f"elapsed={elapsed:.0f}s", file=sys.stderr)
+            print(
+                f"[calibrate] step={seen} solved={solved}/{seen} "
+                f"elapsed={elapsed:.0f}s",
+                file=sys.stderr,
+            )
 
-    print(f"[calibrate] done. solved={solved}/{seen} elapsed={time.time()-t0:.0f}s",
-          file=sys.stderr)
+    print(
+        f"[calibrate] done. solved={solved}/{seen} elapsed={time.time() - t0:.0f}s",
+        file=sys.stderr,
+    )
 
 
 if __name__ == "__main__":

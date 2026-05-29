@@ -14,10 +14,8 @@ A more sophisticated distill (Honda-style learned compression) would use an
 LLM to summarize each group. That requires another LLM call per group; we
 defer it. Current approach: pick-and-package, no LLM needed.
 """
-from __future__ import annotations
 
 import argparse
-import json
 import re
 from collections import defaultdict
 from pathlib import Path
@@ -26,8 +24,20 @@ ROOT = Path(__file__).resolve().parent.parent
 ACCEPTED = ROOT / "proofs" / "accepted"
 OUT = ROOT / "solver" / "cheatsheet.md"
 
-TACTIC_KEYS = ["rfl", "decide", "trivial", "aesop", "calc", "simp", "polyrith",
-               "nlinarith", "ring", "refine", "constructor", "exact"]
+TACTIC_KEYS = [
+    "rfl",
+    "decide",
+    "trivial",
+    "aesop",
+    "calc",
+    "simp",
+    "polyrith",
+    "nlinarith",
+    "ring",
+    "refine",
+    "constructor",
+    "exact",
+]
 _TACTIC_RE = re.compile(r"\b(" + "|".join(TACTIC_KEYS) + r")\b")
 
 
@@ -79,12 +89,15 @@ def _shortest_k(items: list[str], k: int) -> list[str]:
     return sorted(items, key=len)[:k]
 
 
-def distill(accepted_dir: Path, out: Path, k_per_group: int = 3,
-            max_bytes: int = 8192) -> None:
+def distill(
+    accepted_dir: Path, out: Path, k_per_group: int = 3, max_bytes: int = 8192
+) -> None:
     groups = _load_accepted(accepted_dir)
     n_proofs = sum(len(v) for v in groups.values())
     if n_proofs == 0:
-        print(f"[distill] no valid Lean blocks in {accepted_dir} — preserving seed {out}")
+        print(
+            f"[distill] no valid Lean blocks in {accepted_dir} — preserving seed {out}"
+        )
         return
     lines = ["# Lawforge Cheatsheet (distilled from accepted proofs)\n"]
     total = len(lines[0])

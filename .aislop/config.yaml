@@ -1,0 +1,16 @@
+# aislop config — lawforge (Python project, no package.json)
+version: 1
+
+engines:
+  format: true
+  lint: true
+  code-quality: true
+  ai-slop: true
+  architecture: false
+  security: true
+
+quality:
+  maxFunctionLoc: 80
+  maxFileLoc: 500
+  maxNesting: 5
+  maxParams: 6

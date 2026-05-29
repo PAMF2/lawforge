@@ -7,7 +7,6 @@ Here, "arm" = one hypothesis from program.md; "return" = delta in val_solved_rat
 Adaptive: cold-start uniform, then UCB1-tuned with windowed reward to track
 non-stationarity (current train.py state changes the response surface).
 """
-from __future__ import annotations
 
 import json
 import math
@@ -65,8 +64,12 @@ class Agent57Meta:
         state = {
             "t": self.t,
             "arms": [
-                {"name": a.name, "pulls": a.pulls, "rewards": a.rewards,
-                 "last_used_gen": a.last_used_gen}
+                {
+                    "name": a.name,
+                    "pulls": a.pulls,
+                    "rewards": a.rewards,
+                    "last_used_gen": a.last_used_gen,
+                }
                 for a in self.arms
             ],
         }

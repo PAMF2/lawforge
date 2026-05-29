@@ -13,7 +13,6 @@ Examples:
   "x = x*y"        -> AST: Var(x) eq App(Var(x), Var(y))
   "x*(y*z) = (x*y)*z"  -> associativity
 """
-from __future__ import annotations
 
 import itertools
 import json
@@ -22,8 +21,6 @@ import re
 from dataclasses import dataclass
 from typing import Iterable
 
-
-# ---------- equation parser ----------
 
 @dataclass(frozen=True)
 class Var:
@@ -68,7 +65,7 @@ def parse_eq(s: str) -> tuple[Term, Term]:
     eq_pos = tokens.index("=")
     lhs, j = _parse_expr(tokens[:eq_pos], 0)
     assert j == eq_pos, f"unparsed lhs tail at {j}"
-    rhs, k = _parse_expr(tokens[eq_pos + 1:], 0)
+    rhs, k = _parse_expr(tokens[eq_pos + 1 :], 0)
     assert k == len(tokens) - eq_pos - 1, f"unparsed rhs tail at {k}"
     return lhs, rhs
 
@@ -87,12 +84,10 @@ def eval_term(t: Term, table: list[list[int]], env: dict[str, int]) -> int:
     return table[a][b]
 
 
-# ---------- magma enumeration ----------
-
 def all_tables(n: int) -> Iterable[list[list[int]]]:
     """Yield every n×n Cayley table as a flat list of n*n ints in [0,n)."""
     for flat in itertools.product(range(n), repeat=n * n):
-        yield [list(flat[i * n:(i + 1) * n]) for i in range(n)]
+        yield [list(flat[i * n : (i + 1) * n]) for i in range(n)]
 
 
 def random_tables(n: int, k: int, seed: int = 0) -> Iterable[list[list[int]]]:
@@ -118,8 +113,12 @@ def vars_of(*eq_sources: str) -> list[str]:
         return list(DEFAULT_VARS)
 
 
-def satisfies(eq: tuple[Term, Term], table: list[list[int]], n: int,
-              vars_: list[str] | None = None) -> bool:
+def satisfies(
+    eq: tuple[Term, Term],
+    table: list[list[int]],
+    n: int,
+    vars_: list[str] | None = None,
+) -> bool:
     lhs, rhs = eq
     if vars_ is None:
         vars_ = sorted(collect_vars(lhs) | collect_vars(rhs))
@@ -130,12 +129,14 @@ def satisfies(eq: tuple[Term, Term], table: list[list[int]], n: int,
     return True
 
 
-def violates(eq: tuple[Term, Term], table: list[list[int]], n: int,
-             vars_: list[str] | None = None) -> bool:
+def violates(
+    eq: tuple[Term, Term],
+    table: list[list[int]],
+    n: int,
+    vars_: list[str] | None = None,
+) -> bool:
     return not satisfies(eq, table, n, vars_)
 
-
-# ---------- counterexample search ----------
 
 @dataclass
 class CounterEx:
@@ -144,12 +145,15 @@ class CounterEx:
 
 
 def search_counterex(
-    eq1_src: str, eq2_src: str,
-    max_order: int = 4, max_samples_per_order: int = 100_000,
+    eq1_src: str,
+    eq2_src: str,
+    max_order: int = 4,
+    max_samples_per_order: int = 100_000,
     timeout_per_order: float = 15.0,
 ) -> CounterEx | None:
     """Find a magma satisfying eq1 but not eq2. Return None if none in budget."""
     import time
+
     try:
         eq1 = parse_eq(eq1_src)
         eq2 = parse_eq(eq2_src)
@@ -161,8 +165,11 @@ def search_counterex(
     for n in range(2, max_order + 1):
         t0 = time.time()
         total = n ** (n * n)
-        gen = (all_tables(n) if total <= max_samples_per_order
-               else random_tables(n, max_samples_per_order, seed=n))
+        gen = (
+            all_tables(n)
+            if total <= max_samples_per_order
+            else random_tables(n, max_samples_per_order, seed=n)
+        )
         for table in gen:
             if time.time() - t0 > timeout_per_order:
                 break
@@ -170,8 +177,6 @@ def search_counterex(
                 return CounterEx(order=n, table=table)
     return None
 
-
-# ---------- Lean emission ----------
 
 def emit_lean_counterex(ce: CounterEx, eq1_src: str, eq2_src: str) -> str:
     """Emit Lean 4 FALSE certificate matching upstream `def submission : Goal`
@@ -194,7 +199,7 @@ def emit_lean_counterex(ce: CounterEx, eq1_src: str, eq2_src: str) -> str:
         "open MemoFinOp\n\n"
         "def submission : Goal := by\n"
         f"  let m : Magma (Fin {n}) := {{\n"
-        f"    op := finOpTable \"{table_str}\"\n"
+        f'    op := finOpTable "{table_str}"\n'
         f"  }}\n"
         f"  refine ⟨Fin {n}, m, ?_⟩\n"
         f"  decideFin!\n"

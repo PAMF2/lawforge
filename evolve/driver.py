@@ -2,7 +2,6 @@
 
 Run via: python -m evolve.driver --gen N --smoke-sec 300
 """
-from __future__ import annotations
 
 import argparse
 import json
@@ -26,19 +25,26 @@ def git(*args: str) -> str:
 
 
 # Hard wall-clock caps so no single generation can stall the loop.
-TRAIN_HARD_CAP_S = 900   # 15 min, double the configured budget-sec
-EVAL_HARD_CAP_S = 2700   # 45 min, covers 20 problems x 90s x 1/4 workers worst case
+TRAIN_HARD_CAP_S = 900  # 15 min, double the configured budget-sec
+EVAL_HARD_CAP_S = 2700  # 45 min, covers 20 problems x 90s x 1/4 workers worst case
 
 
-def _run_with_pg_kill(argv: list[str], timeout_s: int) -> subprocess.CompletedProcess | None:
+def _run_with_pg_kill(
+    argv: list[str], timeout_s: int
+) -> subprocess.CompletedProcess | None:
     """Like subprocess.run with timeout, but kills the full process group on
     timeout (not just the parent). Without this, child threads/subprocesses
     can keep running past the deadline (observed: Lean judge subprocesses
     holding open file descriptors after eval.py timed out)."""
     import signal as _signal
+
     proc = subprocess.Popen(
-        argv, cwd=ROOT, stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
-        text=True, start_new_session=True,
+        argv,
+        cwd=ROOT,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.STDOUT,
+        text=True,
+        start_new_session=True,
     )
     try:
         out, _ = proc.communicate(timeout=timeout_s)
@@ -61,21 +67,38 @@ def run_smoke(budget_sec: int) -> None:
         TRAIN_HARD_CAP_S,
     )
     if r is None:
-        print(f"[driver] train.py exceeded {TRAIN_HARD_CAP_S}s — killed pg", file=sys.stderr)
+        print(
+            f"[driver] train.py exceeded {TRAIN_HARD_CAP_S}s — killed pg",
+            file=sys.stderr,
+        )
 
 
 def run_eval() -> float:
     workers = os.environ.get("LAWFORGE_EVAL_WORKERS", "2")
     limit = os.environ.get("LAWFORGE_EVAL_LIMIT", "20")
     timeout = os.environ.get("LAWFORGE_EVAL_TIMEOUT", "45")
+    split = os.environ.get("LAWFORGE_EVAL_SPLIT", "dev")
     r = _run_with_pg_kill(
-        ["python3", "-m", "eval", "--split", "dev",
-         "--limit", limit, "--workers", workers, "--timeout", timeout],
+        [
+            "python3",
+            "-m",
+            "eval",
+            "--split",
+            split,
+            "--limit",
+            limit,
+            "--workers",
+            workers,
+            "--timeout",
+            timeout,
+        ],
         EVAL_HARD_CAP_S,
     )
     if r is None:
-        print(f"[driver] eval.py exceeded {EVAL_HARD_CAP_S}s — killed pg, using 0.0",
-              file=sys.stderr)
+        print(
+            f"[driver] eval.py exceeded {EVAL_HARD_CAP_S}s — killed pg, using 0.0",
+            file=sys.stderr,
+        )
         return 0.0
     for line in r.stdout.splitlines()[::-1]:
         if line.startswith("SOLVED_RATE="):
@@ -93,7 +116,9 @@ def save_metric(val: float) -> None:
     LAST_METRIC.write_text(json.dumps({"val_solved_rate": val}))
 
 
-def log_row(gen: int, arm: Arm, before: float, after: float, kept: int, commit_sha: str) -> None:
+def log_row(
+    gen: int, arm: Arm, before: float, after: float, kept: int, commit_sha: str
+) -> None:
     row = [str(gen), arm.name, f"{before:.4f}", f"{after:.4f}", str(kept), commit_sha]
     if not RESULTS_TSV.exists():
         RESULTS_TSV.write_text("gen\tarm\tbefore\tafter\tkept\tcommit\n")
@@ -119,14 +144,15 @@ def main() -> None:
     subprocess.run(["git", "add", "-A"], cwd=ROOT, check=False)
     subprocess.run(
         ["git", "commit", "-m", f"gen{args.gen}: try arm={arm.name}"],
-        cwd=ROOT, check=False,
+        cwd=ROOT,
+        check=False,
     )
     trial_sha = git("rev-parse", "HEAD")
 
     before = load_last_metric()
     t0 = time.time()
     run_smoke(args.smoke_sec)
-    print(f"[gen {args.gen}] smoke train took {time.time()-t0:.0f}s")
+    print(f"[gen {args.gen}] smoke train took {time.time() - t0:.0f}s")
 
     after = run_eval()
     delta = after - before

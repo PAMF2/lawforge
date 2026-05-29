@@ -14,7 +14,6 @@ without Lean), set LAWFORGE_ALLOW_MOCK=1.
 Status enum from competition spec:
   accepted | unparsed | malformed | incomplete_proof | incorrect
 """
-from __future__ import annotations
 
 import json
 import os
@@ -66,15 +65,20 @@ def _load_real_judge() -> bool:
         return False
     _JUDGE_LOAD_TRIED = True
     import sys as _sys
+
     if str(UPSTREAM) not in _sys.path:
         _sys.path.insert(0, str(UPSTREAM))
     try:
         from judge.verify import _resolve_config, verify_answer
+
         _JUDGE_CONFIG = _resolve_config(None)
         _VERIFY_FN = verify_answer
         return True
     except Exception as e:
-        print(f"[judge] failed to load upstream verify: {e}", file=__import__("sys").stderr)
+        print(
+            f"[judge] failed to load upstream verify: {e}",
+            file=__import__("sys").stderr,
+        )
         return False
 
 
@@ -123,8 +127,9 @@ def _normalize_lean_code(code: str) -> str:
     return code.replace("*", "◇") if code else code
 
 
-def judge(lean_code: str, expected_verdict: str = TRUE,
-          problem: dict | None = None) -> Verdict:
+def judge(
+    lean_code: str, expected_verdict: str = TRUE, problem: dict | None = None
+) -> Verdict:
     """Run upstream Lean judge.verify on a candidate proof.
 
     `problem` should include equation1/equation2/eq1_id/eq2_id/id (HF schema).
@@ -141,18 +146,26 @@ def judge(lean_code: str, expected_verdict: str = TRUE,
         )
 
     upstream_problem = _build_upstream_problem(problem, expected_verdict)
-    raw_answer = json.dumps({
-        "verdict": expected_verdict,
-        "code": _normalize_lean_code(lean_code),
-    })
+    raw_answer = json.dumps(
+        {
+            "verdict": expected_verdict,
+            "code": _normalize_lean_code(lean_code),
+        }
+    )
     try:
         result = _VERIFY_FN(upstream_problem, raw_answer, config=_JUDGE_CONFIG)
-        return Verdict(status=result.get("status", UNPARSED),
-                       message=(result.get("message") or result.get("error_code") or "")[:500])
+        return Verdict(
+            status=result.get("status", UNPARSED),
+            message=(result.get("message") or result.get("error_code") or "")[:500],
+        )
     except Exception as e:
-        print(f"[judge] verify_answer raised {type(e).__name__}: {e}",
-              file=_sys_mod.stderr)
-        return Verdict(status=INCORRECT, message=f"judge error: {type(e).__name__}: {e}")
+        print(
+            f"[judge] verify_answer raised {type(e).__name__}: {e}",
+            file=_sys_mod.stderr,
+        )
+        return Verdict(
+            status=INCORRECT, message=f"judge error: {type(e).__name__}: {e}"
+        )
 
 
 def _mock_judge(lean_code: str) -> Verdict:
@@ -169,19 +182,20 @@ def _mock_judge(lean_code: str) -> Verdict:
     return Verdict(status=INCORRECT, message="mock: no obvious tactic")
 
 
-# LLM-judge calibration thresholds (used by judge_or_score). Tune via env.
 ACCEPT_THRESHOLD = float(os.environ.get("LAWFORGE_JUDGE_ACCEPT", "0.85"))
 MALFORMED_THRESHOLD = float(os.environ.get("LAWFORGE_JUDGE_MALFORMED", "0.1"))
 
 
-def llm_judge_score(lean_code: str, eq1: str = "", eq2: str = "",
-                    expected_verdict: str = TRUE) -> float:
+def llm_judge_score(
+    lean_code: str, eq1: str = "", eq2: str = "", expected_verdict: str = TRUE
+) -> float:
     """RULER-style continuous reward 0..1 via LLM-as-judge.
 
     Returns 0.0 if the LLM call fails or returns malformed JSON.
     """
     from lawforge_utils import extract_json
     from solver.proxy_client import call_local
+
     prompt = (
         "You are scoring a Lean 4 proof candidate for the equational-implication task.\n"
         f"Eq1: {eq1}\nEq2: {eq2}\nExpected verdict: {expected_verdict}\n\n"
@@ -200,10 +214,14 @@ def llm_judge_score(lean_code: str, eq1: str = "", eq2: str = "",
         return 0.0
 
 
-def judge_or_score(lean_code: str, expected_verdict: str = TRUE,
-                   eq1: str = "", eq2: str = "",
-                   use_llm_fallback: bool = True,
-                   problem: dict | None = None) -> Verdict:
+def judge_or_score(
+    lean_code: str,
+    expected_verdict: str = TRUE,
+    eq1: str = "",
+    eq2: str = "",
+    use_llm_fallback: bool = True,
+    problem: dict | None = None,
+) -> Verdict:
     """Cascaded reward: real Lean -> LLM-as-judge (RULER). No mock in
     production: when neither Lean nor `use_llm_fallback` is available, raises
     unless LAWFORGE_ALLOW_MOCK=1."""

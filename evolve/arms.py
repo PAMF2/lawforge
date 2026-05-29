@@ -12,7 +12,6 @@ Arms operate on:
   * solver/VERIFIER_REFINE_K      -- L5 refinement rounds
   * train.py top-level constants  -- MAX_ORDER, TEMPERATURE, etc.
 """
-from __future__ import annotations
 
 import json
 import re
@@ -21,13 +20,8 @@ from pathlib import Path
 from evolve.agent57 import Arm
 
 
-# All three prompt variants MUST enforce the single-fenced-Lean-block contract;
-# loose versions cause DeepSeek-Prover to emit prose and tank the baseline.
-# Differences across variants live in reasoning scaffolding only.
-
 _STRICT_FOOTER = """OUTPUT (tactic body only, no imports, no def/theorem header):
 The harness wraps your body with:
-  import JudgeProblem
   def submission : Goal := by
     intro G _ h
     <YOUR BODY HERE>
@@ -44,14 +38,18 @@ Patterns:
 CE hint: {ce_hint}
 """
 
-PROMPT_BASE = """You are a Lean 4 expert in equational theories of magmas.
+PROMPT_BASE = (
+    """You are a Lean 4 expert in equational theories of magmas.
 
 Eq1: {eq1}
 Eq2: {eq2}
 
-""" + _STRICT_FOOTER
+"""
+    + _STRICT_FOOTER
+)
 
-PROMPT_KIMINA = """You are a Lean 4 formal-reasoning expert. Think briefly,
+PROMPT_KIMINA = (
+    """You are a Lean 4 formal-reasoning expert. Think briefly,
 then emit ONLY the Lean code. Consider both directions:
   - TRUE: tactic chain (rfl, simp, decide, aesop, polyrith).
   - FALSE: small finite magma where Eq1 holds and Eq2 fails (use `decide`).
@@ -59,43 +57,82 @@ then emit ONLY the Lean code. Consider both directions:
 Eq1: {eq1}
 Eq2: {eq2}
 
-""" + _STRICT_FOOTER
+"""
+    + _STRICT_FOOTER
+)
 
-PROMPT_SUBGOAL = """You are a Lean 4 expert. Decompose into ≤3 subgoals
+PROMPT_SUBGOAL = (
+    """You are a Lean 4 expert. Decompose into ≤3 subgoals
 internally, compose into one final certificate. Do NOT print intermediate
 prose; only the final fenced Lean.
 
 Eq1: {eq1}
 Eq2: {eq2}
 
-""" + _STRICT_FOOTER
+"""
+    + _STRICT_FOOTER
+)
 
 
 def _patch_prompt(root: Path, new: str) -> None:
     (root / "solver" / "prompt_template.txt").write_text(new)
 
 
-def arm_prompt_base(root: Path) -> None: _patch_prompt(root, PROMPT_BASE)
-def arm_prompt_kimina(root: Path) -> None: _patch_prompt(root, PROMPT_KIMINA)
-def arm_prompt_subgoal(root: Path) -> None: _patch_prompt(root, PROMPT_SUBGOAL)
+def arm_prompt_base(root: Path) -> None:
+    _patch_prompt(root, PROMPT_BASE)
+
+
+def arm_prompt_kimina(root: Path) -> None:
+    _patch_prompt(root, PROMPT_KIMINA)
+
+
+def arm_prompt_subgoal(root: Path) -> None:
+    _patch_prompt(root, PROMPT_SUBGOAL)
 
 
 def _set_hparam(root: Path, key: str, value) -> None:
     p = root / "train.py"
     src = p.read_text()
-    src = re.sub(rf"^{key}\s*=\s*[^\n]+", f"{key} = {value!r}", src, count=1, flags=re.M)
+    src = re.sub(
+        rf"^{key}\s*=\s*[^\n]+", f"{key} = {value!r}", src, count=1, flags=re.M
+    )
     p.write_text(src)
 
 
-def arm_max_order_3(root: Path) -> None: _set_hparam(root, "MAX_ORDER", 3)
-def arm_max_order_5(root: Path) -> None: _set_hparam(root, "MAX_ORDER", 5)
-def arm_temp_low(root: Path) -> None: _set_hparam(root, "TEMPERATURE", 0.1)
-def arm_temp_med(root: Path) -> None: _set_hparam(root, "TEMPERATURE", 0.3)
-def arm_temp_high(root: Path) -> None: _set_hparam(root, "TEMPERATURE", 0.8)
-def arm_tokens_2k(root: Path) -> None: _set_hparam(root, "LLM_MAX_TOKENS", 2048)
-def arm_tokens_8k(root: Path) -> None: _set_hparam(root, "LLM_MAX_TOKENS", 8192)
-def arm_refine_1(root: Path) -> None: _set_hparam(root, "REFINE_ROUNDS", 1)
-def arm_refine_5(root: Path) -> None: _set_hparam(root, "REFINE_ROUNDS", 5)
+def arm_max_order_3(root: Path) -> None:
+    _set_hparam(root, "MAX_ORDER", 3)
+
+
+def arm_max_order_5(root: Path) -> None:
+    _set_hparam(root, "MAX_ORDER", 5)
+
+
+def arm_temp_low(root: Path) -> None:
+    _set_hparam(root, "TEMPERATURE", 0.1)
+
+
+def arm_temp_med(root: Path) -> None:
+    _set_hparam(root, "TEMPERATURE", 0.3)
+
+
+def arm_temp_high(root: Path) -> None:
+    _set_hparam(root, "TEMPERATURE", 0.8)
+
+
+def arm_tokens_2k(root: Path) -> None:
+    _set_hparam(root, "LLM_MAX_TOKENS", 2048)
+
+
+def arm_tokens_8k(root: Path) -> None:
+    _set_hparam(root, "LLM_MAX_TOKENS", 8192)
+
+
+def arm_refine_1(root: Path) -> None:
+    _set_hparam(root, "REFINE_ROUNDS", 1)
+
+
+def arm_refine_5(root: Path) -> None:
+    _set_hparam(root, "REFINE_ROUNDS", 5)
 
 
 def arm_mace4_first(root: Path) -> None:
@@ -124,21 +161,13 @@ def arm_aesop_prelude(root: Path) -> None:
     """Always prefix L3 with `intros; aesop?` attempt."""
     cs = root / "solver" / "cheatsheet.md"
     src = cs.read_text()
-    block = ("\n## PATTERN: always-try-aesop-first\n\n"
-             "Every TRUE proof should start with `intros; try aesop;`. If that\n"
-             "fails, fall through to specific tactics.\n")
+    block = (
+        "\n## PATTERN: always-try-aesop-first\n\n"
+        "Every TRUE proof should start with `intros; try aesop;`. If that\n"
+        "fails, fall through to specific tactics.\n"
+    )
     if "always-try-aesop-first" not in src:
         cs.write_text(src + block)
-
-
-# Removed arms: curriculum_easy/hard, reward_shaping_on/off — the flag files
-# (CURRICULUM_TAG, REWARD_SHAPING) were written but never read, so pulling
-# these arms gave zero-signal reward and poisoned the bandit.
-#
-# Removed: _load_autoresearch_proposals — the proposals.jsonl arms only
-# appended to applied.log without mutating any pipeline file, so pulling them
-# was also zero-signal. Re-add once a real code-edit agent translates
-# proposals into actual patches.
 
 
 CORE_ARMS = [

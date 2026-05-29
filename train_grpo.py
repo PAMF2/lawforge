@@ -8,7 +8,6 @@ Outputs
 - proofs/accepted/<hash>.lean — accepted candidate proofs (cheatsheet corpus).
 - proofs/grpo_log.jsonl       — per-step training log.
 """
-from __future__ import annotations
 
 import argparse
 import json
@@ -20,7 +19,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent
 sys.path.insert(0, str(ROOT))
 
-from lawforge_utils import problem_hash, render_prompt  # noqa: E402
+from lawforge_utils import problem_hash, render_prompt
 
 # NOTE: server is single-threaded (transformers.generate is not thread-safe on
 # one model instance). Parallel client requests just queue + hit per-call
@@ -116,7 +115,6 @@ def main() -> None:
     if not args.smoke:
         # Full GRPO requires ART; gate by import availability.
         try:
-            import openpipe_art  # noqa: F401
         except ImportError:
             print("[grpo] openpipe-art not installed; full training unavailable.\n"
                   "  pip install openpipe-art unsloth trl peft", file=sys.stderr)

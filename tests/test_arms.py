@@ -1,5 +1,6 @@
 """Sanity tests for arm library: each apply() must complete without error
 and leave the repo in a parseable state."""
+
 from pathlib import Path
 
 import pytest
