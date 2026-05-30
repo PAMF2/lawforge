@@ -57,7 +57,7 @@ def _run_with_pg_kill(
             try:
                 os.killpg(os.getpgid(proc.pid), _signal.SIGKILL)
             except ProcessLookupError:
-                pass
+                return None
         return None
 
 
@@ -73,27 +73,27 @@ def run_smoke(budget_sec: int) -> None:
         )
 
 
-def run_eval() -> float:
+def run_eval(gen: int = 0) -> float:
     workers = os.environ.get("LAWFORGE_EVAL_WORKERS", "2")
     limit = os.environ.get("LAWFORGE_EVAL_LIMIT", "20")
     timeout = os.environ.get("LAWFORGE_EVAL_TIMEOUT", "45")
     split = os.environ.get("LAWFORGE_EVAL_SPLIT", "dev")
-    r = _run_with_pg_kill(
-        [
-            "python3",
-            "-m",
-            "eval",
-            "--split",
-            split,
-            "--limit",
-            limit,
-            "--workers",
-            workers,
-            "--timeout",
-            timeout,
-        ],
-        EVAL_HARD_CAP_S,
-    )
+    argv = [
+        "python3",
+        "-m",
+        "eval",
+        "--split",
+        split,
+        "--limit",
+        limit,
+        "--workers",
+        workers,
+        "--timeout",
+        timeout,
+    ]
+    if os.environ.get("LAWFORGE_EVAL_SHUFFLE", "1") == "1":
+        argv += ["--seed", str(gen)]
+    r = _run_with_pg_kill(argv, EVAL_HARD_CAP_S)
     if r is None:
         print(
             f"[driver] eval.py exceeded {EVAL_HARD_CAP_S}s — killed pg, using 0.0",
@@ -154,7 +154,7 @@ def main() -> None:
     run_smoke(args.smoke_sec)
     print(f"[gen {args.gen}] smoke train took {time.time() - t0:.0f}s")
 
-    after = run_eval()
+    after = run_eval(gen=args.gen)
     delta = after - before
     print(f"[gen {args.gen}] before={before:.4f} after={after:.4f} delta={delta:+.4f}")
 

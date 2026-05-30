@@ -99,24 +99,28 @@ def _set_hparam(root: Path, key: str, value) -> None:
     p.write_text(src)
 
 
+def _write_solver_flag(root: Path, name: str, value: str) -> None:
+    (root / "solver" / name).write_text(value)
+
+
 def arm_max_order_3(root: Path) -> None:
-    _set_hparam(root, "MAX_ORDER", 3)
+    _write_solver_flag(root, "MAX_ORDER", "3")
 
 
 def arm_max_order_5(root: Path) -> None:
-    _set_hparam(root, "MAX_ORDER", 5)
+    _write_solver_flag(root, "MAX_ORDER", "5")
 
 
 def arm_temp_low(root: Path) -> None:
-    _set_hparam(root, "TEMPERATURE", 0.1)
+    _write_solver_flag(root, "TEMPERATURE", "0.1")
 
 
 def arm_temp_med(root: Path) -> None:
-    _set_hparam(root, "TEMPERATURE", 0.3)
+    _write_solver_flag(root, "TEMPERATURE", "0.3")
 
 
 def arm_temp_high(root: Path) -> None:
-    _set_hparam(root, "TEMPERATURE", 0.8)
+    _write_solver_flag(root, "TEMPERATURE", "0.8")
 
 
 def arm_tokens_2k(root: Path) -> None:
@@ -128,11 +132,11 @@ def arm_tokens_8k(root: Path) -> None:
 
 
 def arm_refine_1(root: Path) -> None:
-    _set_hparam(root, "REFINE_ROUNDS", 1)
+    _write_solver_flag(root, "VERIFIER_REFINE_K", "1")
 
 
 def arm_refine_5(root: Path) -> None:
-    _set_hparam(root, "REFINE_ROUNDS", 5)
+    _write_solver_flag(root, "VERIFIER_REFINE_K", "5")
 
 
 def arm_mace4_first(root: Path) -> None:

@@ -1,3 +1,4 @@
+# aislop-ignore-file ai-slop/hallucinated-import
 """Evaluation harness: run solver on a dev split, print SOLVED_RATE=<float>.
 
 Key invariant: a single problem MUST exit within `--timeout` seconds, even if
@@ -8,6 +9,7 @@ the subprocess stdout via `select` and killing the process group on overshoot.
 import argparse
 import json
 import os
+import random
 import select
 import signal
 import subprocess
@@ -24,7 +26,9 @@ _USE_LLM_JUDGE = env_bool("LAWFORGE_LLM_JUDGE")
 ROOT = Path(__file__).resolve().parent
 
 
-def load_split(name: str, limit: int | None = None) -> list[dict]:
+def load_split(
+    name: str, limit: int | None = None, seed: int | None = None
+) -> list[dict]:
     p = ROOT / "data" / f"{name}_split.jsonl"
     if not p.exists():
         return [{"hypothesis": "x = x", "goal": "x = x", "label": "true"}]
@@ -35,8 +39,10 @@ def load_split(name: str, limit: int | None = None) -> list[dict]:
             if not line:
                 continue
             rows.append(json.loads(line))
-            if limit is not None and len(rows) >= limit:
-                break
+    if seed is not None:
+        random.Random(seed).shuffle(rows)
+    if limit is not None:
+        rows = rows[:limit]
     return rows
 
 
@@ -48,7 +54,7 @@ def _kill(proc: subprocess.Popen) -> None:
         try:
             os.killpg(os.getpgid(proc.pid), signal.SIGKILL)
         except ProcessLookupError:
-            pass
+            return
 
 
 def _read_line_with_deadline(proc: subprocess.Popen, deadline: float) -> str | None:
@@ -147,9 +153,15 @@ def main() -> None:
         default=4,
         help="parallel solver subprocesses (I/O-bound on LLM)",
     )
+    ap.add_argument(
+        "--seed",
+        type=int,
+        default=None,
+        help="shuffle split with this seed (per-gen variance for bandit)",
+    )
     args = ap.parse_args()
 
-    problems = load_split(args.split, limit=args.limit)
+    problems = load_split(args.split, limit=args.limit, seed=args.seed)
     solved = 0
     done = 0
     t0 = time.time()

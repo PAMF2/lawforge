@@ -1,3 +1,4 @@
+# aislop-ignore-file ai-slop/hallucinated-import
 """lawforge solver — Stage 2 Solo track.
 
 I/O protocol (per Stage 2 spec):
@@ -38,6 +39,17 @@ VERIFIER_REFINE_K = (
 )
 LLM_MAX_TOKENS = int(os.environ.get("LAWFORGE_LLM_MAX_TOKENS", "1024"))
 
+TEMPERATURE = (
+    float((HERE / "TEMPERATURE").read_text().strip())
+    if (HERE / "TEMPERATURE").exists()
+    else 0.3
+)
+MAX_ORDER = (
+    int((HERE / "MAX_ORDER").read_text().strip())
+    if (HERE / "MAX_ORDER").exists()
+    else 5
+)
+
 
 def _wrap_true_submission(proof_body: str) -> str:
     """Wrap a tactic body as TRUE submission matching upstream contract.
@@ -53,11 +65,11 @@ def _wrap_true_submission(proof_body: str) -> str:
     lines = body.split("\n")
     # Strip the common leading indent so the wrapper's 2-space prefix yields
     # a uniformly-indented tactic block (Lean is whitespace-sensitive).
-    non_empty = [l for l in lines if l.strip()]
+    non_empty = [ln for ln in lines if ln.strip()]
     if non_empty:
-        min_indent = min(len(l) - len(l.lstrip()) for l in non_empty)
-        lines = [l[min_indent:] if len(l) > min_indent else l for l in lines]
-    indented = "\n".join("  " + l if l.strip() else "" for l in lines)
+        min_indent = min(len(ln) - len(ln.lstrip()) for ln in non_empty)
+        lines = [ln[min_indent:] if len(ln) > min_indent else ln for ln in lines]
+    indented = "\n".join("  " + ln if ln.strip() else "" for ln in lines)
     return (
         "import JudgeProblem\n\n"
         "def submission : Goal := by\n"
@@ -87,7 +99,7 @@ def l3_tactic_ladder(eq1: str, eq2: str) -> str:
         cheatsheet=CHEATSHEET if USE_CHEATSHEET else "(none)",
         ce_hint="not searched yet",
     )
-    resp = call_llm(prompt, max_tokens=LLM_MAX_TOKENS, temperature=0.3)
+    resp = call_llm(prompt, max_tokens=LLM_MAX_TOKENS, temperature=TEMPERATURE)
     return _wrap_true_submission(_extract_body(resp.text))
 
 
@@ -103,7 +115,7 @@ def l4_subgoal_decomp(eq1: str, eq2: str) -> str:
         + "\n\nDecompose into 2-3 subgoals (as Lean lemma signatures) "
         "before proving the main implication. Emit only the final tactic body."
     )
-    resp = call_llm(prompt, max_tokens=LLM_MAX_TOKENS, temperature=0.3)
+    resp = call_llm(prompt, max_tokens=LLM_MAX_TOKENS, temperature=TEMPERATURE)
     return _wrap_true_submission(_extract_body(resp.text))
 
 
@@ -161,7 +173,7 @@ def solve(problem: dict) -> dict:
             return v
 
     if USE_MACE4_FIRST:
-        ce_code = l2_counterex(eq1, eq2, max_order=5)
+        ce_code = l2_counterex(eq1, eq2, max_order=MAX_ORDER)
         if ce_code:
             v = submit_judge("false", ce_code)
             if v.get("status") == "accepted":

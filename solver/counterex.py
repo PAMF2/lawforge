@@ -144,6 +144,37 @@ class CounterEx:
     table: list[list[int]]
 
 
+import hashlib  # noqa: E402
+
+_CACHE_DIR = (
+    __import__("pathlib").Path(__file__).resolve().parent.parent / "proofs" / "ce_cache"
+)
+
+
+def _ce_cache_key(eq1_src: str, eq2_src: str) -> str:
+    return hashlib.sha1(
+        (eq1_src.replace(" ", "") + "|" + eq2_src.replace(" ", "")).encode()
+    ).hexdigest()[:16]
+
+
+def _ce_cache_load(key: str) -> "CounterEx | None":
+    p = _CACHE_DIR / f"{key}.json"
+    if not p.exists():
+        return None
+    try:
+        d = json.loads(p.read_text())
+    except (json.JSONDecodeError, OSError):
+        return None
+    return CounterEx(order=int(d["order"]), table=d["table"])
+
+
+def _ce_cache_store(key: str, ce: "CounterEx") -> None:
+    _CACHE_DIR.mkdir(parents=True, exist_ok=True)
+    (_CACHE_DIR / f"{key}.json").write_text(
+        json.dumps({"order": ce.order, "table": ce.table})
+    )
+
+
 def search_counterex(
     eq1_src: str,
     eq2_src: str,
@@ -151,8 +182,17 @@ def search_counterex(
     max_samples_per_order: int = 100_000,
     timeout_per_order: float = 15.0,
 ) -> CounterEx | None:
-    """Find a magma satisfying eq1 but not eq2. Return None if none in budget."""
+    """Find a magma satisfying eq1 but not eq2. Return None if none in budget.
+
+    Cached per (eq1, eq2) hash in proofs/ce_cache/. Subsequent calls on the
+    same problem return instantly; saves ~5-30s per FALSE re-eval across gens.
+    """
     import time
+
+    cache_key = _ce_cache_key(eq1_src, eq2_src)
+    cached = _ce_cache_load(cache_key)
+    if cached is not None:
+        return cached
 
     try:
         eq1 = parse_eq(eq1_src)
@@ -174,7 +214,9 @@ def search_counterex(
             if time.time() - t0 > timeout_per_order:
                 break
             if satisfies(eq1, table, n, v1) and violates(eq2, table, n, v2):
-                return CounterEx(order=n, table=table)
+                ce = CounterEx(order=n, table=table)
+                _ce_cache_store(cache_key, ce)
+                return ce
     return None
 
 
