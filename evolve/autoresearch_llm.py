@@ -43,6 +43,11 @@ ALLOWED_FILES = {"solver/prompt_template.txt", "solver/cheatsheet.md"}
 ALLOWED_OPS = {"append", "prepend", "replace"}
 MAX_PAYLOAD = 2000
 
+# prompt_template.txt is fed through str.format with these keys. Any unknown
+# {...} segment in a dynamic payload would raise KeyError on every problem.
+_PROMPT_TPL_KEYS = {"eq1", "eq2", "cheatsheet", "ce_hint"}
+_PLACEHOLDER_RE = __import__("re").compile(r"\{([^{}]+)\}")
+
 
 def _tail(path: Path, n: int = 5) -> list[str]:
     if not path.exists():
@@ -158,6 +163,12 @@ def _validate(proposal: dict) -> tuple[bool, str]:
     name = proposal["name"]
     if not isinstance(name, str) or not name.strip():
         return False, "missing name"
+    if proposal["file"] == "solver/prompt_template.txt":
+        unknown = {
+            m for m in _PLACEHOLDER_RE.findall(payload) if m not in _PROMPT_TPL_KEYS
+        }
+        if unknown:
+            return False, f"unknown placeholder(s) in payload: {sorted(unknown)}"
     return True, ""
 
 

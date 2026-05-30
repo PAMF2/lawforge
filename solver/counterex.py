@@ -16,6 +16,7 @@ Examples:
 
 import itertools
 import json
+import os
 import random
 import re
 from dataclasses import dataclass
@@ -177,7 +178,10 @@ def _ce_cache_has(key: str) -> bool:
 def _ce_cache_store(key: str, ce: "CounterEx | None") -> None:
     _CACHE_DIR.mkdir(parents=True, exist_ok=True)
     payload = {"ce": {"order": ce.order, "table": ce.table}} if ce else {"ce": None}
-    (_CACHE_DIR / f"{key}.json").write_text(json.dumps(payload))
+    target = _CACHE_DIR / f"{key}.json"
+    tmp = _CACHE_DIR / f"{key}.json.{os.getpid()}.tmp"
+    tmp.write_text(json.dumps(payload))
+    os.replace(tmp, target)
 
 
 def search_counterex(

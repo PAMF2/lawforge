@@ -138,9 +138,17 @@ def main() -> None:
 
     arm = meta.select()
     print(f"[gen {args.gen}] selected arm: {arm.name}")
-    arm.apply(ROOT)
 
     pre_sha = git("rev-parse", "HEAD")
+
+    if os.environ.get("LAWFORGE_PRE_ARM_BASELINE", "1") == "1":
+        before = run_eval(gen=args.gen)
+        print(f"[gen {args.gen}] pre-arm baseline={before:.4f} @ seed={args.gen}")
+    else:
+        before = load_last_metric()
+        print(f"[gen {args.gen}] using stale last_metric={before:.4f} (no pre-arm)")
+
+    arm.apply(ROOT)
     subprocess.run(["git", "add", "-A"], cwd=ROOT, check=False)
     subprocess.run(
         ["git", "commit", "-m", f"gen{args.gen}: try arm={arm.name}"],
@@ -149,7 +157,6 @@ def main() -> None:
     )
     trial_sha = git("rev-parse", "HEAD")
 
-    before = load_last_metric()
     t0 = time.time()
     run_smoke(args.smoke_sec)
     print(f"[gen {args.gen}] smoke train took {time.time() - t0:.0f}s")
