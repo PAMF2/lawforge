@@ -63,7 +63,7 @@ def _run_with_pg_kill(
 
 def run_smoke(budget_sec: int) -> None:
     r = _run_with_pg_kill(
-        ["python3", "-m", "train", "--smoke", "--budget-sec", str(budget_sec)],
+        ["python3", "-m", "train_smoke", "--smoke", "--budget-sec", str(budget_sec)],
         TRAIN_HARD_CAP_S,
     )
     if r is None:
@@ -81,7 +81,7 @@ def run_eval(gen: int = 0) -> float:
     argv = [
         "python3",
         "-m",
-        "eval",
+        "eval_harness",
         "--split",
         split,
         "--limit",

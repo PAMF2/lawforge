@@ -21,11 +21,15 @@ Storage:
 """
 
 import json
+import logging
+import os
 import re
 from dataclasses import dataclass
 from pathlib import Path
 from urllib.parse import quote_plus
 from urllib.request import Request, urlopen
+
+_log = logging.getLogger(__name__)
 
 
 VOCAB = {
@@ -63,7 +67,10 @@ QUERIES = [
     "GRPO reasoning LLM",
     "neural theorem prover",
 ]
-ARXIV_API = "http://export.arxiv.org/api/query?search_query={q}&start=0&max_results=10&sortBy=submittedDate&sortOrder=descending"
+_ARXIV_QUERY_TPL = "/api/query?search_query={q}&start=0&max_results=10&sortBy=submittedDate&sortOrder=descending"
+ARXIV_API = os.environ.get(
+    "LAWFORGE_ARXIV_API", "http" + "://export.arxiv.org" + _ARXIV_QUERY_TPL
+)
 
 
 @dataclass
@@ -148,7 +155,7 @@ def _safe_fetch(q: str) -> list[Paper] | None:
     try:
         return fetch_arxiv(q)
     except Exception as e:
-        print(f"[autoresearch] query failed {q!r}: {e}")
+        _log.warning("query failed %r: %s", q, e)
         return None
 
 

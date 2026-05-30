@@ -69,7 +69,7 @@ fi
 
 echo "[5/7] solver smoke (no LLM, mock judge)"
 if LAWFORGE_LLM_URL=http://localhost:1 \
-   timeout 60 python3 -m eval --split dev --limit 5 --timeout 10 \
+   timeout 60 python3 -m eval_harness --split dev --limit 5 --timeout 10 \
    >/tmp/lawforge_eval.log 2>&1; then
   rate=$(grep "^SOLVED_RATE=" /tmp/lawforge_eval.log | cut -d= -f2)
   printf "  PASS  eval ran (rate=%s; ok to be 0 without LLM)\n" "$rate"

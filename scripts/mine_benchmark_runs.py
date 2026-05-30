@@ -19,7 +19,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
 
-from lawforge_utils import problem_hash
+from lawforge_utils import problem_hash  # noqa: E402
 
 REPO = "SAIRfoundation/equational-theories-benchmark"
 ACCEPTED = ROOT / "proofs" / "accepted"

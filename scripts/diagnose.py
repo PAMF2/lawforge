@@ -33,14 +33,14 @@ from lean.judge import (  # noqa: E402
     _to_diamond,
     judge,
 )
-from solver.counterex import emit_lean_counterex, search_counterex
-from solver.solver import _wrap_true_submission
+from solver.counterex import emit_lean_counterex, search_counterex  # noqa: E402
+from solver.solver import _wrap_true_submission  # noqa: E402
 
 
 def _baseline_true(proof_body: str) -> str:
     """Exact upstream baseline make_true_code shape."""
     lines = proof_body.strip().split("\n")
-    indented = "\n".join("  " + l if l.strip() else "" for l in lines)
+    indented = "\n".join("  " + ln if ln.strip() else "" for ln in lines)
     return (
         "import JudgeProblem\n\n"
         "def submission : Goal := by\n"

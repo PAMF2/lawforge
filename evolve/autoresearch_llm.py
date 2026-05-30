@@ -16,10 +16,13 @@ Output written:
 
 import argparse
 import json
+import logging
 import os
 import sys
 import urllib.request
 from pathlib import Path
+
+_log = logging.getLogger(__name__)
 
 ROOT = Path(__file__).resolve().parent.parent
 RESULTS = ROOT / "evolve" / "results.tsv"
@@ -27,8 +30,10 @@ PROMPT = ROOT / "solver" / "prompt_template.txt"
 CHEATSHEET = ROOT / "solver" / "cheatsheet.md"
 GRPO_LOG = ROOT / "proofs" / "grpo_log.jsonl"
 DYN_DIR = ROOT / "evolve" / "dynamic_arms"
+_LLM_HOST = os.environ.get("LAWFORGE_LLM_HOST", "127.0.0.1")
+_LLM_PORT = os.environ.get("LAWFORGE_LLM_PORT", "8000")
 LLM_URL = os.environ.get(
-    "LAWFORGE_LLM_URL", "http://127.0.0.1:8000/v1/chat/completions"
+    "LAWFORGE_LLM_URL", f"http://{_LLM_HOST}:{_LLM_PORT}/v1/chat/completions"
 )
 LLM_MODEL = os.environ.get("LAWFORGE_LLM_MODEL", "deepseek-ai/DeepSeek-Prover-V2-7B")
 LLM_KEY = os.environ.get("LAWFORGE_LLM_KEY", "no-key")
@@ -168,7 +173,7 @@ def run(gen: int) -> int:
     try:
         raw = _call_llm(_build_prompt(gen))
     except Exception as e:
-        print(f"[autoresearch_llm] LLM call failed: {e}", file=sys.stderr)
+        _log.warning("LLM call failed: %s", e)
         return 1
     proposal = _extract_json(raw)
     if proposal is None:

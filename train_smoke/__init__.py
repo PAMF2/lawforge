@@ -29,14 +29,14 @@ ROOT = Path(__file__).resolve().parent
 
 
 def load_train_split() -> list[dict]:
-    from eval import load_split
+    from eval_harness import load_split
 
     return load_split("train")
 
 
 def calibrate_one(problem: dict, timeout: int = 30) -> dict:
     """Run solver on one problem, returning {solved, layer_hit, lean_code}."""
-    from eval import run_solver_on_problem
+    from eval_harness import run_solver_on_problem
 
     t0 = time.time()
     solved = run_solver_on_problem(problem, timeout=timeout)

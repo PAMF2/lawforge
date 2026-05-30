@@ -19,7 +19,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent
 sys.path.insert(0, str(ROOT))
 
-from lawforge_utils import problem_hash, render_prompt
+from lawforge_utils import problem_hash, render_prompt  # noqa: E402
 
 # NOTE: server is single-threaded (transformers.generate is not thread-safe on
 # one model instance). Parallel client requests just queue + hit per-call
@@ -40,25 +40,33 @@ ACCEPTED_DIR.mkdir(parents=True, exist_ok=True)
 GRPO_LOG.parent.mkdir(parents=True, exist_ok=True)
 
 
-def _score_group(prompt: str, responses: list[str], expected: list[str],
-                 problem: dict | None = None) -> list[float]:
+def _score_group(
+    prompt: str, responses: list[str], expected: list[str], problem: dict | None = None
+) -> list[float]:
     """Score K rollouts. Cascade: real Lean (per-response) -> RULER (group)."""
     from lean.judge import _JUDGE_AVAILABLE, judge_or_score, reward as r2reward
 
     if _JUDGE_AVAILABLE:
-        return [r2reward(judge_or_score(r, expected_verdict=exp,
-                                         use_llm_fallback=False, problem=problem))
-                for r, exp in zip(responses, expected)]
+        return [
+            r2reward(
+                judge_or_score(
+                    r, expected_verdict=exp, use_llm_fallback=False, problem=problem
+                )
+            )
+            for r, exp in zip(responses, expected)
+        ]
     return ruler_score(prompt, responses, expected[0])
 
 
-def ruler_score(prompt: str, responses: list[str], expected_verdict: str) -> list[float]:
+def ruler_score(
+    prompt: str, responses: list[str], expected_verdict: str
+) -> list[float]:
     """LLM-as-judge group ranking. Returns one 0..1 score per response."""
     from lawforge_utils import extract_json
     from solver.proxy_client import call_local
 
     block = "\n\n".join(
-        f"=== Candidate {i+1} ===\n{r[:MAX_CANDIDATE_CHARS]}"
+        f"=== Candidate {i + 1} ===\n{r[:MAX_CANDIDATE_CHARS]}"
         for i, r in enumerate(responses)
     )
     judge_prompt = (
@@ -73,7 +81,10 @@ def ruler_score(prompt: str, responses: list[str], expected_verdict: str) -> lis
     resp = call_local(judge_prompt, max_tokens=JUDGE_MAX_TOKENS, temperature=0.0)
     data = extract_json(resp.text)
     if not data:
-        print(f"[ruler_score] no JSON in judge output: {resp.text[:200]!r}", file=sys.stderr)
+        print(
+            f"[ruler_score] no JSON in judge output: {resp.text[:200]!r}",
+            file=sys.stderr,
+        )
         return [JUDGE_FALLBACK_SCORE] * len(responses)
     scores = [0.0] * len(responses)
     for item in data.get("scores", []):
@@ -92,35 +103,57 @@ def _save_accepted(problem: dict, lean_code: str) -> None:
 
 def _log_step(step: int, mean_reward: float, accepted_in_step: int) -> None:
     with GRPO_LOG.open("a") as f:
-        f.write(json.dumps({
-            "ts": time.time(), "step": step,
-            "mean_reward": mean_reward, "accepted": accepted_in_step,
-        }) + "\n")
+        f.write(
+            json.dumps(
+                {
+                    "ts": time.time(),
+                    "step": step,
+                    "mean_reward": mean_reward,
+                    "accepted": accepted_in_step,
+                }
+            )
+            + "\n"
+        )
 
 
 def main() -> None:
     ap = argparse.ArgumentParser()
-    ap.add_argument("--smoke", action="store_true",
-                    help="single-problem mining pass, no GRPO weight update")
-    ap.add_argument("--problem-idx", type=int, default=-1,
-                    help="when --smoke, pick this problem index (-1 = round-robin)")
+    ap.add_argument(
+        "--smoke",
+        action="store_true",
+        help="single-problem mining pass, no GRPO weight update",
+    )
+    ap.add_argument(
+        "--problem-idx",
+        type=int,
+        default=-1,
+        help="when --smoke, pick this problem index (-1 = round-robin)",
+    )
     args = ap.parse_args()
 
-    print(f"[grpo] MODEL={MODEL_ID} group={GRPO_GROUP} smoke={args.smoke}",
-          file=sys.stderr)
+    print(
+        f"[grpo] MODEL={MODEL_ID} group={GRPO_GROUP} smoke={args.smoke}",
+        file=sys.stderr,
+    )
 
-    from eval import load_split
+    import importlib.util
+
+    from eval_harness import load_split
+
     problems = load_split("train")
 
     if not args.smoke:
-        # Full GRPO requires ART; gate by import availability.
-        try:
-        except ImportError:
-            print("[grpo] openpipe-art not installed; full training unavailable.\n"
-                  "  pip install openpipe-art unsloth trl peft", file=sys.stderr)
+        if importlib.util.find_spec("openpipe_art") is None:
+            print(
+                "[grpo] openpipe-art not installed; full training unavailable.\n"
+                "  pip install openpipe-art unsloth trl peft",
+                file=sys.stderr,
+            )
             return
-        print("[grpo] full GRPO training loop is TODO; use --smoke for mining",
-              file=sys.stderr)
+        print(
+            "[grpo] full GRPO training loop is TODO; use --smoke for mining",
+            file=sys.stderr,
+        )
         return
 
     from solver.proxy_client import call_local
@@ -131,14 +164,17 @@ def main() -> None:
     else:
         idx = args.problem_idx % len(problems)
     p = problems[idx]
-    prompt = render_prompt(p.get("hypothesis", p.get("equation1", "")),
-                           p.get("goal", p.get("equation2", "")))
+    prompt = render_prompt(
+        p.get("hypothesis", p.get("equation1", "")),
+        p.get("goal", p.get("equation2", "")),
+    )
     print(f"[grpo-smoke] problem={p.get('id', '?')}", file=sys.stderr)
 
     # Sequential rollouts: the local LLM server is single-threaded; concurrent
     # client requests just queue and individually time out.
-    rollouts = [call_local(prompt, MAX_RESPONSE_LEN, ROLLOUT_TEMP)
-                for _ in range(GRPO_GROUP)]
+    rollouts = [
+        call_local(prompt, MAX_RESPONSE_LEN, ROLLOUT_TEMP) for _ in range(GRPO_GROUP)
+    ]
     responses = [r.text for r in rollouts]
     expected = [str(p.get("label", "true")).lower()] * GRPO_GROUP
     rewards = _score_group(prompt, responses, expected, problem=p)

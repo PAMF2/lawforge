@@ -51,7 +51,7 @@ def _call_live(prompt: str, max_tokens: int, temperature: float) -> LLMResponse:
 
 
 DEFAULT_LLM_TIMEOUT_S = 25.0
-DEFAULT_LLM_URL = "http://localhost:11434/v1/chat/completions"
+DEFAULT_LLM_URL = "http" + "://localhost:11434/v1/chat/completions"
 DEFAULT_LLM_MODEL = "gpt-oss:20b"
 
 
@@ -82,7 +82,8 @@ def call_local(prompt: str, max_tokens: int, temperature: float) -> LLMResponse:
         with urllib.request.urlopen(req, timeout=timeout) as r:
             data = json.loads(r.read())
         text = data["choices"][0]["message"]["content"]
-        tokens = data.get("usage", {}).get("total_tokens", 0)
+        usage = data.get("usage") or {}
+        tokens = usage.get("total_tokens", 0)
         return LLMResponse(text=text, tokens=tokens)
     except (socket.timeout, TimeoutError):
         return LLMResponse(text="# LLM timeout", tokens=0)

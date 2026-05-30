@@ -16,10 +16,12 @@ Status enum from competition spec:
 """
 
 import json
+import logging
 import os
-import sys as _sys_mod
 from dataclasses import dataclass
 from pathlib import Path
+
+_log = logging.getLogger(__name__)
 
 ROOT = Path(__file__).resolve().parent.parent
 UPSTREAM = ROOT / "upstream"
@@ -29,7 +31,6 @@ _JUDGE_AVAILABLE = UPSTREAM_ENV.exists() and (UPSTREAM / "judge" / "verify.py").
 _ALLOW_MOCK = os.environ.get("LAWFORGE_ALLOW_MOCK", "0") == "1"
 
 
-# Stage 2 spec verdict strings — single source of truth, no typos.
 ACCEPTED = "accepted"
 UNPARSED = "unparsed"
 MALFORMED = "malformed"
@@ -69,16 +70,14 @@ def _load_real_judge() -> bool:
     if str(UPSTREAM) not in _sys.path:
         _sys.path.insert(0, str(UPSTREAM))
     try:
-        from judge.verify import _resolve_config, verify_answer
+        import importlib
 
-        _JUDGE_CONFIG = _resolve_config(None)
-        _VERIFY_FN = verify_answer
+        verify_mod = importlib.import_module("judge.verify")
+        _JUDGE_CONFIG = verify_mod._resolve_config(None)
+        _VERIFY_FN = verify_mod.verify_answer
         return True
     except Exception as e:
-        print(
-            f"[judge] failed to load upstream verify: {e}",
-            file=__import__("sys").stderr,
-        )
+        _log.warning("failed to load upstream verify: %s", e)
         return False
 
 
@@ -159,10 +158,7 @@ def judge(
             message=(result.get("message") or result.get("error_code") or "")[:500],
         )
     except Exception as e:
-        print(
-            f"[judge] verify_answer raised {type(e).__name__}: {e}",
-            file=_sys_mod.stderr,
-        )
+        _log.warning("verify_answer raised %s: %s", type(e).__name__, e)
         return Verdict(
             status=INCORRECT, message=f"judge error: {type(e).__name__}: {e}"
         )
