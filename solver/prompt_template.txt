@@ -1,26 +1,27 @@
-You are solving equational-theory implication problems in Lean 4 over
-magmas with binary operator `◇` (Unicode diamond, U+25C7).
+You are a Lean 4 expert solving SAIR Stage 2 equational implications over magmas.
 
-Eq1 (hypothesis): {eq1}
-Eq2 (goal):       {eq2}
+Magma operator is `◇` (NOT `*`).
+Goal: decide if Eq1 implies Eq2 for every magma.
 
-If Eq1 implies Eq2 universally, emit ONLY the Lean tactic body that closes
-the goal `EquationRHS G` given `h : EquationLHS G`. The harness wraps your
-body with:
+{problem.equation1_id} (Eq1, hypothesis): {problem.equation1}
+{problem.equation2_id} (Eq2, target):     {problem.equation2}
 
-  import JudgeProblem
-  def submission : Goal := by
-    intro G _ h
-    <YOUR BODY HERE>
+Round: {solver.round}    Stage: {solver.stage}
+CE-search hint: {solver.ce_hint}
 
-Constraints:
-- Tactic body only. No `import`, no `theorem`, no `def submission`.
-- Use `◇` as the magma operator, NOT `*`.
-- Allowed axioms: propext, Quot.sound, Classical.choice.
-- Forbidden: `sorry`, `admit`.
-- Common tactics: `intro x y z`, `rw [h]`, `exact h _ _`, `simp [h]`, `aesop`.
+Cheatsheet (worked patterns):
+__CHEATSHEET__
 
-Patterns from accepted proofs:
-{cheatsheet}
+Previous attempts on THIS problem:
+{history.attempts}
 
-Counterexample search hint: {ce_hint}
+Allowed axioms only: propext, Quot.sound, Classical.choice.
+Forbidden: sorry, admit, prose outside JSON.
+
+Respond with STRICT JSON only, no markdown, no commentary:
+
+{"verdict": "true", "proof": "<Lean tactic body, no imports, no theorem header>"}
+
+or
+
+{"verdict": "false", "counterexample_table": [[r0c0,r0c1,...], [r1c0,r1c1,...], ...]}

@@ -20,11 +20,13 @@ import time
 from pathlib import Path
 
 from solver.counterex import emit_lean_counterex, search_counterex
-from solver.proxy_client import call_llm, submit_judge
+from solver.proxy_client import call_llm, call_llm_context, submit_judge
 
 HERE = Path(__file__).resolve().parent
-PROMPT_TPL = (HERE / "prompt_template.txt").read_text()
+_RAW_PROMPT_TPL = (HERE / "prompt_template.txt").read_text()
 CHEATSHEET = (HERE / "cheatsheet.md").read_text()
+PROMPT = _RAW_PROMPT_TPL.replace("__CHEATSHEET__", CHEATSHEET)
+PROMPT_TPL = PROMPT
 
 USE_MACE4_FIRST = (HERE / "USE_MACE4_FIRST").exists()
 USE_CHEATSHEET = (
@@ -95,44 +97,83 @@ def l2_counterex(eq1: str, eq2: str, max_order: int = 4) -> str | None:
     return emit_lean_counterex(ce, eq1, eq2) if ce else None
 
 
-def l3_tactic_ladder(eq1: str, eq2: str) -> str:
-    """Layer 3: ask LLM for a tactic body, wrap as submission."""
-    prompt = PROMPT_TPL.format(
-        eq1=eq1,
-        eq2=eq2,
-        cheatsheet=CHEATSHEET if USE_CHEATSHEET else "(none)",
-        ce_hint="not searched yet",
-    )
-    resp = call_llm(prompt, max_tokens=LLM_MAX_TOKENS, temperature=TEMPERATURE)
-    return _wrap_true_submission(_extract_body(resp.text))
+_LLM_USE_LEGACY = os.environ.get("LAWFORGE_LLM_LEGACY", "0") == "1"
 
 
-def l4_subgoal_decomp(eq1: str, eq2: str) -> str:
-    """Layer 4: DeepSeek-Prover-V2 style — single combined prompt (no planner)."""
-    prompt = (
-        PROMPT_TPL.format(
-            eq1=eq1,
-            eq2=eq2,
+def _llm_text(context: dict) -> str:
+    """Production Solo: solver sends a context dict; proxy fills PROMPT and
+    calls LLM. LAWFORGE_LLM_LEGACY=1 falls back to the local call_llm path
+    used by the in-repo eval harness during development."""
+    if _LLM_USE_LEGACY:
+        prompt = PROMPT.format(
+            eq1=context.get("eq1", ""),
+            eq2=context.get("eq2", ""),
             cheatsheet=CHEATSHEET if USE_CHEATSHEET else "(none)",
-            ce_hint="not searched yet",
+            ce_hint=context.get("ce_hint", "not searched yet"),
         )
-        + "\n\nDecompose into 2-3 subgoals (as Lean lemma signatures) "
-        "before proving the main implication. Emit only the final tactic body."
+        extra = context.get("extra")
+        if extra:
+            prompt = prompt + "\n\n" + str(extra)
+        resp = call_llm(prompt, max_tokens=LLM_MAX_TOKENS, temperature=TEMPERATURE)
+        return resp.text
+    return call_llm_context(context)
+
+
+def l3_tactic_ladder(eq1: str, eq2: str, round_: int = 0, ce_hint: str = "") -> str:
+    """Layer 3: ask LLM for a tactic body, wrap as submission."""
+    text = _llm_text(
+        {
+            "eq1": eq1,
+            "eq2": eq2,
+            "stage": "first",
+            "round": round_,
+            "ce_hint": ce_hint or "not searched yet",
+        }
     )
-    resp = call_llm(prompt, max_tokens=LLM_MAX_TOKENS, temperature=TEMPERATURE)
-    return _wrap_true_submission(_extract_body(resp.text))
+    return _wrap_true_submission(_extract_body(text))
 
 
-def l5_refine(eq1: str, eq2: str, prior_code: str, error_msg: str) -> str:
+def l4_subgoal_decomp(eq1: str, eq2: str, round_: int = 1, ce_hint: str = "") -> str:
+    """Layer 4: ask LLM to decompose before composing."""
+    text = _llm_text(
+        {
+            "eq1": eq1,
+            "eq2": eq2,
+            "stage": "subgoal",
+            "round": round_,
+            "ce_hint": ce_hint or "not searched yet",
+            "extra": "Decompose into 2-3 subgoals (Lean lemma signatures) "
+            "before proving the main implication. Emit only the final tactic body.",
+        }
+    )
+    return _wrap_true_submission(_extract_body(text))
+
+
+def l5_refine(
+    eq1: str,
+    eq2: str,
+    prior_code: str,
+    error_msg: str,
+    round_: int = 2,
+) -> str:
     """Layer 5: feed Lean error back to LLM, ask for fix."""
-    prompt = (
-        f"The following Lean 4 proof attempt failed:\n```\n{prior_code}\n```\n"
-        f"Judge feedback: {error_msg}\n\n"
-        f"Eq1: {eq1}\nEq2: {eq2}\n\n"
-        "Emit a corrected Lean 4 tactic body only (no imports, no theorem)."
+    text = _llm_text(
+        {
+            "eq1": eq1,
+            "eq2": eq2,
+            "stage": "refine",
+            "round": round_,
+            "ce_hint": "",
+            "prior_code": prior_code[:1500],
+            "last_error": error_msg[:1500],
+            "extra": (
+                f"The previous attempt failed with:\n{error_msg[:800]}\n\n"
+                "Emit a corrected Lean 4 tactic body only "
+                "(no imports, no theorem header)."
+            ),
+        }
     )
-    resp = call_llm(prompt, max_tokens=LLM_MAX_TOKENS, temperature=0.5)
-    return _wrap_true_submission(_extract_body(resp.text))
+    return _wrap_true_submission(_extract_body(text))
 
 
 def _extract_body(text: str) -> str:
@@ -167,8 +208,12 @@ def _extract_body(text: str) -> str:
 
 
 def solve(problem: dict) -> dict:
-    eq1 = problem.get("hypothesis", problem.get("eq1", ""))
-    eq2 = problem.get("goal", problem.get("eq2", ""))
+    eq1 = (
+        problem.get("equation1") or problem.get("hypothesis") or problem.get("eq1", "")
+    )
+    eq2 = problem.get("equation2") or problem.get("goal") or problem.get("eq2", "")
+    rnd = 0
+    ce_hint = ""
 
     code = l1_syntactic(eq1, eq2)
     if code:
@@ -182,8 +227,11 @@ def solve(problem: dict) -> dict:
             v = submit_judge("false", ce_code)
             if v.get("status") == "accepted":
                 return v
+        else:
+            ce_hint = f"no counterex on Fin 2..{MAX_ORDER}"
 
-    code = l3_tactic_ladder(eq1, eq2)
+    code = l3_tactic_ladder(eq1, eq2, round_=rnd, ce_hint=ce_hint)
+    rnd += 1
     v = submit_judge("true", code)
     if v.get("status") == "accepted":
         return v
@@ -192,20 +240,22 @@ def solve(problem: dict) -> dict:
 
     code4 = code
     if not llm_dead:
-        code4 = l4_subgoal_decomp(eq1, eq2)
+        code4 = l4_subgoal_decomp(eq1, eq2, round_=rnd, ce_hint=ce_hint)
+        rnd += 1
         v = submit_judge("true", code4)
         if v.get("status") == "accepted":
             return v
         last_err = v.get("message", last_err)
 
         for _ in range(VERIFIER_REFINE_K):
-            code4 = l5_refine(eq1, eq2, code4, last_err)
+            code4 = l5_refine(eq1, eq2, code4, last_err, round_=rnd)
+            rnd += 1
             v = submit_judge("true", code4)
             if v.get("status") == "accepted":
                 return v
             last_err = v.get("message", last_err)
 
-    ce_code = l2_counterex(eq1, eq2, max_order=5)
+    ce_code = l2_counterex(eq1, eq2, max_order=MAX_ORDER)
     if ce_code:
         v = submit_judge("false", ce_code)
         if v.get("status") == "accepted":
@@ -215,11 +265,13 @@ def solve(problem: dict) -> dict:
 
 
 def main() -> None:
-    # Solo track: one problem per subprocess.
     line = sys.stdin.readline().strip()
     if not line:
         return
-    problem = json.loads(line)
+    msg = json.loads(line)
+    # Production Solo: startup is {"problem": {...}, "budget": {...}}.
+    # Legacy local eval may still send raw problem dict.
+    problem = msg.get("problem", msg) if isinstance(msg, dict) else msg
     t0 = time.time()
     result = solve(problem)
     sys.stderr.write(

@@ -100,3 +100,23 @@ def submit_judge(verdict: str, code: str) -> dict:
     if not line:
         return {"status": "unparsed"}
     return json.loads(line)
+
+
+def call_llm_context(context: dict) -> str:
+    """Stage 2 Solo production protocol: send a context dict, proxy fills the
+    solver's PROMPT template and forwards to LLM, returns proxy's
+    {"response": "<llm text>"} or {"error": "..."}. Returns the raw response
+    text on success, empty string on error."""
+    req = {"call": "llm", "context": context}
+    sys.stdout.write(json.dumps(req) + "\n")
+    sys.stdout.flush()
+    line = sys.stdin.readline()
+    if not line:
+        return ""
+    try:
+        msg = json.loads(line)
+    except json.JSONDecodeError:
+        return ""
+    if "error" in msg:
+        return ""
+    return str(msg.get("response", ""))
