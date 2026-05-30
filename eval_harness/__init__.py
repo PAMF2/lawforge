@@ -23,7 +23,7 @@ from solver.proxy_client import call_local
 
 _USE_LLM_JUDGE = env_bool("LAWFORGE_LLM_JUDGE")
 
-ROOT = Path(__file__).resolve().parent
+ROOT = Path(__file__).resolve().parent.parent
 
 
 def load_split(

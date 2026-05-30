@@ -151,10 +151,9 @@ _CACHE_DIR = (
 )
 
 
-def _ce_cache_key(eq1_src: str, eq2_src: str) -> str:
-    return hashlib.sha1(
-        (eq1_src.replace(" ", "") + "|" + eq2_src.replace(" ", "")).encode()
-    ).hexdigest()[:16]
+def _ce_cache_key(eq1_src: str, eq2_src: str, max_order: int) -> str:
+    blob = eq1_src.replace(" ", "") + "|" + eq2_src.replace(" ", "") + f"|o{max_order}"
+    return hashlib.sha1(blob.encode()).hexdigest()[:16]
 
 
 def _ce_cache_load(key: str) -> "CounterEx | None":
@@ -165,14 +164,20 @@ def _ce_cache_load(key: str) -> "CounterEx | None":
         d = json.loads(p.read_text())
     except (json.JSONDecodeError, OSError):
         return None
-    return CounterEx(order=int(d["order"]), table=d["table"])
+    if d.get("ce") is None:
+        return None
+    ce = d["ce"]
+    return CounterEx(order=int(ce["order"]), table=ce["table"])
 
 
-def _ce_cache_store(key: str, ce: "CounterEx") -> None:
+def _ce_cache_has(key: str) -> bool:
+    return (_CACHE_DIR / f"{key}.json").exists()
+
+
+def _ce_cache_store(key: str, ce: "CounterEx | None") -> None:
     _CACHE_DIR.mkdir(parents=True, exist_ok=True)
-    (_CACHE_DIR / f"{key}.json").write_text(
-        json.dumps({"order": ce.order, "table": ce.table})
-    )
+    payload = {"ce": {"order": ce.order, "table": ce.table}} if ce else {"ce": None}
+    (_CACHE_DIR / f"{key}.json").write_text(json.dumps(payload))
 
 
 def search_counterex(
@@ -189,10 +194,9 @@ def search_counterex(
     """
     import time
 
-    cache_key = _ce_cache_key(eq1_src, eq2_src)
-    cached = _ce_cache_load(cache_key)
-    if cached is not None:
-        return cached
+    cache_key = _ce_cache_key(eq1_src, eq2_src, max_order)
+    if _ce_cache_has(cache_key):
+        return _ce_cache_load(cache_key)
 
     try:
         eq1 = parse_eq(eq1_src)
@@ -217,6 +221,7 @@ def search_counterex(
                 ce = CounterEx(order=n, table=table)
                 _ce_cache_store(cache_key, ce)
                 return ce
+    _ce_cache_store(cache_key, None)
     return None
 
 

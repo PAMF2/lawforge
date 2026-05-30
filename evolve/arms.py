@@ -124,11 +124,11 @@ def arm_temp_high(root: Path) -> None:
 
 
 def arm_tokens_2k(root: Path) -> None:
-    _set_hparam(root, "LLM_MAX_TOKENS", 2048)
+    _write_solver_flag(root, "LLM_MAX_TOKENS", "2048")
 
 
 def arm_tokens_8k(root: Path) -> None:
-    _set_hparam(root, "LLM_MAX_TOKENS", 8192)
+    _write_solver_flag(root, "LLM_MAX_TOKENS", "8192")
 
 
 def arm_refine_1(root: Path) -> None:

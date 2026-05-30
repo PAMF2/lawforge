@@ -25,7 +25,7 @@ LLM_MAX_TOKENS = 4096
 CHEATSHEET_K = 8
 REFINE_ROUNDS = 1
 
-ROOT = Path(__file__).resolve().parent
+ROOT = Path(__file__).resolve().parent.parent
 
 
 def load_train_split() -> list[dict]:

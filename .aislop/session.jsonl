@@ -40,3 +40,10 @@
 {"ts":1780100960779,"files":["/home/pedroafonso/Desktop/lawforge/solver/proxy_client.py"]}
 {"ts":1780100978688,"files":["/home/pedroafonso/Desktop/lawforge/scripts/diagnose.py"]}
 {"ts":1780100992671,"files":["/home/pedroafonso/Desktop/lawforge/scripts/mine_benchmark_runs.py"]}
+{"ts":1780101787769,"files":["/home/pedroafonso/Desktop/lawforge/eval_harness/__init__.py"]}
+{"ts":1780101800740,"files":["/home/pedroafonso/Desktop/lawforge/train_smoke/__init__.py"]}
+{"ts":1780101836362,"files":["/home/pedroafonso/Desktop/lawforge/lawforge_utils/__init__.py"]}
+{"ts":1780101861230,"files":["/home/pedroafonso/Desktop/lawforge/solver/solver.py"]}
+{"ts":1780101870107,"files":["/home/pedroafonso/Desktop/lawforge/evolve/arms.py"]}
+{"ts":1780101884203,"files":["/home/pedroafonso/Desktop/lawforge/solver/counterex.py"]}
+{"ts":1780101901236,"files":["/home/pedroafonso/Desktop/lawforge/solver/counterex.py"]}

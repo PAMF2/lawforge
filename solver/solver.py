@@ -37,7 +37,11 @@ VERIFIER_REFINE_K = (
     if (HERE / "VERIFIER_REFINE_K").exists()
     else 0
 )
-LLM_MAX_TOKENS = int(os.environ.get("LAWFORGE_LLM_MAX_TOKENS", "1024"))
+LLM_MAX_TOKENS = (
+    int((HERE / "LLM_MAX_TOKENS").read_text().strip())
+    if (HERE / "LLM_MAX_TOKENS").exists()
+    else int(os.environ.get("LAWFORGE_LLM_MAX_TOKENS", "1024"))
+)
 
 TEMPERATURE = (
     float((HERE / "TEMPERATURE").read_text().strip())
