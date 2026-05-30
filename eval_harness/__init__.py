@@ -151,11 +151,14 @@ def run_solver_on_problem(problem: dict, timeout: int = 30) -> bool:
     env["LAWFORGE_PROXY_MODE"] = "live"
     env["PYTHONPATH"] = str(ROOT)
     prompt_tpl = _load_solver_prompt()
+    stderr_target = subprocess.DEVNULL
+    if os.environ.get("LAWFORGE_EVAL_VERBOSE", "0") == "1":
+        stderr_target = sys.stderr
     proc = subprocess.Popen(
         [sys.executable, "-m", "solver.solver"],
         stdin=subprocess.PIPE,
         stdout=subprocess.PIPE,
-        stderr=subprocess.DEVNULL,
+        stderr=stderr_target,
         cwd=ROOT,
         env=env,
         text=True,

@@ -282,9 +282,7 @@ def _marathon_main() -> None:
             if line:
                 problems.append(json.loads(line))
 
-    sys.stderr.write(
-        f"[marathon] {len(problems)} problems, budget={budget_s:.0f}s\n"
-    )
+    sys.stderr.write(f"[marathon] {len(problems)} problems, budget={budget_s:.0f}s\n")
 
     # Cheapest-first: do counterex sweep on all problems before any LLM call.
     # Counterex pass is deterministic + fast (< 1s/problem), no token cost.
@@ -301,9 +299,7 @@ def _marathon_main() -> None:
             if ce is None:
                 continue
             code = emit_lean_counterex(ce, eq1, eq2)
-            out.write(
-                json.dumps({"id": pid, "verdict": "false", "code": code}) + "\n"
-            )
+            out.write(json.dumps({"id": pid, "verdict": "false", "code": code}) + "\n")
             out.flush()
             solved_ids.add(pid)
 

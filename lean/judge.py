@@ -170,9 +170,14 @@ def _mock_judge(lean_code: str) -> Verdict:
     that explicitly import _mock_judge."""
     if "sorry" in lean_code or "admit" in lean_code:
         return Verdict(status=INCOMPLETE_PROOF)
-    if "theorem" not in lean_code and "example" not in lean_code:
+    has_decl = (
+        "theorem" in lean_code
+        or "example" in lean_code
+        or "def submission" in lean_code
+    )
+    if not has_decl:
         return Verdict(status=MALFORMED)
-    for tac in ("rfl", "decide", "trivial", "aesop"):
+    for tac in ("rfl", "decide", "trivial", "aesop", "decideFin!"):
         if tac in lean_code:
             return Verdict(status=ACCEPTED, message=f"mock accepted on {tac}")
     return Verdict(status=INCORRECT, message="mock: no obvious tactic")
