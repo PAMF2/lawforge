@@ -215,18 +215,21 @@ def solve(problem: dict) -> dict:
     rnd = 0
     ce_hint = ""
 
+    def _accept(verdict: str, code: str, v: dict) -> dict:
+        return {**v, "verdict": verdict, "code": code}
+
     code = l1_syntactic(eq1, eq2)
     if code:
         v = submit_judge("true", code)
         if v.get("status") == "accepted":
-            return v
+            return _accept("true", code, v)
 
     if USE_MACE4_FIRST:
         ce_code = l2_counterex(eq1, eq2, max_order=MAX_ORDER)
         if ce_code:
             v = submit_judge("false", ce_code)
             if v.get("status") == "accepted":
-                return v
+                return _accept("false", ce_code, v)
         else:
             ce_hint = f"no counterex on Fin 2..{MAX_ORDER}"
 
@@ -234,7 +237,7 @@ def solve(problem: dict) -> dict:
     rnd += 1
     v = submit_judge("true", code)
     if v.get("status") == "accepted":
-        return v
+        return _accept("true", code, v)
     last_err = v.get("message", "")
     llm_dead = code.startswith("# LLM timeout") or code.startswith("# LLM error")
 
@@ -244,7 +247,7 @@ def solve(problem: dict) -> dict:
         rnd += 1
         v = submit_judge("true", code4)
         if v.get("status") == "accepted":
-            return v
+            return _accept("true", code4, v)
         last_err = v.get("message", last_err)
 
         for _ in range(VERIFIER_REFINE_K):
@@ -252,25 +255,109 @@ def solve(problem: dict) -> dict:
             rnd += 1
             v = submit_judge("true", code4)
             if v.get("status") == "accepted":
-                return v
+                return _accept("true", code4, v)
             last_err = v.get("message", last_err)
 
     ce_code = l2_counterex(eq1, eq2, max_order=MAX_ORDER)
     if ce_code:
         v = submit_judge("false", ce_code)
         if v.get("status") == "accepted":
-            return v
+            return _accept("false", ce_code, v)
 
     return {"status": "incorrect"}
 
 
+def _marathon_main() -> None:
+    """Marathon track: read manifest, attempt each problem under a global
+    budget, append accepted answers to JUDGE_MARATHON_OUTPUT as JSONL."""
+    manifest_path = Path(os.environ["JUDGE_MARATHON_MANIFEST"])
+    output_path = Path(os.environ["JUDGE_MARATHON_OUTPUT"])
+    budget_s = float(os.environ.get("JUDGE_MARATHON_BUDGET_SECONDS", "30000"))
+    deadline = time.time() + budget_s
+
+    problems = []
+    with manifest_path.open() as f:
+        for line in f:
+            line = line.strip()
+            if line:
+                problems.append(json.loads(line))
+
+    sys.stderr.write(
+        f"[marathon] {len(problems)} problems, budget={budget_s:.0f}s\n"
+    )
+
+    # Cheapest-first: do counterex sweep on all problems before any LLM call.
+    # Counterex pass is deterministic + fast (< 1s/problem), no token cost.
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+    solved_ids: set[str] = set()
+    with output_path.open("a") as out:
+        for p in problems:
+            if time.time() >= deadline:
+                break
+            pid = p.get("id", "")
+            eq1 = p.get("equation1", "")
+            eq2 = p.get("equation2", "")
+            ce = search_counterex(eq1, eq2, max_order=MAX_ORDER)
+            if ce is None:
+                continue
+            code = emit_lean_counterex(ce, eq1, eq2)
+            out.write(
+                json.dumps({"id": pid, "verdict": "false", "code": code}) + "\n"
+            )
+            out.flush()
+            solved_ids.add(pid)
+
+        sys.stderr.write(
+            f"[marathon] counterex pass: {len(solved_ids)}/{len(problems)} FALSE\n"
+        )
+
+        # Now allocate remaining budget across TRUE candidates via per-problem
+        # solve(). Skip ones already covered by the counterex sweep.
+        remaining = [p for p in problems if p.get("id") not in solved_ids]
+        if not remaining or time.time() >= deadline:
+            return
+        per_problem_s = max(30.0, (deadline - time.time()) / len(remaining))
+        sys.stderr.write(
+            f"[marathon] LLM phase: {len(remaining)} remaining, "
+            f"~{per_problem_s:.0f}s each\n"
+        )
+        for p in remaining:
+            if time.time() >= deadline:
+                break
+            pid = p.get("id", "")
+            try:
+                result = solve(p)
+            except Exception as e:  # noqa: BLE001
+                sys.stderr.write(f"[marathon] {pid} error: {e}\n")
+                continue
+            if result.get("status") == "accepted" and result.get("code"):
+                out.write(
+                    json.dumps(
+                        {
+                            "id": pid,
+                            "verdict": result.get("verdict", "true"),
+                            "code": result["code"],
+                        }
+                    )
+                    + "\n"
+                )
+                out.flush()
+                solved_ids.add(pid)
+    sys.stderr.write(
+        f"[marathon] done: {len(solved_ids)}/{len(problems)} solved "
+        f"in {time.time() - (deadline - budget_s):.0f}s\n"
+    )
+
+
 def main() -> None:
+    if "JUDGE_MARATHON_MANIFEST" in os.environ:
+        _marathon_main()
+        return
+
     line = sys.stdin.readline().strip()
     if not line:
         return
     msg = json.loads(line)
-    # Production Solo: startup is {"problem": {...}, "budget": {...}}.
-    # Legacy local eval may still send raw problem dict.
     problem = msg.get("problem", msg) if isinstance(msg, dict) else msg
     t0 = time.time()
     result = solve(problem)
