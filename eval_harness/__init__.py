@@ -207,7 +207,9 @@ def run_solver_on_problem(problem: dict, timeout: int = 30) -> bool:
             elif call == "llm":
                 context = req.get("context") or {}
                 filled = _fill_prompt(prompt_tpl, problem, context, judge_log)
-                r = call_local(filled, 2048, 0.3)
+                max_tokens = int(context.get("max_tokens", 2048))
+                temperature = float(context.get("temperature", 0.3))
+                r = call_local(filled, max_tokens, temperature)
                 proc.stdin.write(json.dumps({"response": r.text}) + "\n")
                 proc.stdin.flush()
             else:

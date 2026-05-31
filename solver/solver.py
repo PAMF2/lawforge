@@ -20,7 +20,7 @@ import time
 from pathlib import Path
 
 from solver.counterex import emit_lean_counterex, search_counterex
-from solver.proxy_client import call_llm, call_llm_context, submit_judge
+from solver.proxy_client import call_llm_context, submit_judge
 
 HERE = Path(__file__).resolve().parent
 _RAW_PROMPT_TPL = (HERE / "prompt_template.txt").read_text()
@@ -97,25 +97,19 @@ def l2_counterex(eq1: str, eq2: str, max_order: int = 4) -> str | None:
     return emit_lean_counterex(ce, eq1, eq2) if ce else None
 
 
-_LLM_USE_LEGACY = os.environ.get("LAWFORGE_LLM_LEGACY", "0") == "1"
-
-
 def _llm_text(context: dict) -> str:
     """Production Solo: solver sends a context dict; proxy fills PROMPT and
-    calls LLM. LAWFORGE_LLM_LEGACY=1 falls back to the local call_llm path
-    used by the in-repo eval harness during development."""
-    if _LLM_USE_LEGACY:
-        prompt = PROMPT.format(
-            eq1=context.get("eq1", ""),
-            eq2=context.get("eq2", ""),
-            cheatsheet=CHEATSHEET if USE_CHEATSHEET else "(none)",
-            ce_hint=context.get("ce_hint", "not searched yet"),
-        )
-        extra = context.get("extra")
-        if extra:
-            prompt = prompt + "\n\n" + str(extra)
-        resp = call_llm(prompt, max_tokens=LLM_MAX_TOKENS, temperature=TEMPERATURE)
-        return resp.text
+    calls LLM. eval_harness mirrors the production proxy locally so this
+    single path covers both the upstream judge and our in-repo dev harness.
+
+    We attach max_tokens/temperature/cheatsheet_on as `solver.*` context keys.
+    The dev eval_harness reads them to parameterize call_local; the upstream
+    judge proxy ignores unknown keys, so the production contract is preserved.
+    """
+    context = dict(context)
+    context.setdefault("max_tokens", LLM_MAX_TOKENS)
+    context.setdefault("temperature", TEMPERATURE)
+    context.setdefault("cheatsheet_on", int(bool(USE_CHEATSHEET)))
     return call_llm_context(context)
 
 
