@@ -20,7 +20,7 @@ import time
 from pathlib import Path
 
 from solver.counterex import emit_lean_counterex, search_counterex
-from solver.proxy_client import call_llm_context, submit_judge
+from solver.proxy_client import call_llm_context, call_local, submit_judge
 
 HERE = Path(__file__).resolve().parent
 _RAW_PROMPT_TPL = (HERE / "prompt_template.txt").read_text()
@@ -261,6 +261,36 @@ def solve(problem: dict) -> dict:
     return {"status": "incorrect"}
 
 
+_MARATHON_RE = re.compile(r"\{(problem|solver|history)\.[a-zA-Z_]+\}")
+
+
+def _marathon_fill_prompt(problem: dict) -> str:
+    eq1 = problem.get("equation1", "")
+    eq2 = problem.get("equation2", "")
+    eq1_name = f"Equation{problem.get('eq1_id', '')}"
+    eq2_name = f"Equation{problem.get('eq2_id', '')}"
+    vars_ = {
+        "problem.id": str(problem.get("id", "")),
+        "problem.eq1_id": str(problem.get("eq1_id", "")),
+        "problem.eq2_id": str(problem.get("eq2_id", "")),
+        "problem.equation1": eq1,
+        "problem.equation2": eq2,
+        "problem.equation1_id": eq1_name,
+        "problem.equation2_id": eq2_name,
+        "history.attempts": "(no prior attempts)",
+        "history.round": "0",
+        "history.last_error": "",
+        "history.last_status": "",
+        "solver.round": "0",
+        "solver.stage": "marathon",
+        "solver.ce_hint": "",
+    }
+    out = PROMPT
+    for k, v in vars_.items():
+        out = out.replace("{" + k + "}", v)
+    return _MARATHON_RE.sub("", out)
+
+
 def _marathon_main() -> None:
     """Marathon track: read manifest, attempt each problem under a global
     budget, append accepted answers to JUDGE_MARATHON_OUTPUT as JSONL."""
@@ -301,8 +331,7 @@ def _marathon_main() -> None:
             f"[marathon] counterex pass: {len(solved_ids)}/{len(problems)} FALSE\n"
         )
 
-        # Now allocate remaining budget across TRUE candidates via per-problem
-        # solve(). Skip ones already covered by the counterex sweep.
+        # TRUE phase: direct LLM (no proxy in marathon harness).
         remaining = [p for p in problems if p.get("id") not in solved_ids]
         if not remaining or time.time() >= deadline:
             return
@@ -315,24 +344,22 @@ def _marathon_main() -> None:
             if time.time() >= deadline:
                 break
             pid = p.get("id", "")
-            try:
-                result = solve(p)
-            except Exception as e:  # noqa: BLE001
-                sys.stderr.write(f"[marathon] {pid} error: {e}\n")
-                continue
-            if result.get("status") == "accepted" and result.get("code"):
-                out.write(
-                    json.dumps(
-                        {
-                            "id": pid,
-                            "verdict": result.get("verdict", "true"),
-                            "code": result["code"],
-                        }
-                    )
-                    + "\n"
-                )
+            eq1 = p.get("equation1", "")
+            eq2 = p.get("equation2", "")
+            l1 = l1_syntactic(eq1, eq2)
+            if l1:
+                out.write(json.dumps({"id": pid, "verdict": "true", "code": l1}) + "\n")
                 out.flush()
                 solved_ids.add(pid)
+                continue
+            prompt = _marathon_fill_prompt(p)
+            r = call_local(prompt, LLM_MAX_TOKENS, TEMPERATURE)
+            if r.text.startswith("# LLM "):
+                continue
+            code = _wrap_true_submission(_extract_body(r.text))
+            out.write(json.dumps({"id": pid, "verdict": "true", "code": code}) + "\n")
+            out.flush()
+            solved_ids.add(pid)
     sys.stderr.write(
         f"[marathon] done: {len(solved_ids)}/{len(problems)} solved "
         f"in {time.time() - (deadline - budget_s):.0f}s\n"
