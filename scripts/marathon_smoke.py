@@ -19,10 +19,16 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 
 
-def _load_dev(limit: int) -> list[dict]:
-    p = ROOT / "data" / "dev_split.jsonl"
-    if not p.exists():
-        sys.stderr.write(f"missing {p} — run scripts/prep_data.py first\n")
+def _load_split(name: str, limit: int) -> list[dict]:
+    candidates = [
+        ROOT / "data" / f"{name}_split.jsonl",
+        ROOT / "data" / f"{name}_test.jsonl",
+    ]
+    p = next((c for c in candidates if c.exists()), None)
+    if p is None:
+        sys.stderr.write(
+            f"missing data file for split={name} — run scripts/prep_data.py first\n"
+        )
         sys.exit(1)
     rows = []
     with p.open() as f:
@@ -47,17 +53,24 @@ def _to_manifest_row(p: dict) -> dict:
 
 def main() -> None:
     ap = argparse.ArgumentParser()
+    ap.add_argument("--split", default="dev")
     ap.add_argument("--limit", type=int, default=5)
     ap.add_argument("--budget", type=float, default=8.0)
+    ap.add_argument(
+        "--output",
+        default=None,
+        help="answers JSONL path; default: temp dir (deleted on exit)",
+    )
     args = ap.parse_args()
 
-    rows = _load_dev(args.limit)
+    rows = _load_split(args.split, args.limit)
     with tempfile.TemporaryDirectory() as td:
         manifest = Path(td) / "manifest.jsonl"
         with manifest.open("w") as f:
             for p in rows:
                 f.write(json.dumps(_to_manifest_row(p)) + "\n")
-        output = Path(td) / "answers.jsonl"
+        output = Path(args.output) if args.output else Path(td) / "answers.jsonl"
+        output.parent.mkdir(parents=True, exist_ok=True)
 
         env = os.environ.copy()
         env["PYTHONPATH"] = str(ROOT)

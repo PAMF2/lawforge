@@ -51,3 +51,5 @@ kaggle/loop/lawforge_loop.ipynb
 kaggle/smoke/lawforge_smoke.ipynb
 # kaggle marathon smoke kernel (hardcoded HF token, local-only)
 kaggle/marathon_smoke/lawforge_smoke_marathon.ipynb
+# kaggle marathon hard2 kernel (hardcoded HF token, local-only)
+kaggle/marathon_hard2/lawforge_marathon_hard2.ipynb
