@@ -47,3 +47,7 @@ kaggle/lawforge_vllm_proxy.ipynb
 
 # kaggle loop kernel (hardcoded HF token, local-only)
 kaggle/loop/lawforge_loop.ipynb
+# kaggle smoke kernel (hardcoded HF token, local-only)
+kaggle/smoke/lawforge_smoke.ipynb
+# kaggle marathon smoke kernel (hardcoded HF token, local-only)
+kaggle/marathon_smoke/lawforge_smoke_marathon.ipynb

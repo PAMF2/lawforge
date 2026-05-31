@@ -1,0 +1,15 @@
+{
+  "id": "pedroafonso2/lawforge-smoke-marathon",
+  "title": "lawforge-smoke-marathon",
+  "code_file": "lawforge_smoke_marathon.ipynb",
+  "language": "python",
+  "kernel_type": "notebook",
+  "is_private": "true",
+  "enable_gpu": "true",
+  "enable_tpu": "false",
+  "enable_internet": "true",
+  "dataset_sources": [],
+  "competition_sources": [],
+  "kernel_sources": [],
+  "model_sources": []
+}
