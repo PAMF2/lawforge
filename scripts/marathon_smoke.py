@@ -71,7 +71,7 @@ def main() -> None:
             env=env,
             capture_output=True,
             text=True,
-            timeout=120,
+            timeout=args.budget + 60,
         )
         sys.stderr.write(r.stderr)
         if r.returncode != 0:
