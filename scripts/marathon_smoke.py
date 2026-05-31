@@ -14,6 +14,7 @@ import os
 import subprocess
 import sys
 import tempfile
+import time
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -78,17 +79,31 @@ def main() -> None:
         env["JUDGE_MARATHON_OUTPUT"] = str(output)
         env["JUDGE_MARATHON_BUDGET_SECONDS"] = str(args.budget)
 
-        r = subprocess.run(
-            [sys.executable, "-m", "solver.solver"],
+        proc = subprocess.Popen(
+            [sys.executable, "-u", "-m", "solver.solver"],
             cwd=ROOT,
             env=env,
-            capture_output=True,
+            stdout=subprocess.DEVNULL,
+            stderr=subprocess.PIPE,
             text=True,
-            timeout=args.budget + 60,
+            bufsize=1,
         )
-        sys.stderr.write(r.stderr)
-        if r.returncode != 0:
-            sys.stderr.write(f"solver exited rc={r.returncode}\n")
+        deadline = time.time() + args.budget + 60
+        try:
+            assert proc.stderr is not None
+            for line in iter(proc.stderr.readline, ""):
+                sys.stderr.write(line)
+                sys.stderr.flush()
+                if time.time() > deadline:
+                    proc.kill()
+                    sys.stderr.write("[smoke] outer deadline hit, killed\n")
+                    break
+            proc.wait(timeout=10)
+        except subprocess.TimeoutExpired:
+            proc.kill()
+        rc = proc.returncode
+        if rc != 0:
+            sys.stderr.write(f"solver exited rc={rc}\n")
             sys.exit(1)
 
         if not output.exists():

@@ -340,26 +340,43 @@ def _marathon_main() -> None:
             f"[marathon] LLM phase: {len(remaining)} remaining, "
             f"~{per_problem_s:.0f}s each\n"
         )
-        for p in remaining:
+        for i, p in enumerate(remaining, start=1):
             if time.time() >= deadline:
                 break
             pid = p.get("id", "")
             eq1 = p.get("equation1", "")
             eq2 = p.get("equation2", "")
+            t0 = time.time()
             l1 = l1_syntactic(eq1, eq2)
             if l1:
                 out.write(json.dumps({"id": pid, "verdict": "true", "code": l1}) + "\n")
                 out.flush()
                 solved_ids.add(pid)
+                sys.stderr.write(
+                    f"[marathon] [{i}/{len(remaining)}] {pid} l1 emit "
+                    f"{time.time() - t0:.1f}s\n"
+                )
+                sys.stderr.flush()
                 continue
             prompt = _marathon_fill_prompt(p)
             r = call_local(prompt, LLM_MAX_TOKENS, TEMPERATURE)
+            dt = time.time() - t0
             if r.text.startswith("# LLM "):
+                sys.stderr.write(
+                    f"[marathon] [{i}/{len(remaining)}] {pid} llm-skip "
+                    f"{r.text[:40]} ({dt:.1f}s)\n"
+                )
+                sys.stderr.flush()
                 continue
             code = _wrap_true_submission(_extract_body(r.text))
             out.write(json.dumps({"id": pid, "verdict": "true", "code": code}) + "\n")
             out.flush()
             solved_ids.add(pid)
+            sys.stderr.write(
+                f"[marathon] [{i}/{len(remaining)}] {pid} llm emit "
+                f"{len(code)}b {dt:.1f}s\n"
+            )
+            sys.stderr.flush()
     sys.stderr.write(
         f"[marathon] done: {len(solved_ids)}/{len(problems)} solved "
         f"in {time.time() - (deadline - budget_s):.0f}s\n"
