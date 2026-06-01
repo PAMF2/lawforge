@@ -18,9 +18,34 @@ Previous attempts on THIS problem:
 Allowed axioms only: propext, Quot.sound, Classical.choice.
 Forbidden: sorry, admit, prose outside JSON.
 
-Respond with STRICT JSON only, no markdown, no commentary:
+FORMAT RULES (strict, violations auto-rejected):
+- Respond with ONE JSON object. First char must be `{`.
+- `proof` field contains ONLY Lean 4 tactic lines.
+- The proof MUST start with a tactic verb: `intro`, `exact`, `have`, `rw`,
+  `simp`, `simp_all`, `apply`, `refine`, `calc`, `aesop`, `decide`, `rfl`,
+  `omega`, `constructor`, `cases`, `rcases`, `obtain`.
+- DO NOT emit `import`, `open`, `namespace`, `def submission`, `theorem`,
+  `lemma`, `example`, `:= by`, or any markdown fence.
+- DO NOT emit `### Step`, `### Verdict`, `### Proof`, `**Bold**`, or any
+  English narration like "We need", "Let us", "First,", "Note that".
+- The wrapper already runs `intro G _ h`. Continue from there. If you
+  need more binders, use a fresh `intro x y z` (no `G _ h`).
+- Magma operator is `◇` (U+25C7), NEVER `*`.
 
-{"verdict": "true", "proof": "<Lean tactic body, no imports, no theorem header>"}
+GOOD example (TRUE):
+  {"verdict":"true","proof":"intro x y z\n  have h1 := h x y z\n  rw [h1]"}
+
+GOOD example (FALSE, order-2 magma):
+  {"verdict":"false","counterexample_table":[[0,0],[0,1]]}
+
+BAD examples (REJECTED, do not do this):
+  {"verdict":"true","proof":"### Step 1: Understand the Problem\n..."}
+  {"verdict":"true","proof":"import JudgeProblem\ndef submission..."}
+  {"verdict":"true","proof":"x = (y ◇ z) ◇ w"}
+
+Respond now with STRICT JSON only:
+
+{"verdict": "true", "proof": "<lean tactic body>"}
 
 or
 

@@ -170,35 +170,7 @@ def l5_refine(
     return _wrap_true_submission(_extract_body(text))
 
 
-def _extract_body(text: str) -> str:
-    """Pull tactic body from LLM output. Accepts fenced ```lean blocks, raw,
-    or upstream-style JSON {verdict, proof}. Returns body suitable for
-    _wrap_true_submission (no imports, no theorem/def header)."""
-    s = text.strip()
-    s = re.sub(r"<think>[\s\S]*?</think>", "", s).strip()
-    # try JSON first (upstream PROMPT contract)
-    m = re.search(r"\{[\s\S]*\}", s)
-    if m:
-        try:
-            obj = json.loads(m.group())
-            if isinstance(obj, dict) and "proof" in obj:
-                s = str(obj["proof"])
-        except (json.JSONDecodeError, ValueError):
-            pass
-    # strip fences if any
-    fm = re.search(r"```(?:lean4?|Lean4?)?\s*\n?(.*?)```", s, re.DOTALL)
-    if fm:
-        s = fm.group(1)
-    # drop a leading `def submission` / `theorem` wrapper if the model emitted one
-    s = re.sub(r"^\s*(?:import\s+\S+\n)+", "", s)
-    s = re.sub(
-        r"^\s*(?:def\s+submission|theorem\s+\w+|example)\b[^\n]*?:=\s*by\b", "", s
-    )
-    # If the LLM also emitted `intro G _ h` (or its variants), strip — the
-    # wrapper adds this exact line and a second intro would error
-    # "no introducible binders left".
-    s = re.sub(r"^\s*intro\s+G\s+\S+\s+h\s*$", "", s, count=1, flags=re.MULTILINE)
-    return s.strip() or "sorry"
+from solver.extract import extract_body as _extract_body
 
 
 def solve(problem: dict) -> dict:
@@ -291,6 +263,67 @@ def _marathon_fill_prompt(problem: dict) -> str:
     return _MARATHON_RE.sub("", out)
 
 
+def _marathon_counterex_pass(
+    problems: list, out, deadline: float, solved_ids: set
+) -> None:
+    for p in problems:
+        if time.time() >= deadline:
+            break
+        pid = p.get("id", "")
+        eq1 = p.get("equation1", "")
+        eq2 = p.get("equation2", "")
+        ce = search_counterex(eq1, eq2, max_order=MAX_ORDER)
+        if ce is None:
+            continue
+        code = emit_lean_counterex(ce, eq1, eq2)
+        out.write(json.dumps({"id": pid, "verdict": "false", "code": code}) + "\n")
+        out.flush()
+        solved_ids.add(pid)
+
+
+def _marathon_emit(out, pid: str, code: str, solved_ids: set) -> None:
+    out.write(json.dumps({"id": pid, "verdict": "true", "code": code}) + "\n")
+    out.flush()
+    solved_ids.add(pid)
+
+
+def _marathon_llm_phase(
+    remaining: list, out, deadline: float, solved_ids: set
+) -> None:
+    total = len(remaining)
+    for i, p in enumerate(remaining, start=1):
+        if time.time() >= deadline:
+            break
+        pid = p.get("id", "")
+        eq1 = p.get("equation1", "")
+        eq2 = p.get("equation2", "")
+        t0 = time.time()
+        l1 = l1_syntactic(eq1, eq2)
+        if l1:
+            _marathon_emit(out, pid, l1, solved_ids)
+            sys.stderr.write(
+                f"[marathon] [{i}/{total}] {pid} l1 emit "
+                f"{time.time() - t0:.1f}s\n"
+            )
+            sys.stderr.flush()
+            continue
+        r = call_local(_marathon_fill_prompt(p), LLM_MAX_TOKENS, TEMPERATURE)
+        dt = time.time() - t0
+        if r.text.startswith("# LLM "):
+            sys.stderr.write(
+                f"[marathon] [{i}/{total}] {pid} llm-skip "
+                f"{r.text[:40]} ({dt:.1f}s)\n"
+            )
+            sys.stderr.flush()
+            continue
+        code = _wrap_true_submission(_extract_body(r.text))
+        _marathon_emit(out, pid, code, solved_ids)
+        sys.stderr.write(
+            f"[marathon] [{i}/{total}] {pid} llm emit {len(code)}b {dt:.1f}s\n"
+        )
+        sys.stderr.flush()
+
+
 def _marathon_main() -> None:
     """Marathon track: read manifest, attempt each problem under a global
     budget, append accepted answers to JUDGE_MARATHON_OUTPUT as JSONL."""
@@ -307,76 +340,21 @@ def _marathon_main() -> None:
                 problems.append(json.loads(line))
 
     sys.stderr.write(f"[marathon] {len(problems)} problems, budget={budget_s:.0f}s\n")
-
-    # Cheapest-first: do counterex sweep on all problems before any LLM call.
-    # Counterex pass is deterministic + fast (< 1s/problem), no token cost.
     output_path.parent.mkdir(parents=True, exist_ok=True)
     solved_ids: set[str] = set()
     with output_path.open("a") as out:
-        for p in problems:
-            if time.time() >= deadline:
-                break
-            pid = p.get("id", "")
-            eq1 = p.get("equation1", "")
-            eq2 = p.get("equation2", "")
-            ce = search_counterex(eq1, eq2, max_order=MAX_ORDER)
-            if ce is None:
-                continue
-            code = emit_lean_counterex(ce, eq1, eq2)
-            out.write(json.dumps({"id": pid, "verdict": "false", "code": code}) + "\n")
-            out.flush()
-            solved_ids.add(pid)
-
+        _marathon_counterex_pass(problems, out, deadline, solved_ids)
         sys.stderr.write(
             f"[marathon] counterex pass: {len(solved_ids)}/{len(problems)} FALSE\n"
         )
-
-        # TRUE phase: direct LLM (no proxy in marathon harness).
         remaining = [p for p in problems if p.get("id") not in solved_ids]
-        if not remaining or time.time() >= deadline:
-            return
-        per_problem_s = max(30.0, (deadline - time.time()) / len(remaining))
-        sys.stderr.write(
-            f"[marathon] LLM phase: {len(remaining)} remaining, "
-            f"~{per_problem_s:.0f}s each\n"
-        )
-        for i, p in enumerate(remaining, start=1):
-            if time.time() >= deadline:
-                break
-            pid = p.get("id", "")
-            eq1 = p.get("equation1", "")
-            eq2 = p.get("equation2", "")
-            t0 = time.time()
-            l1 = l1_syntactic(eq1, eq2)
-            if l1:
-                out.write(json.dumps({"id": pid, "verdict": "true", "code": l1}) + "\n")
-                out.flush()
-                solved_ids.add(pid)
-                sys.stderr.write(
-                    f"[marathon] [{i}/{len(remaining)}] {pid} l1 emit "
-                    f"{time.time() - t0:.1f}s\n"
-                )
-                sys.stderr.flush()
-                continue
-            prompt = _marathon_fill_prompt(p)
-            r = call_local(prompt, LLM_MAX_TOKENS, TEMPERATURE)
-            dt = time.time() - t0
-            if r.text.startswith("# LLM "):
-                sys.stderr.write(
-                    f"[marathon] [{i}/{len(remaining)}] {pid} llm-skip "
-                    f"{r.text[:40]} ({dt:.1f}s)\n"
-                )
-                sys.stderr.flush()
-                continue
-            code = _wrap_true_submission(_extract_body(r.text))
-            out.write(json.dumps({"id": pid, "verdict": "true", "code": code}) + "\n")
-            out.flush()
-            solved_ids.add(pid)
+        if remaining and time.time() < deadline:
+            per_problem_s = max(30.0, (deadline - time.time()) / len(remaining))
             sys.stderr.write(
-                f"[marathon] [{i}/{len(remaining)}] {pid} llm emit "
-                f"{len(code)}b {dt:.1f}s\n"
+                f"[marathon] LLM phase: {len(remaining)} remaining, "
+                f"~{per_problem_s:.0f}s each\n"
             )
-            sys.stderr.flush()
+            _marathon_llm_phase(remaining, out, deadline, solved_ids)
     sys.stderr.write(
         f"[marathon] done: {len(solved_ids)}/{len(problems)} solved "
         f"in {time.time() - (deadline - budget_s):.0f}s\n"
