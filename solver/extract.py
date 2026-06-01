@@ -24,6 +24,9 @@ _TACTIC_HEAD_KW = (
 _TACTIC_HEAD_RE = re.compile(
     r"^\s*(?:" + r"|".join(_TACTIC_HEAD_KW) + r")\b|^\s*(?:·|<;>|\(|\{|\[)"
 )
+_TACTIC_ANYWHERE_RE = re.compile(
+    r"(?:^|[^a-zA-Z_])(?:" + r"|".join(_TACTIC_HEAD_KW) + r")(?:$|[^a-zA-Z_])"
+)
 # Lines marking prose / markdown / re-emit shapes never legal as tactics.
 _PROSE_HEAD_RE = re.compile(
     r"^\s*(?:#{1,6}\s|>\s|\*\*|Verdict\b|Proof\b|Step\b|Attempted\b|"
@@ -90,7 +93,6 @@ def extract_body(text: str) -> str:
     )
     s = re.sub(r"^\s*intro\s*$\n?", "", s, count=1, flags=re.MULTILINE)
     s = _strip_leading_prose(s)
-    head = s.lstrip()[:200].lower()
-    if not any(kw in head for kw in _TACTIC_HEAD_KW):
+    if not _TACTIC_ANYWHERE_RE.search(s.lstrip()[:400]):
         return "sorry"
     return s.strip() or "sorry"
