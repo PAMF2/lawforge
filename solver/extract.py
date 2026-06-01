@@ -37,22 +37,24 @@ _PROSE_HEAD_RE = re.compile(
 
 
 def _strip_leading_prose(body: str) -> str:
+    """Drop every line until we hit one that begins with a Lean tactic
+    verb. If no such line exists we return empty - the caller's sentinel
+    converts that to "sorry" and l4/l5 can take another swing. This is
+    strict by design: hard2 emits prose (numbered lists, markdown
+    headings, bare equations, Cayley tables) that look nothing like
+    a tactic; keeping any of it produces unparseable submissions."""
     lines = body.split("\n")
     out, dropping = [], True
     for ln in lines:
         if dropping:
-            if not ln.strip():
+            if not ln.strip() or _PROSE_HEAD_RE.match(ln):
                 continue
             if _TACTIC_HEAD_RE.match(ln):
                 dropping = False
                 out.append(ln)
                 continue
-            if _PROSE_HEAD_RE.match(ln):
-                continue
-            dropping = False
-            out.append(ln)
-        else:
-            out.append(ln)
+            continue
+        out.append(ln)
     return "\n".join(out).strip()
 
 
