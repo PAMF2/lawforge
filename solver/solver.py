@@ -20,6 +20,7 @@ import time
 from pathlib import Path
 
 from solver.counterex import emit_lean_counterex, search_counterex
+from solver.extract import extract_body as _extract_body
 from solver.proxy_client import call_llm_context, call_local, submit_judge
 
 HERE = Path(__file__).resolve().parent
@@ -170,9 +171,6 @@ def l5_refine(
     return _wrap_true_submission(_extract_body(text))
 
 
-from solver.extract import extract_body as _extract_body
-
-
 def solve(problem: dict) -> dict:
     eq1 = (
         problem.get("equation1") or problem.get("hypothesis") or problem.get("eq1", "")
@@ -287,9 +285,7 @@ def _marathon_emit(out, pid: str, code: str, solved_ids: set) -> None:
     solved_ids.add(pid)
 
 
-def _marathon_llm_phase(
-    remaining: list, out, deadline: float, solved_ids: set
-) -> None:
+def _marathon_llm_phase(remaining: list, out, deadline: float, solved_ids: set) -> None:
     total = len(remaining)
     for i, p in enumerate(remaining, start=1):
         if time.time() >= deadline:
@@ -302,8 +298,7 @@ def _marathon_llm_phase(
         if l1:
             _marathon_emit(out, pid, l1, solved_ids)
             sys.stderr.write(
-                f"[marathon] [{i}/{total}] {pid} l1 emit "
-                f"{time.time() - t0:.1f}s\n"
+                f"[marathon] [{i}/{total}] {pid} l1 emit {time.time() - t0:.1f}s\n"
             )
             sys.stderr.flush()
             continue
@@ -311,8 +306,7 @@ def _marathon_llm_phase(
         dt = time.time() - t0
         if r.text.startswith("# LLM "):
             sys.stderr.write(
-                f"[marathon] [{i}/{total}] {pid} llm-skip "
-                f"{r.text[:40]} ({dt:.1f}s)\n"
+                f"[marathon] [{i}/{total}] {pid} llm-skip {r.text[:40]} ({dt:.1f}s)\n"
             )
             sys.stderr.flush()
             continue

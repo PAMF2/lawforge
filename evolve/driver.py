@@ -104,8 +104,10 @@ def run_eval(gen: int = 0) -> float:
         if line.startswith("SOLVED_RATE="):
             return float(line.split("=", 1)[1])
     if os.environ.get("LAWFORGE_EVAL_VERBOSE", "0") == "1":
-        print("[driver] eval produced no SOLVED_RATE — last 60 lines of stdout:",
-              file=sys.stderr)
+        print(
+            "[driver] eval produced no SOLVED_RATE — last 60 lines of stdout:",
+            file=sys.stderr,
+        )
         for line in r.stdout.splitlines()[-60:]:
             print(f"  {line}", file=sys.stderr)
     return 0.0
