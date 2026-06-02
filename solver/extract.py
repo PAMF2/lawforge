@@ -50,7 +50,7 @@ _FENCE_RE = re.compile(
 # arbitrary whitespace and any `intro G _ h` variant (the underscore may be
 # a real name like `inst`).
 _HEADER_RE = re.compile(
-    r"^\s*def\s+submission\s*:\s*Goal\s*:=\s*by\s*\n?",
+    r"^\s*(?:def|theorem|lemma|example)\s+[\s\S]*?:=\s*by\s*\n?",
     re.MULTILINE,
 )
 _INTRO_GMH_RE = re.compile(
@@ -58,6 +58,10 @@ _INTRO_GMH_RE = re.compile(
     re.MULTILINE,
 )
 _IMPORT_RE = re.compile(r"^\s*import\s+\S.*\n?", re.MULTILINE)
+_CLASS_RE = re.compile(
+    r"^\s*(?:class|instance|infixl|infixr|infix|open|namespace|variable)\b[^\n]*\n?",
+    re.MULTILINE,
+)
 
 
 def _strip_leading_prose(body: str) -> str:
@@ -81,11 +85,13 @@ def _strip_leading_prose(body: str) -> str:
 
 
 def _strip_goedel_wrapper(body: str) -> str:
-    """Remove `import ...`, `def submission : Goal := by`, and the matching
-    `intro G _ h` line the Goedel model copied from the prompt. Any further
-    `intro x y z` the model added on its OWN line is preserved — those are
-    real downstream binders the body needs."""
+    """Remove the prompt wrapper Goedel re-emits inside the fence:
+    `import`/`class`/`infixl`/`open`/`namespace`/`variable` headers,
+    the `def|theorem|lemma|example ... := by` declaration line, and the
+    matching `intro G _ h` if the model copied it. Any downstream
+    `intro x y z` the model added is preserved verbatim."""
     body = _IMPORT_RE.sub("", body)
+    body = _CLASS_RE.sub("", body)
     body = _HEADER_RE.sub("", body, count=1)
     body = _INTRO_GMH_RE.sub("", body, count=1)
     return body

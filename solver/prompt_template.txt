@@ -1,13 +1,12 @@
 You are Goedel-Prover-V2, a Lean 4 theorem-proving model.
 
-Task: SAIR Stage 2 Solo. Decide whether equational hypothesis Eq1 implies
-equational target Eq2 for every magma `(G, ◇)`. The magma operator is the
-Unicode diamond `◇` (U+25C7), NEVER `*`. Every tactic must use `◇`.
+Task: prove a universal implication between two equational laws on a
+magma. The magma operator is the Unicode diamond `◇` (U+25C7), exposed
+via `class Magma` with `infixl " ◇ " => Magma.op`. Mathlib `*` is NOT
+in scope; every tactic must use `◇` or `Magma.op`.
 
-{problem.equation1_id} (Eq1, hypothesis): {problem.equation1}
-{problem.equation2_id} (Eq2, target):     {problem.equation2}
-
-Round: {solver.round}
+Eq1 (hypothesis): {problem.equation1}
+Eq2 (target):     {problem.equation2}
 
 Cheatsheet of worked SAIR patterns (study before planning):
 __CHEATSHEET__
@@ -15,29 +14,30 @@ __CHEATSHEET__
 Previous attempts on this problem (avoid repeating failed shapes):
 {history.attempts}
 
-The FALSE / counterexample branch is handled by a separate finite-magma
-search layer; your job is the TRUE direction only. Produce a Lean 4 proof
-that closes the goal `Goal` from the SAIR Solo judge. The hypothesis name
-is `h`. The magma operator is `◇`, NEVER `*`.
+The full Lean context, exactly as the SAIR judge sees it, is shown
+inside the fence below. `Magma G` provides the `◇` operator. `h` is the
+universally quantified hypothesis built from Eq1. The remaining goal is
+the universally quantified statement built from Eq2. Replace the `sorry`
+with a tactic block that closes the goal.
 
-Allowed axioms only: `propext`, `Quot.sound`, `Classical.choice`.
-Forbidden: `admit`, unproved metavariables, any use of `*` for the magma.
-
-The formal statement you must complete is the SAIR Solo wrapper exactly as
-written below: `import JudgeProblem`, then `def submission : Goal := by`,
-then `intro G _ h`, then the `sorry` you must replace with a real Lean 4
-tactic block. Do not rename `G`, the magma-instance binder, or `h`. Re-emit
-the entire file inside a single ```lean4 fenced block.
+Allowed axioms: `propext`, `Quot.sound`, `Classical.choice`.
+Forbidden: `admit`, unproved metavariables, `*` for the magma operator.
 
 Complete the following Lean 4 code:
 
 ```lean4
-import JudgeProblem
+class Magma (G : Type) where
+  op : G → G → G
 
-def submission : Goal := by
-  intro G _ h
+infixl:70 " ◇ " => Magma.op
+
+example
+    (G : Type) [inst : Magma G]
+    (h : ∀ x y z w u : G, {problem.equation1})
+    : ∀ x y z w u : G, {problem.equation2} := by
   sorry
 ```
 
 Before producing the Lean 4 code to formally prove the given theorem,
-provide a detailed proof plan outlining the main proof steps and strategies.
+provide a detailed proof plan outlining the main proof steps and
+strategies.
