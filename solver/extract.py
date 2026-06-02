@@ -1,15 +1,22 @@
 """LLM-output -> Lean-tactic-body extractor.
 
-Lifted out of solver/solver.py to keep that module under the size cap.
-Defends against three observed failure modes in marathon hard2 emits:
-(1) `### Step N` markdown CoT inside the JSON `proof` field; (2) full-file
-re-emit with `import JudgeProblem` + `def submission : Goal := by`;
-(3) `intro G _ h x y z w` shape where the model duplicates the wrapper's
-`intro G _ h` prefix but with additional downstream binders we want to
-preserve.
+Tuned for Goedel-Prover-V2-8B output shape:
+chain-of-thought "proof plan" prose, then a fenced ```lean4 ... ``` block
+containing the FULL wrapped Lean code (imports + `def submission : Goal := by`
++ `intro G _ h` + tactics). We want just the inner tactic body so
+solver._wrap_true_submission can re-wrap it with the canonical header.
+
+Strategy:
+(1) find the LAST ```lean4 / ```Lean4 / ```lean fence and take its body;
+(2) strip imports, the `def submission ... := by` header, and the
+    `intro G _ h` line the model copied from the prompt; any additional
+    `intro x y z` the model emitted downstream is preserved verbatim;
+(3) if no fence is found, fall back to prose-stripping the raw text via the
+    legacy _TACTIC_HEAD_RE / _PROSE_HEAD_RE machinery;
+(4) if nothing tactic-shaped survives, return "sorry" so the wrapper still
+    produces a syntactically valid (if false) submission.
 """
 
-import json
 import re
 
 _TACTIC_HEAD_KW = (
@@ -24,9 +31,6 @@ _TACTIC_HEAD_KW = (
 _TACTIC_HEAD_RE = re.compile(
     r"^\s*(?:" + r"|".join(_TACTIC_HEAD_KW) + r")\b|^\s*(?:·|<;>|\(|\{|\[)"
 )
-_TACTIC_ANYWHERE_RE = re.compile(
-    r"(?:^|[^a-zA-Z_])(?:" + r"|".join(_TACTIC_HEAD_KW) + r")(?:$|[^a-zA-Z_])"
-)
 # Lines marking prose / markdown / re-emit shapes never legal as tactics.
 _PROSE_HEAD_RE = re.compile(
     r"^\s*(?:#{1,6}\s|>\s|\*\*|Verdict\b|Proof\b|Step\b|Attempted\b|"
@@ -34,17 +38,35 @@ _PROSE_HEAD_RE = re.compile(
     r"This\b|That\b|The\b|It\b|So\b|import\b|open\b|namespace\b|section\b|"
     r"def\s+\w|theorem\s+\w|lemma\s+\w|example\s)"
 )
+# Find ```lean4 / ```Lean4 / ```lean fences; case-insensitive on the tag.
+# Use a non-greedy body and re.DOTALL so newlines are captured. We will
+# pick the LAST match — Goedel emits a CoT scratch block first sometimes,
+# the final fence is the one that holds the real submission.
+_FENCE_RE = re.compile(
+    r"```(?:lean4?|Lean4?)\s*\n?(.*?)```",
+    re.DOTALL | re.IGNORECASE,
+)
+# Strip the wrapped header the model copied from the prompt. We tolerate
+# arbitrary whitespace and any `intro G _ h` variant (the underscore may be
+# a real name like `inst`).
+_HEADER_RE = re.compile(
+    r"^\s*def\s+submission\s*:\s*Goal\s*:=\s*by\s*\n?",
+    re.MULTILINE,
+)
+_INTRO_GMH_RE = re.compile(
+    r"^\s*intro\s+G\s+\S+\s+h\s*(?:\n|$)",
+    re.MULTILINE,
+)
+_IMPORT_RE = re.compile(r"^\s*import\s+\S.*\n?", re.MULTILINE)
 
 
 def _strip_leading_prose(body: str) -> str:
     """Drop every line until we hit one that begins with a Lean tactic
-    verb. If no such line exists we return empty - the caller's sentinel
-    converts that to "sorry" and l4/l5 can take another swing. This is
-    strict by design: hard2 emits prose (numbered lists, markdown
-    headings, bare equations, Cayley tables) that look nothing like
-    a tactic; keeping any of it produces unparseable submissions."""
+    verb. Returns "" if no tactic-shaped line is found; the caller's
+    sentinel turns that into "sorry"."""
     lines = body.split("\n")
-    out, dropping = [], True
+    out: list[str] = []
+    dropping = True
     for ln in lines:
         if dropping:
             if not ln.strip() or _PROSE_HEAD_RE.match(ln):
@@ -58,43 +80,43 @@ def _strip_leading_prose(body: str) -> str:
     return "\n".join(out).strip()
 
 
-def extract_body(text: str) -> str:
-    """Pull a Lean tactic body out of raw LLM output.
+def _strip_goedel_wrapper(body: str) -> str:
+    """Remove `import ...`, `def submission : Goal := by`, and the matching
+    `intro G _ h` line the Goedel model copied from the prompt. Any further
+    `intro x y z` the model added on its OWN line is preserved — those are
+    real downstream binders the body needs."""
+    body = _IMPORT_RE.sub("", body)
+    body = _HEADER_RE.sub("", body, count=1)
+    body = _INTRO_GMH_RE.sub("", body, count=1)
+    return body
 
-    Accepts fenced ```lean blocks, raw tactics, or the upstream JSON
-    `{verdict, proof}` shape. Returns a body suitable for the wrapper
-    (no imports, no theorem/def header). Falls back to "sorry" when the
-    head of the body has no recognizable Lean tactic keyword."""
-    s = text.strip()
-    s = re.sub(r"<think>[\s\S]*?</think>", "", s).strip()
-    m = re.search(r"\{[\s\S]*\}", s)
-    if m:
-        try:
-            obj = json.loads(m.group())
-            if isinstance(obj, dict) and "proof" in obj:
-                s = str(obj["proof"])
-        except (json.JSONDecodeError, ValueError):
-            pass
-    fm = re.search(r"```(?:lean4?|Lean4?)?\s*\n?(.*?)```", s, re.DOTALL)
-    if fm:
-        s = fm.group(1)
-    s = re.sub(r"^\s*(?:import\s+\S+\n)+", "", s)
-    s = re.sub(
-        r"^\s*(?:def\s+submission|theorem\s+\w+|lemma\s+\w+|example)\b"
-        r"[\s\S]*?:=\s*by\b\s*\n?",
-        "",
-        s,
-        count=1,
-    )
-    s = re.sub(
-        r"^\s*intro\s+G\s+\S+\s+h(?=\s|$)",
-        "intro",
-        s,
-        count=1,
-        flags=re.MULTILINE,
-    )
-    s = re.sub(r"^\s*intro\s*$\n?", "", s, count=1, flags=re.MULTILINE)
-    s = _strip_leading_prose(s)
-    if not _TACTIC_ANYWHERE_RE.search(s.lstrip()[:400]):
+
+def extract_body(text: str) -> str:
+    """Pull a Lean tactic body out of raw Goedel-Prover-V2-8B output.
+
+    Contract: returns a string suitable for solver._wrap_true_submission,
+    which prepends `import JudgeProblem\\n\\ndef submission : Goal := by\\n
+    intro G _ h\\n` and then indents each line by two spaces. We therefore
+    return the INNER tactic body only, no imports, no def header, no
+    `intro G _ h`. Returns "sorry" on any failure so the wrapper still
+    yields a syntactically valid file.
+    """
+    if not isinstance(text, str) or not text.strip():
         return "sorry"
-    return s.strip() or "sorry"
+    s = text.strip()
+    # Drop any <think>...</think> scratchpad some checkpoints emit.
+    s = re.sub(r"<think>[\s\S]*?</think>", "", s).strip()
+
+    fences = _FENCE_RE.findall(s)
+    if fences:
+        # LAST fence wins — earlier ones are usually CoT scratch.
+        body = fences[-1]
+        body = _strip_goedel_wrapper(body)
+        body = _strip_leading_prose(body)
+        return body.strip() or "sorry"
+
+    # No fence — fall back to raw-text prose stripping. Still try to strip
+    # the wrapper in case the model emitted it without a fence.
+    body = _strip_goedel_wrapper(s)
+    body = _strip_leading_prose(body)
+    return body.strip() or "sorry"
