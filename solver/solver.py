@@ -316,11 +316,19 @@ def _marathon_llm_phase(
             )
             sys.stderr.flush()
             continue
-        code = _wrap_true_submission(_extract_body(r.text))
+        body = _extract_body(r.text)
+        code = _wrap_true_submission(body)
         _marathon_emit(out, pid, code, solved_ids)
         sys.stderr.write(
             f"[marathon] [{i}/{total}] {pid} llm emit {len(code)}b {dt:.1f}s\n"
         )
+        if body == "sorry" and os.environ.get("LAWFORGE_DEBUG_RAW", "0") == "1":
+            head = r.text[:400].replace("\n", "\\n")
+            tail = r.text[-400:].replace("\n", "\\n")
+            sys.stderr.write(
+                f"[marathon] [{i}/{total}] {pid} RAW len={len(r.text)} "
+                f"head={head!r} tail={tail!r}\n"
+            )
         sys.stderr.flush()
 
 
