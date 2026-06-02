@@ -1,43 +1,27 @@
-You are Goedel-Prover-V2, a Lean 4 theorem-proving model.
-
-Task: prove a universal implication between two equational laws on a
-magma. The magma operator is the Unicode diamond `◇` (U+25C7), exposed
-via `class Magma` with `infixl " ◇ " => Magma.op`. Mathlib `*` is NOT
-in scope; every tactic must use `◇` or `Magma.op`.
-
-Eq1 (hypothesis): {problem.equation1}
-Eq2 (target):     {problem.equation2}
-
-Cheatsheet of worked SAIR patterns (study before planning):
-__CHEATSHEET__
-
-Previous attempts on this problem (avoid repeating failed shapes):
-{history.attempts}
-
-The full Lean context, exactly as the SAIR judge sees it, is shown
-inside the fence below. `Magma G` provides the `◇` operator. `h` is the
-universally quantified hypothesis built from Eq1. The remaining goal is
-the universally quantified statement built from Eq2. Replace the `sorry`
-with a tactic block that closes the goal.
-
-Allowed axioms: `propext`, `Quot.sound`, `Classical.choice`.
-Forbidden: `admit`, unproved metavariables, `*` for the magma operator.
-
 Complete the following Lean 4 code:
 
 ```lean4
+import Mathlib
+import Aesop
+
+set_option maxHeartbeats 0
+
+open BigOperators Real Nat Topology Rat
+
 class Magma (G : Type) where
   op : G → G → G
 
 infixl:70 " ◇ " => Magma.op
 
-example
+-- {problem.equation1_id} (Eq1, hypothesis): {problem.equation1}
+-- {problem.equation2_id} (Eq2, target):     {problem.equation2}
+
+theorem sair_implication
     (G : Type) [inst : Magma G]
     (h : ∀ x y z w u : G, {problem.equation1})
     : ∀ x y z w u : G, {problem.equation2} := by
   sorry
 ```
 
-Before producing the Lean 4 code to formally prove the given theorem,
-provide a detailed proof plan outlining the main proof steps and
-strategies.
+Before producing the Lean 4 code to formally prove the given theorem, provide a detailed proof plan outlining the main proof steps and strategies.
+The plan should highlight key ideas, intermediate lemmas, and proof structures that will guide the construction of the final formal proof.
