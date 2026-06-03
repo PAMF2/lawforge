@@ -22,7 +22,13 @@ def test_fill_prompt_substitutes_known_keys():
 
 def test_fill_prompt_strips_unfilled_placeholders():
     out = _fill_prompt(
-        {"id": "x", "equation1": "a = b", "equation2": "b = a", "eq1_id": 1, "eq2_id": 2}
+        {
+            "id": "x",
+            "equation1": "a = b",
+            "equation2": "b = a",
+            "eq1_id": 1,
+            "eq2_id": 2,
+        }
     )
     assert not re.search(r"\{(problem|solver|history)\.[a-zA-Z_]+\}", out)
 

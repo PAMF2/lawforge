@@ -20,6 +20,8 @@ Usage:
 
 import argparse
 import json
+import multiprocessing as mp
+import os
 import re
 import sys
 from collections import Counter
@@ -35,9 +37,25 @@ _TACTIC_LINE = re.compile(
     r"nth_rewrite|repeat|rfl|decide|assumption|fun|trivial|conv|let|show)\b"
 )
 
+# Mathlib-only identifiers that the SAIR sandbox cannot resolve. A body that
+# references any of these typechecks against Kimina's training environment
+# (Mathlib + Aesop) but will fail when the SAIR judge wraps it inside
+# `import JudgeProblem; def submission : Goal := by ...`.
+_MATHLIB_LEAK = re.compile(
+    r"\b("
+    r"Nat\.|Int\.|Real\.|Rat\.|Complex\.|Finset\.|List\.|Set\.|"
+    r"Mathlib\.|BigOperators|Topology|Order\.|Group\.|Ring\.|Field\.|"
+    r"Module\.|LinearMap|Polynomial|MeasureTheory|Continuous|"
+    r"omega|positivity|polyrith|linarith|nlinarith|norm_num|ring|ring_nf|"
+    r"field_simp|abel|gcongr"
+    r")\b"
+)
+
 
 def _is_plausible_body(body: str) -> bool:
     if not body or body.strip() == "sorry":
+        return False
+    if _MATHLIB_LEAK.search(body):
         return False
     return any(_TACTIC_LINE.match(ln) for ln in body.splitlines())
 
@@ -58,6 +76,26 @@ def judge_candidate(cand: str, eq1: str, eq2: str, problem: dict) -> str | None:
     return body if v.accepted else None
 
 
+def _judge_one_row(args: tuple) -> tuple[dict, str | None]:
+    row, max_cands, allow_mock = args
+    if allow_mock:
+        os.environ["LAWFORGE_ALLOW_MOCK"] = "1"
+    eq1 = row["eq1"]
+    eq2 = row["eq2"]
+    problem = {
+        "id": row["id"],
+        "equation1": eq1,
+        "equation2": eq2,
+        "hypothesis": eq1,
+        "goal": eq2,
+    }
+    for cand in row["candidates"][:max_cands]:
+        body = judge_candidate(cand, eq1, eq2, problem)
+        if body:
+            return row, body
+    return row, None
+
+
 def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--in", dest="in_path", default="/kaggle/working/harvested.jsonl")
@@ -69,36 +107,38 @@ def main() -> None:
         default=8,
         help="Cap candidates judged per problem (saves time).",
     )
+    ap.add_argument(
+        "--workers",
+        type=int,
+        default=max(1, (os.cpu_count() or 4) - 1),
+        help="Parallel judge workers (each spawns a Lean subprocess).",
+    )
+    ap.add_argument(
+        "--allow-mock",
+        action="store_true",
+        help="Permit heuristic mock judge when upstream Lean missing. "
+        "Mock has false positives; use only for quick iteration.",
+    )
     args = ap.parse_args()
+
+    rows: list[dict] = []
+    with Path(args.in_path).open() as f:
+        for line in f:
+            rows.append(json.loads(line))
 
     accepted: list[tuple[dict, str]] = []
     problems_seen = 0
     problems_with_accept = 0
-    with Path(args.in_path).open() as f:
-        for line in f:
-            row = json.loads(line)
+    pool_args = [(row, args.max_cands_per_problem, args.allow_mock) for row in rows]
+    with mp.Pool(processes=args.workers) as pool:
+        for row, body in pool.imap_unordered(_judge_one_row, pool_args, chunksize=4):
             problems_seen += 1
-            eq1 = row["eq1"]
-            eq2 = row["eq2"]
-            problem = {
-                "id": row["id"],
-                "equation1": eq1,
-                "equation2": eq2,
-                "hypothesis": eq1,
-                "goal": eq2,
-            }
-            got = False
-            for cand in row["candidates"][: args.max_cands_per_problem]:
-                body = judge_candidate(cand, eq1, eq2, problem)
-                if body:
-                    accepted.append((row, body))
-                    got = True
-                    break
-            if got:
+            if body:
+                accepted.append((row, body))
                 problems_with_accept += 1
             if problems_seen % 50 == 0:
                 sys.stderr.write(
-                    f"[distill] {problems_seen} judged, "
+                    f"[distill] {problems_seen}/{len(rows)} judged, "
                     f"{problems_with_accept} accepted so far\n"
                 )
 

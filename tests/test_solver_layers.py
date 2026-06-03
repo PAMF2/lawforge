@@ -109,10 +109,7 @@ def test_l3_variant_sends_diversification_context():
 def test_l5_refine_structured_error_context():
     fake = _fake_proxy_response("rw [h x y z]\nrfl")
     prior = (
-        "import JudgeProblem\n\n"
-        "def submission : Goal := by\n"
-        "  intro G _ h\n"
-        "  rw [h]\n"
+        "import JudgeProblem\n\ndef submission : Goal := by\n  intro G _ h\n  rw [h]\n"
     )
     err = "Submission.lean:5:2: error: Tactic `rw` failed"
     with patch("solver.solver.call_llm_context", side_effect=fake):
