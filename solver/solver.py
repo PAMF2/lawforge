@@ -151,7 +151,31 @@ def l5_refine(
     error_msg: str,
     round_: int = 2,
 ) -> str:
-    """Layer 5: feed Lean error back to LLM, ask for fix."""
+    """Layer 5: Goedel-V2 style self-correction. Feed structured error
+    context (original goal + failed attempt + verbatim Lean error) back
+    to the LLM and ask for a single targeted fix.
+
+    Goedel paper (arXiv:2508.03613) reports +2.3pp on miniF2F pass@32
+    from 2 correction rounds at 32B. Lawforge floor is much lower so
+    headroom is larger; structured error context is the lever."""
+    body_only = re.sub(
+        r"^import.*?def submission\s*:\s*Goal\s*:=\s*by\s*\n\s*intro G _ h\s*\n",
+        "",
+        prior_code,
+        count=1,
+        flags=re.DOTALL,
+    )
+    err = error_msg.strip()[:1200]
+    extra = (
+        "Your previous Lean 4 tactic body did NOT close the goal.\n\n"
+        f"<previous_attempt>\n{body_only.strip()[:1000]}\n</previous_attempt>\n\n"
+        f"<lean_error>\n{err}\n</lean_error>\n\n"
+        "Read the error carefully. Identify the failing tactic. Replace "
+        "ONLY the failing line(s) with a corrected sequence — keep the "
+        "rest of the proof intact when possible. Emit ONLY the Lean 4 "
+        "tactic body (no `import`, no `def submission`, no `theorem`, no "
+        "markdown). Continue from where `intro G _ h` left off."
+    )
     text = _llm_text(
         {
             "eq1": eq1,
@@ -160,12 +184,8 @@ def l5_refine(
             "round": round_,
             "ce_hint": "",
             "prior_code": prior_code[:1500],
-            "last_error": error_msg[:1500],
-            "extra": (
-                f"The previous attempt failed with:\n{error_msg[:800]}\n\n"
-                "Emit a corrected Lean 4 tactic body only "
-                "(no imports, no theorem header)."
-            ),
+            "last_error": err,
+            "extra": extra,
         }
     )
     return _wrap_true_submission(_extract_body(text))
