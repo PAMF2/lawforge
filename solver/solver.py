@@ -1,5 +1,5 @@
 # aislop-ignore-file ai-slop/hallucinated-import
-"""lawforge solver — Stage 2 Solo track.
+"""lawforge solver - Stage 2 Solo track.
 
 I/O protocol (per Stage 2 spec):
   - Read one problem JSON from stdin.
@@ -144,6 +144,18 @@ def l4_subgoal_decomp(eq1: str, eq2: str, round_: int = 1, ce_hint: str = "") ->
     return _wrap_true_submission(_extract_body(text))
 
 
+def _strip_submission_wrapper(code: str) -> str:
+    """Return only the tactic body of a wrapped submission.
+
+    Tolerant of varied whitespace / extra `intros` and of bodies that
+    were emitted without the wrapper (returns input unchanged).
+    """
+    out = re.sub(r"^\s*(?:import\s+\S+\s*\n)+", "", code, count=1, flags=re.MULTILINE)
+    out = re.sub(r"^\s*def\s+submission\s*:\s*Goal\s*:=\s*by\s*\n", "", out, count=1)
+    out = re.sub(r"^\s*intro\s+G\s+_\s+h\s*\n", "", out, count=1)
+    return out
+
+
 def l5_refine(
     eq1: str,
     eq2: str,
@@ -151,30 +163,23 @@ def l5_refine(
     error_msg: str,
     round_: int = 2,
 ) -> str:
-    """Layer 5: Goedel-V2 style self-correction. Feed structured error
-    context (original goal + failed attempt + verbatim Lean error) back
-    to the LLM and ask for a single targeted fix.
+    """Layer 5: structured self-correction (Goedel-V2 idiom).
 
-    Goedel paper (arXiv:2508.03613) reports +2.3pp on miniF2F pass@32
-    from 2 correction rounds at 32B. Lawforge floor is much lower so
-    headroom is larger; structured error context is the lever."""
-    body_only = re.sub(
-        r"^import.*?def submission\s*:\s*Goal\s*:=\s*by\s*\n\s*intro G _ h\s*\n",
-        "",
-        prior_code,
-        count=1,
-        flags=re.DOTALL,
-    )
+    Feeds previous tactic body and verbatim Lean error back to the LLM in
+    tagged form so the model can target the failing tactic instead of
+    rewriting the whole proof.
+    """
+    body_only = _strip_submission_wrapper(prior_code).strip()[:1000]
     err = error_msg.strip()[:1200]
     extra = (
         "Your previous Lean 4 tactic body did NOT close the goal.\n\n"
-        f"<previous_attempt>\n{body_only.strip()[:1000]}\n</previous_attempt>\n\n"
+        f"<previous_attempt>\n{body_only}\n</previous_attempt>\n\n"
         f"<lean_error>\n{err}\n</lean_error>\n\n"
-        "Read the error carefully. Identify the failing tactic. Replace "
-        "ONLY the failing line(s) with a corrected sequence — keep the "
-        "rest of the proof intact when possible. Emit ONLY the Lean 4 "
-        "tactic body (no `import`, no `def submission`, no `theorem`, no "
-        "markdown). Continue from where `intro G _ h` left off."
+        "Read the error. Identify the failing tactic. Replace ONLY the "
+        "failing line(s) with a corrected sequence. Keep the rest intact "
+        "when possible. Emit ONLY the Lean 4 tactic body (no `import`, no "
+        "`def submission`, no `theorem`, no markdown fences). Continue "
+        "from where `intro G _ h` left off."
     )
     text = _llm_text(
         {

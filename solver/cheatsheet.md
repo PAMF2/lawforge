@@ -78,26 +78,22 @@ aesop
 
 ## PATTERN: nth_rewrite targeted
 
-When `rw [h]` rewrites wrong occurrence. Use `nth_rewrite N [h]`.
+When `rw [h]` rewrites the wrong occurrence. Use `nth_rewrite N [h]`.
 
 ```lean
 intro x y z
-nth_rewrite 1 [← h]
-apply h
-repeat assumption
+nth_rewrite 1 [h x y z]
+rfl
 ```
 
 ## PATTERN: symm + rewrite
 
-Symmetric direction of hypothesis.
+Hypothesis applies right-to-left.
 
 ```lean
 intro x y z
 symm
-nth_rewrite 1 [h]
-symm
-apply h
-repeat assumption
+rw [h x y z]
 ```
 
 ## PATTERN: calc chain (multi-step magma)
@@ -134,11 +130,12 @@ exact h x y z
 
 ## PATTERN: <;> combinator
 
-Apply tactic to all subgoals.
+After a tactic that produces multiple subgoals (e.g. `cases`, `induction`),
+close all of them with the same tail tactic.
 
 ```lean
 intro x y z
-constructor <;> (rw [h]; rfl)
+cases x <;> simp [h]
 ```
 
 ## PATTERN: aesop fallback

@@ -4,7 +4,7 @@ For a pair (Eq1, Eq2) where we suspect Eq1 does NOT imply Eq2, enumerate small
 magmas (order n = 2..MAX_ORDER) and check whether the magma satisfies Eq1 but
 violates Eq2. If found, emit the Cayley table as a Lean witness.
 
-Uses pure Python — no SAT solver, no external deps. Targets orders 2..5
+Uses pure Python - no SAT solver, no external deps. Targets orders 2..5
 (2^4=16, 3^9=19683, 4^16=4.3e9, 5^25=3e17). At order 4 we sample randomly
 (MAX_SAMPLES) rather than exhaust.
 
@@ -231,7 +231,7 @@ def search_counterex(
 
 def emit_lean_counterex(ce: CounterEx, eq1_src: str, eq2_src: str) -> str:
     """Emit Lean 4 FALSE certificate matching upstream `def submission : Goal`
-    contract (Stage 2 baseline solver shape — see equational-theories-lean-
+    contract (Stage 2 baseline solver shape - see equational-theories-lean-
     stage2 examples/solo/demos/baseline/solver.py:make_false_code).
 
     Goal expands to ∃ (G : Type) (_ : Magma G), EquationLHS G ∧ ¬EquationRHS G.

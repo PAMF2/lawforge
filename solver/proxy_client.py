@@ -1,10 +1,10 @@
 """LLM proxy client.
 
 Two modes:
-  1. live   — talks to the organizer's stdin/stdout JSON proxy at runtime.
+  1. live   - talks to the organizer's stdin/stdout JSON proxy at runtime.
               Solver does: print('{"call":"llm",...}') and reads the response
               from stdin. This is the Stage 2 Solo protocol.
-  2. local  — for development / Karpathy loop. Talks to a local OpenAI-compatible
+  2. local  - for development / Karpathy loop. Talks to a local OpenAI-compatible
               endpoint (Ollama / vLLM / OpenRouter) running gpt-oss-20b or
               gemma-4-31B so we can run the bandit offline.
 
@@ -57,7 +57,7 @@ DEFAULT_LLM_MODEL = "gpt-oss:20b"
 
 def call_local(prompt: str, max_tokens: int, temperature: float) -> LLMResponse:
     """OpenAI-compatible endpoint client. Hard timeout via LAWFORGE_LLM_TIMEOUT
-    (default 25s). No retry. The caller controls max_tokens — no silent cap."""
+    (default 25s). No retry. The caller controls max_tokens - no silent cap."""
     import socket
     import urllib.request
 
