@@ -55,3 +55,7 @@ kaggle/marathon_smoke/lawforge_smoke_marathon.ipynb
 kaggle/marathon_hard2/lawforge_marathon_hard2.ipynb
 # kaggle train kernel (hardcoded HF token, local-only)
 kaggle/train/lawforge_train.ipynb
+
+# aislop per-session telemetry, not source of truth
+.aislop/history.jsonl
+.aislop/session.jsonl
