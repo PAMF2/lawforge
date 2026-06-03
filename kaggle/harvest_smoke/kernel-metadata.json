@@ -1,0 +1,15 @@
+{
+  "id": "pedroafonso2/lawforge-harvest-smoke",
+  "title": "lawforge-harvest-smoke",
+  "code_file": "lawforge_harvest_smoke.ipynb",
+  "language": "python",
+  "kernel_type": "notebook",
+  "is_private": "true",
+  "enable_gpu": "true",
+  "enable_tpu": "false",
+  "enable_internet": "true",
+  "dataset_sources": [],
+  "competition_sources": [],
+  "kernel_sources": [],
+  "model_sources": []
+}
