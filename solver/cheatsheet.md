@@ -138,6 +138,39 @@ intro x y z
 cases x <;> simp [h]
 ```
 
+## PATTERN: repeat intro + apply (ETP top hit)
+
+Variadic `intro` then close by applying hypothesis. Wins when goal's
+quantifier arity matches hypothesis arity. 261 hits in ETP corpus.
+
+```lean
+repeat intro
+apply h
+```
+
+## PATTERN: brute rewrite combos (ETP top hit)
+
+Try all sign/order rewrite combinations under `try` so the first one
+that closes the goal wins. 643 hits across ETP corpus.
+
+```lean
+repeat intro
+try { rw [h, ← h] }
+try { rw [← h, h] }
+try { rw [h, h] }
+try { rw [← h, ← h] }
+```
+
+## PATTERN: nth_rewrite combo
+
+Targeted occurrence rewrite paired with `rw` cleanup. 147 hits.
+
+```lean
+repeat intro
+try { nth_rewrite 1 [h]; rw [h] }
+try { nth_rewrite 2 [h]; rw [← h] }
+```
+
 ## PATTERN: aesop fallback
 
 When sequence isn't obvious, let aesop search.
