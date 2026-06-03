@@ -1,0 +1,855 @@
+{"id": "normal_0756", "difficulty": "normal", "hypothesis": "x = y * (((x * x) * y) * z)", "goal": "x = x * ((x * (y * z)) * w)", "label": "true"}
+{"id": "normal_0328", "difficulty": "normal", "hypothesis": "x = ((y * (z * x)) * w) * y", "goal": "x = x * (((x * y) * x) * y)", "label": "true"}
+{"id": "normal_0928", "difficulty": "normal", "hypothesis": "x = y * ((y * (y * y)) * z)", "goal": "x * y = z * ((z * w) * z)", "label": "true"}
+{"id": "normal_0917", "difficulty": "normal", "hypothesis": "x = y * ((z * (y * x)) * y)", "goal": "(x * y) * y = (y * z) * x", "label": "true"}
+{"id": "normal_0607", "difficulty": "normal", "hypothesis": "x = y * ((z * (y * w)) * u)", "goal": "x = x * ((y * x) * (z * x))", "label": "true"}
+{"id": "normal_0979", "difficulty": "normal", "hypothesis": "x = (x * x) * ((x * y) * z)", "goal": "x * y = z * ((w * w) * x)", "label": "false"}
+{"id": "normal_0743", "difficulty": "normal", "hypothesis": "x = y * (((z * x) * x) * z)", "goal": "x * y = (z * w) * (u * v)", "label": "true"}
+{"id": "hard1_0027", "difficulty": "hard", "hypothesis": "x = x * (y * (x * z))", "goal": "x = ((x * y) * (z * w)) * u", "label": "true"}
+{"id": "normal_0788", "difficulty": "normal", "hypothesis": "x = y * ((z * (w * y)) * x)", "goal": "x = y * ((z * (y * w)) * y)", "label": "false"}
+{"id": "normal_0216", "difficulty": "normal", "hypothesis": "x * x = (y * y) * (y * x)", "goal": "x = (y * x) * (y * (y * y))", "label": "false"}
+{"id": "normal_0035", "difficulty": "normal", "hypothesis": "x = (y * z) * ((y * x) * w)", "goal": "x = (y * (z * x)) * (x * w)", "label": "true"}
+{"id": "normal_0132", "difficulty": "normal", "hypothesis": "x = y * ((z * (x * z)) * z)", "goal": "x = (y * (y * z)) * (y * z)", "label": "true"}
+{"id": "normal_0931", "difficulty": "normal", "hypothesis": "x = y * ((z * x) * (y * z))", "goal": "x * (y * z) = w * (u * z)", "label": "false"}
+{"id": "normal_0699", "difficulty": "normal", "hypothesis": "x = y * (y * ((z * x) * x))", "goal": "x * (y * z) = w * (u * v)", "label": "false"}
+{"id": "normal_0483", "difficulty": "normal", "hypothesis": "x = (y * y) * (y * (x * z))", "goal": "x * y = z * (w * z)", "label": "true"}
+{"id": "normal_0904", "difficulty": "normal", "hypothesis": "x * y = (y * (z * w)) * u", "goal": "x = y * (z * (x * (z * z)))", "label": "false"}
+{"id": "normal_0423", "difficulty": "normal", "hypothesis": "x = y * (x * ((x * x) * y))", "goal": "x = y * (x * ((x * z) * w))", "label": "false"}
+{"id": "normal_0940", "difficulty": "normal", "hypothesis": "x = y * (z * (x * (w * u)))", "goal": "x * x = (y * z) * (z * x)", "label": "true"}
+{"id": "normal_0789", "difficulty": "normal", "hypothesis": "x * y = (x * (y * x)) * y", "goal": "x = y * ((x * (z * y)) * w)", "label": "false"}
+{"id": "normal_0481", "difficulty": "normal", "hypothesis": "x * y = z * (z * (y * x))", "goal": "x = (y * (y * (x * x))) * x", "label": "false"}
+{"id": "normal_0055", "difficulty": "normal", "hypothesis": "x = (x * ((y * z) * w)) * y", "goal": "x = y * (z * (z * (z * y)))", "label": "false"}
+{"id": "normal_0164", "difficulty": "normal", "hypothesis": "x * (y * z) = (x * z) * z", "goal": "x = (y * (y * (y * y))) * y", "label": "false"}
+{"id": "normal_0435", "difficulty": "normal", "hypothesis": "x = (y * (z * x)) * (z * x)", "goal": "x = x * (y * (y * (y * y)))", "label": "false"}
+{"id": "normal_0526", "difficulty": "normal", "hypothesis": "x = ((y * y) * z) * (y * w)", "goal": "x = y * (((z * z) * y) * z)", "label": "true"}
+{"id": "normal_0955", "difficulty": "normal", "hypothesis": "x = y * (y * (z * (z * y)))", "goal": "x = (y * y) * ((y * x) * x)", "label": "true"}
+{"id": "normal_0467", "difficulty": "normal", "hypothesis": "x * x = (y * z) * w", "goal": "x * y = (z * z) * (y * x)", "label": "false"}
+{"id": "normal_0472", "difficulty": "normal", "hypothesis": "x = (((x * y) * z) * y) * y", "goal": "x = (y * (z * y)) * (y * y)", "label": "false"}
+{"id": "normal_0462", "difficulty": "normal", "hypothesis": "x * (x * y) = (z * w) * z", "goal": "x * y = y * (z * (y * y))", "label": "false"}
+{"id": "normal_0488", "difficulty": "normal", "hypothesis": "x = (((y * z) * z) * y) * w", "goal": "x = (x * ((y * x) * z)) * x", "label": "true"}
+{"id": "normal_0241", "difficulty": "normal", "hypothesis": "x = (y * ((z * z) * z)) * z", "goal": "x = (y * y) * ((x * x) * x)", "label": "true"}
+{"id": "normal_0622", "difficulty": "normal", "hypothesis": "x * x = y * (z * (z * z))", "goal": "x * x = (x * y) * (y * x)", "label": "false"}
+{"id": "normal_0856", "difficulty": "normal", "hypothesis": "x = ((y * z) * (z * z)) * z", "goal": "x = ((x * y) * y) * (x * z)", "label": "true"}
+{"id": "normal_0988", "difficulty": "normal", "hypothesis": "x = (y * z) * ((w * w) * y)", "goal": "x = y * ((y * (y * y)) * z)", "label": "true"}
+{"id": "normal_0152", "difficulty": "normal", "hypothesis": "x = y * (x * ((y * z) * w))", "goal": "x = (y * z) * ((w * x) * w)", "label": "true"}
+{"id": "normal_0702", "difficulty": "normal", "hypothesis": "x = y * (((x * y) * x) * x)", "goal": "x = (x * (y * (y * y))) * x", "label": "false"}
+{"id": "normal_0117", "difficulty": "normal", "hypothesis": "x = ((y * x) * (y * z)) * z", "goal": "x = ((y * x) * y) * (x * z)", "label": "false"}
+{"id": "normal_0209", "difficulty": "normal", "hypothesis": "(x * x) * y = (z * z) * w", "goal": "x * y = (z * (y * z)) * y", "label": "false"}
+{"id": "normal_0723", "difficulty": "normal", "hypothesis": "x = (((y * x) * z) * x) * y", "goal": "x = (x * x) * ((x * y) * x)", "label": "true"}
+{"id": "normal_0762", "difficulty": "normal", "hypothesis": "x = y * ((y * x) * (x * z))", "goal": "x = (y * x) * ((x * z) * y)", "label": "true"}
+{"id": "normal_0197", "difficulty": "normal", "hypothesis": "x = y * (((y * x) * z) * z)", "goal": "x = y * ((z * y) * (w * u))", "label": "false"}
+{"id": "normal_0294", "difficulty": "normal", "hypothesis": "x * (y * z) = w * (y * z)", "goal": "x * y = (z * w) * (y * w)", "label": "false"}
+{"id": "normal_0715", "difficulty": "normal", "hypothesis": "x = (((y * x) * x) * z) * w", "goal": "x = y * ((y * z) * (x * y))", "label": "true"}
+{"id": "normal_0139", "difficulty": "normal", "hypothesis": "x = y * ((x * x) * (x * x))", "goal": "x = (y * y) * (z * y)", "label": "false"}
+{"id": "normal_0559", "difficulty": "normal", "hypothesis": "x = ((y * (z * z)) * y) * z", "goal": "x = y * ((x * (z * x)) * z)", "label": "true"}
+{"id": "normal_0388", "difficulty": "normal", "hypothesis": "x = x * (x * (y * y))", "goal": "x = (((y * z) * x) * x) * y", "label": "false"}
+{"id": "normal_0947", "difficulty": "normal", "hypothesis": "x = ((y * (z * y)) * z) * y", "goal": "x * y = x * ((z * x) * z)", "label": "true"}
+{"id": "normal_0907", "difficulty": "normal", "hypothesis": "x = ((x * (y * x)) * x) * z", "goal": "x = (x * (y * (z * y))) * w", "label": "false"}
+{"id": "normal_0060", "difficulty": "normal", "hypothesis": "x = y * (((z * y) * x) * y)", "goal": "x * y = y * (z * w)", "label": "true"}
+{"id": "normal_0653", "difficulty": "normal", "hypothesis": "x * y = (x * (z * w)) * z", "goal": "x * y = (y * y) * (x * z)", "label": "false"}
+{"id": "normal_0764", "difficulty": "normal", "hypothesis": "x = (y * ((x * x) * x)) * y", "goal": "x = y * ((z * (z * z)) * z)", "label": "false"}
+{"id": "normal_0995", "difficulty": "normal", "hypothesis": "x = ((y * x) * (z * y)) * x", "goal": "x = y * (((z * x) * x) * w)", "label": "false"}
+{"id": "normal_0264", "difficulty": "normal", "hypothesis": "x = (y * (y * z)) * (w * y)", "goal": "x = y * ((z * w) * (y * y))", "label": "true"}
+{"id": "normal_0771", "difficulty": "normal", "hypothesis": "x * y = z * ((z * y) * x)", "goal": "x = (x * x) * (x * y)", "label": "false"}
+{"id": "normal_0952", "difficulty": "normal", "hypothesis": "x = (y * (x * (y * z))) * x", "goal": "x * (x * y) = (z * y) * z", "label": "false"}
+{"id": "normal_0180", "difficulty": "normal", "hypothesis": "x = ((y * (y * y)) * z) * y", "goal": "x = ((y * (y * x)) * x) * z", "label": "true"}
+{"id": "normal_0418", "difficulty": "normal", "hypothesis": "x = ((y * z) * w) * u", "goal": "x * y = (z * (x * x)) * y", "label": "true"}
+{"id": "normal_0189", "difficulty": "normal", "hypothesis": "x = (((y * z) * y) * y) * z", "goal": "x = (x * y) * (z * (z * y))", "label": "true"}
+{"id": "normal_0535", "difficulty": "normal", "hypothesis": "x * y = ((y * y) * y) * y", "goal": "x = ((y * x) * x) * x", "label": "false"}
+{"id": "normal_0930", "difficulty": "normal", "hypothesis": "x = (((y * y) * z) * w) * z", "goal": "x = x * (y * (y * (z * y)))", "label": "true"}
+{"id": "normal_0595", "difficulty": "normal", "hypothesis": "x * y = (x * z) * (x * y)", "goal": "x * x = (y * (z * y)) * z", "label": "false"}
+{"id": "normal_0391", "difficulty": "normal", "hypothesis": "x = y * (z * (w * (y * z)))", "goal": "x = ((x * y) * y) * y", "label": "true"}
+{"id": "normal_0079", "difficulty": "normal", "hypothesis": "x = y * (((x * y) * y) * z)", "goal": "x * (y * z) = (x * y) * w", "label": "true"}
+{"id": "hard1_0060", "difficulty": "hard", "hypothesis": "x = (((y * z) * x) * z) * x", "goal": "x = y * (((x * y) * y) * x)", "label": "true"}
+{"id": "hard1_0068", "difficulty": "hard", "hypothesis": "x * x = y * ((x * z) * y)", "goal": "x * (y * x) = x * (z * x)", "label": "false"}
+{"id": "normal_0354", "difficulty": "normal", "hypothesis": "x * y = (x * x) * (z * y)", "goal": "x * x = ((y * z) * w) * u", "label": "false"}
+{"id": "normal_0004", "difficulty": "normal", "hypothesis": "x = y * (z * ((w * u) * u))", "goal": "x = ((y * z) * x) * (x * w)", "label": "true"}
+{"id": "normal_0304", "difficulty": "normal", "hypothesis": "(x * y) * z = (x * w) * z", "goal": "x = ((x * y) * (y * y)) * z", "label": "false"}
+{"id": "normal_0192", "difficulty": "normal", "hypothesis": "x = y * (z * (y * w))", "goal": "x = x * ((y * (z * y)) * y)", "label": "true"}
+{"id": "normal_0911", "difficulty": "normal", "hypothesis": "x = y * ((y * (z * z)) * y)", "goal": "x = (y * (z * y)) * w", "label": "true"}
+{"id": "normal_0871", "difficulty": "normal", "hypothesis": "x = y * ((z * (y * x)) * z)", "goal": "x = (y * (z * w)) * y", "label": "false"}
+{"id": "hard1_0048", "difficulty": "hard", "hypothesis": "x = (y * (z * y)) * x", "goal": "x = (((y * z) * y) * y) * x", "label": "false"}
+{"id": "normal_0579", "difficulty": "normal", "hypothesis": "x = (y * y) * ((x * y) * y)", "goal": "x * y = y * ((z * w) * x)", "label": "false"}
+{"id": "normal_0502", "difficulty": "normal", "hypothesis": "x = (y * (z * z)) * w", "goal": "x = ((y * z) * (y * w)) * z", "label": "true"}
+{"id": "normal_0179", "difficulty": "normal", "hypothesis": "x * y = z * (w * (x * u))", "goal": "x = y * (z * (z * (z * x)))", "label": "false"}
+{"id": "normal_0910", "difficulty": "normal", "hypothesis": "x = (y * ((z * x) * x)) * z", "goal": "x = x * (y * (y * (z * x)))", "label": "true"}
+{"id": "normal_0668", "difficulty": "normal", "hypothesis": "x = y * (((x * z) * x) * z)", "goal": "x = x * (y * (x * (y * y)))", "label": "true"}
+{"id": "normal_0927", "difficulty": "normal", "hypothesis": "x = (y * x) * ((x * x) * z)", "goal": "x * y = x * ((z * x) * w)", "label": "true"}
+{"id": "normal_0766", "difficulty": "normal", "hypothesis": "x = ((x * x) * (x * y)) * y", "goal": "x = ((y * x) * (z * x)) * w", "label": "false"}
+{"id": "normal_0206", "difficulty": "normal", "hypothesis": "x * y = z * ((z * w) * u)", "goal": "x * (y * y) = (x * z) * x", "label": "true"}
+{"id": "normal_0642", "difficulty": "normal", "hypothesis": "x = (x * ((y * y) * y)) * z", "goal": "x * x = (x * y) * (z * x)", "label": "false"}
+{"id": "normal_0874", "difficulty": "normal", "hypothesis": "x = (y * z) * ((y * w) * w)", "goal": "x = (x * y) * x", "label": "true"}
+{"id": "normal_0511", "difficulty": "normal", "hypothesis": "x = (((y * z) * w) * u) * u", "goal": "x = ((y * z) * w) * (w * w)", "label": "true"}
+{"id": "normal_0256", "difficulty": "normal", "hypothesis": "x = y * (y * (z * (x * y)))", "goal": "x = (y * y) * (x * (x * x))", "label": "true"}
+{"id": "normal_0737", "difficulty": "normal", "hypothesis": "x = (y * x) * ((x * z) * w)", "goal": "x = y * ((z * z) * x)", "label": "true"}
+{"id": "normal_0140", "difficulty": "normal", "hypothesis": "x = (y * (z * (z * x))) * y", "goal": "x = (x * (x * x)) * (x * x)", "label": "true"}
+{"id": "normal_0157", "difficulty": "normal", "hypothesis": "x = y * ((x * y) * (z * z))", "goal": "x = (x * ((y * x) * z)) * x", "label": "false"}
+{"id": "normal_0378", "difficulty": "normal", "hypothesis": "x = y * ((y * (z * x)) * x)", "goal": "x = x * ((y * (x * y)) * y)", "label": "false"}
+{"id": "normal_0645", "difficulty": "normal", "hypothesis": "x = y * ((z * (w * y)) * w)", "goal": "x = x * (y * (z * (y * x)))", "label": "true"}
+{"id": "hard1_0019", "difficulty": "hard", "hypothesis": "x * y = (x * (y * x)) * z", "goal": "x * y = (x * (x * z)) * x", "label": "false"}
+{"id": "normal_0114", "difficulty": "normal", "hypothesis": "(x * y) * z = (y * z) * x", "goal": "x = (y * z) * ((w * u) * v)", "label": "false"}
+{"id": "normal_0203", "difficulty": "normal", "hypothesis": "x = y * ((z * z) * (y * y))", "goal": "x = y * (z * (x * (z * x)))", "label": "true"}
+{"id": "normal_0881", "difficulty": "normal", "hypothesis": "x = (y * (z * w)) * (y * w)", "goal": "x = ((y * x) * (z * w)) * y", "label": "true"}
+{"id": "hard1_0061", "difficulty": "hard", "hypothesis": "x = x * (y * (z * (x * y)))", "goal": "x = x * (((y * x) * z) * w)", "label": "true"}
+{"id": "normal_0575", "difficulty": "normal", "hypothesis": "x = x * (x * (y * (y * y)))", "goal": "x = ((x * (y * z)) * w) * w", "label": "false"}
+{"id": "hard1_0039", "difficulty": "hard", "hypothesis": "x = x * ((x * y) * (z * z))", "goal": "x = x * (((x * y) * x) * y)", "label": "false"}
+{"id": "hard1_0015", "difficulty": "hard", "hypothesis": "x * x = x * (y * (z * y))", "goal": "x * (x * x) = x * (y * x)", "label": "false"}
+{"id": "normal_0332", "difficulty": "normal", "hypothesis": "x * x = ((x * y) * z) * y", "goal": "x = y * ((y * z) * (w * u))", "label": "false"}
+{"id": "normal_0567", "difficulty": "normal", "hypothesis": "x = y * (z * ((x * w) * u))", "goal": "x = (x * (y * y)) * z", "label": "true"}
+{"id": "normal_0543", "difficulty": "normal", "hypothesis": "x * (y * x) = (z * z) * w", "goal": "x * y = (y * y) * (z * z)", "label": "false"}
+{"id": "normal_0884", "difficulty": "normal", "hypothesis": "x * x = (x * y) * (z * z)", "goal": "x * x = (x * (x * y)) * z", "label": "false"}
+{"id": "hard1_0013", "difficulty": "hard", "hypothesis": "x * y = ((z * y) * x) * x", "goal": "x * y = y * (y * (y * y))", "label": "true"}
+{"id": "normal_0781", "difficulty": "normal", "hypothesis": "x = y * (z * ((w * u) * x))", "goal": "(x * y) * x = (z * x) * x", "label": "true"}
+{"id": "normal_0017", "difficulty": "normal", "hypothesis": "x * (y * z) = y * (x * w)", "goal": "x = (x * ((x * x) * x)) * y", "label": "false"}
+{"id": "normal_0397", "difficulty": "normal", "hypothesis": "x = (y * ((z * w) * u)) * u", "goal": "x = y * (x * ((z * z) * y))", "label": "true"}
+{"id": "normal_0314", "difficulty": "normal", "hypothesis": "x = (y * x) * ((z * w) * w)", "goal": "x * (y * y) = (z * z) * w", "label": "true"}
+{"id": "normal_0137", "difficulty": "normal", "hypothesis": "x = ((y * (z * w)) * x) * w", "goal": "x = x * (y * (y * x))", "label": "true"}
+{"id": "normal_0100", "difficulty": "normal", "hypothesis": "x = y * ((z * (x * y)) * x)", "goal": "x = ((y * x) * (z * x)) * z", "label": "false"}
+{"id": "normal_0974", "difficulty": "normal", "hypothesis": "x = y * ((z * x) * (w * x))", "goal": "x = (((x * y) * x) * x) * y", "label": "false"}
+{"id": "normal_0011", "difficulty": "normal", "hypothesis": "x = y * (y * ((z * x) * y))", "goal": "x = ((y * y) * x) * (z * x)", "label": "true"}
+{"id": "normal_0565", "difficulty": "normal", "hypothesis": "x = (y * (x * x)) * (y * y)", "goal": "x = (y * y) * (x * (z * x))", "label": "false"}
+{"id": "normal_0098", "difficulty": "normal", "hypothesis": "x = y * (y * z)", "goal": "x = (y * x) * (x * (y * x))", "label": "true"}
+{"id": "normal_0688", "difficulty": "normal", "hypothesis": "x = y * (z * ((z * w) * z))", "goal": "x * y = (z * x) * x", "label": "true"}
+{"id": "normal_0828", "difficulty": "normal", "hypothesis": "x * y = x * (z * (z * x))", "goal": "(x * x) * x = (y * z) * y", "label": "false"}
+{"id": "normal_0090", "difficulty": "normal", "hypothesis": "x = (y * (z * (z * x))) * x", "goal": "x = (x * ((y * x) * x)) * x", "label": "true"}
+{"id": "normal_0727", "difficulty": "normal", "hypothesis": "x = ((x * y) * x) * (x * y)", "goal": "x = (y * (y * (z * w))) * z", "label": "false"}
+{"id": "normal_0596", "difficulty": "normal", "hypothesis": "x = (x * y) * (z * z)", "goal": "x = y * (z * ((x * z) * z))", "label": "false"}
+{"id": "normal_0750", "difficulty": "normal", "hypothesis": "x = (y * (x * (z * z))) * z", "goal": "x = y * ((x * y) * y)", "label": "true"}
+{"id": "normal_0194", "difficulty": "normal", "hypothesis": "x = (y * (z * w)) * (z * w)", "goal": "x = x * (((x * y) * y) * z)", "label": "true"}
+{"id": "normal_0466", "difficulty": "normal", "hypothesis": "x = y * y", "goal": "x * x = (y * z) * (w * z)", "label": "true"}
+{"id": "normal_0761", "difficulty": "normal", "hypothesis": "x = y * (z * ((w * x) * y))", "goal": "x * x = (x * y) * (z * y)", "label": "true"}
+{"id": "normal_0223", "difficulty": "normal", "hypothesis": "x = ((y * (x * y)) * x) * y", "goal": "x = ((y * (z * w)) * u) * z", "label": "false"}
+{"id": "normal_0641", "difficulty": "normal", "hypothesis": "x = ((y * x) * (z * x)) * w", "goal": "x = y * (x * ((y * z) * z))", "label": "true"}
+{"id": "normal_0754", "difficulty": "normal", "hypothesis": "x = (y * (z * z)) * (w * y)", "goal": "x = (y * (x * x)) * (x * z)", "label": "true"}
+{"id": "normal_0835", "difficulty": "normal", "hypothesis": "x * y = z * ((w * x) * x)", "goal": "x = (y * x) * (z * (z * w))", "label": "false"}
+{"id": "normal_0331", "difficulty": "normal", "hypothesis": "x = (y * ((x * z) * z)) * w", "goal": "x = (y * (z * y)) * (w * y)", "label": "true"}
+{"id": "normal_0293", "difficulty": "normal", "hypothesis": "x = (y * z) * ((z * y) * z)", "goal": "x * y = ((z * z) * w) * x", "label": "true"}
+{"id": "normal_0215", "difficulty": "normal", "hypothesis": "x = (((y * z) * w) * z) * u", "goal": "x * y = y * (x * z)", "label": "true"}
+{"id": "normal_0603", "difficulty": "normal", "hypothesis": "x = ((y * y) * z) * (y * y)", "goal": "x * y = ((z * y) * y) * y", "label": "true"}
+{"id": "normal_0219", "difficulty": "normal", "hypothesis": "x = y * (x * (y * (x * z)))", "goal": "x * x = y * (x * (z * y))", "label": "true"}
+{"id": "normal_0524", "difficulty": "normal", "hypothesis": "x * (y * x) = (y * z) * z", "goal": "x = (((x * y) * z) * y) * x", "label": "false"}
+{"id": "normal_0739", "difficulty": "normal", "hypothesis": "x = (y * y) * (z * (w * y))", "goal": "x * y = (z * (x * w)) * u", "label": "true"}
+{"id": "normal_0944", "difficulty": "normal", "hypothesis": "x = y * ((z * (w * u)) * v)", "goal": "x * y = (z * z) * (w * x)", "label": "true"}
+{"id": "hard1_0051", "difficulty": "hard", "hypothesis": "x * y = ((x * z) * w) * y", "goal": "x * y = ((z * w) * x) * y", "label": "false"}
+{"id": "normal_0684", "difficulty": "normal", "hypothesis": "x = x * ((y * y) * (y * y))", "goal": "x * y = (x * z) * x", "label": "false"}
+{"id": "normal_0638", "difficulty": "normal", "hypothesis": "x = y * ((z * (x * w)) * u)", "goal": "x * y = (z * (x * y)) * x", "label": "true"}
+{"id": "normal_0637", "difficulty": "normal", "hypothesis": "x * y = (z * w) * (x * z)", "goal": "x = ((y * z) * y) * (w * w)", "label": "false"}
+{"id": "normal_0899", "difficulty": "normal", "hypothesis": "x = y * (z * (x * (w * y)))", "goal": "x = ((y * (y * z)) * z) * y", "label": "true"}
+{"id": "normal_0933", "difficulty": "normal", "hypothesis": "x * y = ((z * y) * y) * x", "goal": "x = y * (((x * z) * w) * w)", "label": "false"}
+{"id": "normal_0111", "difficulty": "normal", "hypothesis": "x = (x * (y * (z * w))) * y", "goal": "(x * x) * y = (z * w) * x", "label": "false"}
+{"id": "normal_0115", "difficulty": "normal", "hypothesis": "x = y * (((z * x) * w) * y)", "goal": "x * y = x * (y * (z * w))", "label": "true"}
+{"id": "normal_0283", "difficulty": "normal", "hypothesis": "x * x = x * (x * (x * x))", "goal": "x = x * ((y * (y * z)) * y)", "label": "false"}
+{"id": "normal_0161", "difficulty": "normal", "hypothesis": "x = y * (y * ((x * z) * z))", "goal": "x * y = y * ((z * x) * z)", "label": "true"}
+{"id": "normal_0591", "difficulty": "normal", "hypothesis": "x = (y * (y * z)) * y", "goal": "x = y * (((z * w) * y) * x)", "label": "true"}
+{"id": "normal_0918", "difficulty": "normal", "hypothesis": "x = y * (((z * y) * w) * y)", "goal": "x = ((x * (x * x)) * x) * x", "label": "true"}
+{"id": "normal_0784", "difficulty": "normal", "hypothesis": "x = (((y * x) * z) * y) * w", "goal": "x * x = ((y * x) * x) * z", "label": "true"}
+{"id": "normal_0882", "difficulty": "normal", "hypothesis": "x * x = (y * (z * y)) * y", "goal": "x * x = ((y * x) * y) * z", "label": "false"}
+{"id": "normal_0405", "difficulty": "normal", "hypothesis": "x = (y * ((x * z) * y)) * x", "goal": "x * (y * y) = x * (z * z)", "label": "false"}
+{"id": "normal_0539", "difficulty": "normal", "hypothesis": "x = x * (y * ((y * z) * y))", "goal": "x * y = (z * z) * (w * u)", "label": "false"}
+{"id": "hard1_0036", "difficulty": "hard", "hypothesis": "x * x = y * (z * (x * z))", "goal": "x * x = x * (y * (z * x))", "label": "false"}
+{"id": "normal_0093", "difficulty": "normal", "hypothesis": "x = y * ((z * z) * (z * y))", "goal": "x = ((y * z) * (z * y)) * x", "label": "true"}
+{"id": "normal_0692", "difficulty": "normal", "hypothesis": "x = ((y * (z * y)) * x) * w", "goal": "x = (y * (y * z)) * (x * x)", "label": "true"}
+{"id": "normal_0290", "difficulty": "normal", "hypothesis": "x * x = y * ((z * z) * x)", "goal": "x = (y * (z * y)) * (x * w)", "label": "false"}
+{"id": "normal_0767", "difficulty": "normal", "hypothesis": "x = y * (z * ((w * y) * u))", "goal": "x = y * (((z * w) * y) * w)", "label": "true"}
+{"id": "normal_0389", "difficulty": "normal", "hypothesis": "x * x = ((x * y) * z) * w", "goal": "x = ((y * (z * z)) * w) * z", "label": "false"}
+{"id": "normal_0582", "difficulty": "normal", "hypothesis": "x = (y * (y * x)) * (x * z)", "goal": "x * y = x * (x * (y * y))", "label": "true"}
+{"id": "normal_0070", "difficulty": "normal", "hypothesis": "x * y = (y * y) * z", "goal": "x * (y * z) = (x * x) * y", "label": "true"}
+{"id": "normal_0613", "difficulty": "normal", "hypothesis": "x = y * (z * ((w * y) * w))", "goal": "x = (y * ((z * x) * x)) * y", "label": "true"}
+{"id": "normal_0399", "difficulty": "normal", "hypothesis": "x * x = y * ((y * y) * z)", "goal": "x = y * ((z * (x * x)) * z)", "label": "false"}
+{"id": "normal_0302", "difficulty": "normal", "hypothesis": "x = (y * ((y * y) * x)) * x", "goal": "x * y = z * (x * (w * w))", "label": "false"}
+{"id": "normal_0382", "difficulty": "normal", "hypothesis": "x = (y * z) * (w * (x * z))", "goal": "x = (y * (x * y)) * (x * z)", "label": "true"}
+{"id": "hard1_0066", "difficulty": "hard", "hypothesis": "x = ((y * z) * y) * (x * z)", "goal": "x = (((y * x) * y) * y) * y", "label": "false"}
+{"id": "normal_0222", "difficulty": "normal", "hypothesis": "x = y * ((x * (z * w)) * w)", "goal": "x = (y * (z * w)) * (y * z)", "label": "true"}
+{"id": "normal_0006", "difficulty": "normal", "hypothesis": "x * y = ((z * w) * u) * y", "goal": "x = x * ((y * x) * (y * z))", "label": "false"}
+{"id": "normal_0687", "difficulty": "normal", "hypothesis": "x * y = x * ((z * w) * u)", "goal": "x = (y * (y * x)) * (z * x)", "label": "false"}
+{"id": "normal_0636", "difficulty": "normal", "hypothesis": "x * y = ((z * w) * y) * y", "goal": "x = (y * y) * (z * (x * y))", "label": "false"}
+{"id": "normal_0894", "difficulty": "normal", "hypothesis": "x = ((x * x) * y) * z", "goal": "x = ((y * z) * (y * y)) * y", "label": "false"}
+{"id": "normal_0738", "difficulty": "normal", "hypothesis": "x = y * (z * (w * (u * y)))", "goal": "x = (y * ((y * z) * w)) * y", "label": "true"}
+{"id": "normal_0248", "difficulty": "normal", "hypothesis": "x * y = y * (z * (z * y))", "goal": "x = (y * (z * (w * x))) * w", "label": "false"}
+{"id": "normal_0381", "difficulty": "normal", "hypothesis": "x = (y * ((y * x) * x)) * x", "goal": "x = (y * ((z * y) * y)) * x", "label": "false"}
+{"id": "normal_0836", "difficulty": "normal", "hypothesis": "x = y * (((x * y) * x) * z)", "goal": "x = (x * y) * (x * (y * y))", "label": "true"}
+{"id": "normal_0765", "difficulty": "normal", "hypothesis": "x = (y * x) * ((z * y) * w)", "goal": "x = (((y * z) * w) * x) * w", "label": "true"}
+{"id": "normal_0370", "difficulty": "normal", "hypothesis": "x = (y * (y * y)) * (z * x)", "goal": "x * y = (y * z) * w", "label": "false"}
+{"id": "normal_0888", "difficulty": "normal", "hypothesis": "x = (y * y) * (x * (y * z))", "goal": "x = x * (((y * x) * z) * x)", "label": "true"}
+{"id": "normal_0571", "difficulty": "normal", "hypothesis": "x = ((y * x) * y) * (z * w)", "goal": "x * (y * z) = (y * z) * y", "label": "true"}
+{"id": "normal_0696", "difficulty": "normal", "hypothesis": "x * x = (x * x) * (y * x)", "goal": "x = y * (z * (y * (y * y)))", "label": "false"}
+{"id": "normal_0050", "difficulty": "normal", "hypothesis": "x = (y * x) * (y * (z * y))", "goal": "x = ((y * z) * w) * (y * w)", "label": "true"}
+{"id": "normal_0184", "difficulty": "normal", "hypothesis": "x = ((y * z) * y) * (z * w)", "goal": "x * y = y * ((y * z) * x)", "label": "true"}
+{"id": "normal_0623", "difficulty": "normal", "hypothesis": "x * y = z * (x * (w * x))", "goal": "(x * y) * x = (z * w) * x", "label": "true"}
+{"id": "normal_0913", "difficulty": "normal", "hypothesis": "x = ((y * (z * x)) * x) * w", "goal": "(x * y) * x = (z * y) * y", "label": "true"}
+{"id": "normal_0182", "difficulty": "normal", "hypothesis": "x * y = y * (z * (x * w))", "goal": "x = ((y * (z * z)) * w) * u", "label": "false"}
+{"id": "hard1_0021", "difficulty": "hard", "hypothesis": "x = y * ((y * x) * (x * y))", "goal": "x = (y * (x * y)) * x", "label": "false"}
+{"id": "normal_0834", "difficulty": "normal", "hypothesis": "x * y = y * (z * (x * y))", "goal": "x = y * ((z * y) * (x * x))", "label": "false"}
+{"id": "normal_0057", "difficulty": "normal", "hypothesis": "x = ((y * (z * z)) * w) * y", "goal": "x = y * (((z * x) * w) * x)", "label": "true"}
+{"id": "normal_0848", "difficulty": "normal", "hypothesis": "x = (y * x) * (y * (z * y))", "goal": "x = ((y * z) * w) * (x * x)", "label": "true"}
+{"id": "normal_0449", "difficulty": "normal", "hypothesis": "x = y * ((x * z) * (z * w))", "goal": "x = ((y * (y * z)) * y) * z", "label": "true"}
+{"id": "normal_0890", "difficulty": "normal", "hypothesis": "x = y * ((z * x) * z)", "goal": "x * y = (y * (y * y)) * x", "label": "true"}
+{"id": "normal_0384", "difficulty": "normal", "hypothesis": "x = y * (x * (z * (w * w)))", "goal": "x = (y * ((x * x) * y)) * y", "label": "true"}
+{"id": "normal_0597", "difficulty": "normal", "hypothesis": "x = (y * (z * (w * w))) * y", "goal": "x = ((y * x) * (x * z)) * w", "label": "true"}
+{"id": "normal_0042", "difficulty": "normal", "hypothesis": "x = (y * (z * x)) * (w * y)", "goal": "x * x = y * (z * (w * y))", "label": "true"}
+{"id": "normal_0823", "difficulty": "normal", "hypothesis": "x = (y * (z * (x * w))) * u", "goal": "x * (x * y) = (z * y) * w", "label": "true"}
+{"id": "normal_0455", "difficulty": "normal", "hypothesis": "x = y * (z * ((w * z) * w))", "goal": "x = ((x * x) * (y * y)) * y", "label": "true"}
+{"id": "normal_0031", "difficulty": "normal", "hypothesis": "x = y * ((z * (z * w)) * z)", "goal": "x = (y * z) * (y * (w * z))", "label": "true"}
+{"id": "normal_0806", "difficulty": "normal", "hypothesis": "x * y = x * ((y * x) * x)", "goal": "x = (y * (y * z)) * (x * y)", "label": "false"}
+{"id": "normal_0533", "difficulty": "normal", "hypothesis": "x * (y * x) = z * (x * x)", "goal": "x * y = x * ((z * y) * x)", "label": "false"}
+{"id": "normal_0847", "difficulty": "normal", "hypothesis": "x * (x * y) = (x * x) * x", "goal": "x * y = z * (w * (u * u))", "label": "false"}
+{"id": "normal_0673", "difficulty": "normal", "hypothesis": "x = y * (((z * z) * w) * z)", "goal": "x * x = ((x * x) * x) * y", "label": "true"}
+{"id": "normal_0078", "difficulty": "normal", "hypothesis": "x = y * (z * (z * (z * x)))", "goal": "x = y * (x * ((z * w) * y))", "label": "false"}
+{"id": "normal_0299", "difficulty": "normal", "hypothesis": "x * x = x * ((x * y) * y)", "goal": "x * x = ((x * x) * y) * z", "label": "false"}
+{"id": "normal_0262", "difficulty": "normal", "hypothesis": "x = (y * ((z * w) * x)) * w", "goal": "x * (y * x) = (y * x) * x", "label": "true"}
+{"id": "normal_0853", "difficulty": "normal", "hypothesis": "x * y = z * (x * (w * x))", "goal": "x = ((y * x) * z) * (x * x)", "label": "false"}
+{"id": "normal_0725", "difficulty": "normal", "hypothesis": "x = (x * (y * x)) * (y * z)", "goal": "x = x * (x * (y * (z * w)))", "label": "false"}
+{"id": "normal_0168", "difficulty": "normal", "hypothesis": "x = x * (y * ((y * z) * z))", "goal": "x * y = (z * w) * y", "label": "false"}
+{"id": "normal_0948", "difficulty": "normal", "hypothesis": "x = y * (y * ((z * y) * y))", "goal": "x * x = x * (y * (z * y))", "label": "true"}
+{"id": "normal_0190", "difficulty": "normal", "hypothesis": "x = (x * x) * ((y * y) * x)", "goal": "x * y = x * ((z * y) * y)", "label": "false"}
+{"id": "normal_0586", "difficulty": "normal", "hypothesis": "x * x = (y * (z * w)) * z", "goal": "x * y = (y * (x * z)) * x", "label": "false"}
+{"id": "normal_0417", "difficulty": "normal", "hypothesis": "x * y = (z * z) * (x * x)", "goal": "x = ((y * (z * w)) * y) * u", "label": "false"}
+{"id": "normal_0280", "difficulty": "normal", "hypothesis": "x * (y * y) = y * (z * w)", "goal": "x = y * (y * ((z * z) * y))", "label": "false"}
+{"id": "normal_0831", "difficulty": "normal", "hypothesis": "x * (y * z) = (y * y) * x", "goal": "x * y = (z * x) * (y * x)", "label": "false"}
+{"id": "normal_0872", "difficulty": "normal", "hypothesis": "x * x = y * (x * (z * y))", "goal": "x = y * ((z * (z * y)) * z)", "label": "false"}
+{"id": "normal_0770", "difficulty": "normal", "hypothesis": "x = x * ((y * z) * (w * z))", "goal": "x = y * ((x * (y * z)) * x)", "label": "false"}
+{"id": "normal_0315", "difficulty": "normal", "hypothesis": "x = x * (((y * z) * w) * y)", "goal": "x = (y * (z * w)) * y", "label": "false"}
+{"id": "normal_0033", "difficulty": "normal", "hypothesis": "x = (x * (y * y)) * (x * x)", "goal": "x = ((y * z) * z) * (y * w)", "label": "false"}
+{"id": "normal_0556", "difficulty": "normal", "hypothesis": "x = (x * y) * (y * (z * x))", "goal": "x = (y * (y * z)) * (w * y)", "label": "false"}
+{"id": "normal_0942", "difficulty": "normal", "hypothesis": "x = (y * ((z * z) * y)) * z", "goal": "x = x * ((y * (z * w)) * x)", "label": "true"}
+{"id": "normal_0480", "difficulty": "normal", "hypothesis": "x = y * ((x * y) * (y * z))", "goal": "x * x = (y * z) * (x * y)", "label": "true"}
+{"id": "hard1_0029", "difficulty": "hard", "hypothesis": "x = (y * y) * ((z * x) * x)", "goal": "x * y = (y * (z * x)) * y", "label": "false"}
+{"id": "normal_0165", "difficulty": "normal", "hypothesis": "x * x = (y * y) * y", "goal": "x = (x * (y * x)) * (z * w)", "label": "false"}
+{"id": "normal_0517", "difficulty": "normal", "hypothesis": "x = (x * (y * z)) * (z * x)", "goal": "x * (y * z) = (x * w) * u", "label": "false"}
+{"id": "normal_0577", "difficulty": "normal", "hypothesis": "x = (x * y) * ((x * x) * z)", "goal": "x = y * ((x * (y * x)) * z)", "label": "false"}
+{"id": "normal_0158", "difficulty": "normal", "hypothesis": "x = x * (((y * y) * x) * z)", "goal": "(x * x) * y = (y * x) * z", "label": "false"}
+{"id": "normal_0585", "difficulty": "normal", "hypothesis": "x = y * (((z * w) * y) * u)", "goal": "x * y = ((z * x) * w) * z", "label": "true"}
+{"id": "normal_0357", "difficulty": "normal", "hypothesis": "x * y = (y * y) * (y * x)", "goal": "x = (y * (y * x)) * (z * x)", "label": "false"}
+{"id": "normal_0921", "difficulty": "normal", "hypothesis": "x = ((x * y) * z) * (y * z)", "goal": "x * y = (z * (w * z)) * w", "label": "false"}
+{"id": "normal_0779", "difficulty": "normal", "hypothesis": "x = ((y * y) * (z * y)) * w", "goal": "x = (y * z) * ((x * w) * w)", "label": "true"}
+{"id": "normal_0021", "difficulty": "normal", "hypothesis": "x * (x * x) = x * (y * z)", "goal": "x * x = ((y * z) * w) * z", "label": "false"}
+{"id": "normal_0400", "difficulty": "normal", "hypothesis": "x = y * (z * (w * (x * w)))", "goal": "x * (x * y) = (x * y) * x", "label": "true"}
+{"id": "normal_0053", "difficulty": "normal", "hypothesis": "x = (y * x) * (x * (z * x))", "goal": "x = (((y * z) * w) * w) * x", "label": "false"}
+{"id": "normal_0527", "difficulty": "normal", "hypothesis": "x = (y * ((y * z) * w)) * y", "goal": "x = (y * y) * ((x * x) * x)", "label": "true"}
+{"id": "normal_0142", "difficulty": "normal", "hypothesis": "x = (y * x) * ((y * x) * x)", "goal": "x * y = x * ((x * x) * x)", "label": "false"}
+{"id": "normal_0614", "difficulty": "normal", "hypothesis": "x = (x * ((y * x) * z)) * y", "goal": "x * y = (y * (z * z)) * x", "label": "false"}
+{"id": "normal_0730", "difficulty": "normal", "hypothesis": "x = y * (x * (z * z))", "goal": "x = (((x * x) * x) * y) * x", "label": "true"}
+{"id": "normal_0561", "difficulty": "normal", "hypothesis": "x = y * ((z * (x * x)) * y)", "goal": "x = x * (y * ((y * x) * z))", "label": "true"}
+{"id": "normal_0522", "difficulty": "normal", "hypothesis": "x = (y * y) * (y * (z * x))", "goal": "x * y = (y * y) * y", "label": "true"}
+{"id": "normal_0962", "difficulty": "normal", "hypothesis": "x = (y * z) * (z * (w * z))", "goal": "x = (y * (z * w)) * x", "label": "true"}
+{"id": "normal_0498", "difficulty": "normal", "hypothesis": "x = (((x * y) * z) * y) * z", "goal": "x = x * (y * ((z * w) * z))", "label": "false"}
+{"id": "normal_0227", "difficulty": "normal", "hypothesis": "x = (y * (z * (x * w))) * y", "goal": "x = y * ((y * (z * z)) * z)", "label": "true"}
+{"id": "normal_0110", "difficulty": "normal", "hypothesis": "x = ((y * (x * z)) * y) * w", "goal": "x = y * (((y * x) * y) * z)", "label": "true"}
+{"id": "normal_0602", "difficulty": "normal", "hypothesis": "x = (((y * z) * w) * z) * y", "goal": "x * x = y * (y * (z * w))", "label": "true"}
+{"id": "normal_0972", "difficulty": "normal", "hypothesis": "x = y * (z * (w * (u * v)))", "goal": "x * x = y * (y * (z * y))", "label": "true"}
+{"id": "normal_0198", "difficulty": "normal", "hypothesis": "x = (x * x) * ((x * x) * y)", "goal": "x = ((y * x) * (x * y)) * z", "label": "false"}
+{"id": "normal_0049", "difficulty": "normal", "hypothesis": "x = y * (x * ((z * z) * w))", "goal": "x = ((x * (y * y)) * x) * y", "label": "true"}
+{"id": "normal_0474", "difficulty": "normal", "hypothesis": "x = ((y * z) * x) * y", "goal": "x = (y * x) * (x * (x * z))", "label": "true"}
+{"id": "normal_0339", "difficulty": "normal", "hypothesis": "x * x = y * (y * (z * z))", "goal": "x = x * ((y * z) * (w * z))", "label": "false"}
+{"id": "normal_0935", "difficulty": "normal", "hypothesis": "x * x = ((y * z) * w) * z", "goal": "x = ((y * z) * w) * (x * z)", "label": "false"}
+{"id": "normal_0395", "difficulty": "normal", "hypothesis": "x = (y * z) * (y * (w * x))", "goal": "x = ((y * z) * (w * z)) * y", "label": "false"}
+{"id": "normal_0922", "difficulty": "normal", "hypothesis": "x = (y * (x * z)) * (x * w)", "goal": "x = (x * y) * ((z * w) * u)", "label": "true"}
+{"id": "normal_0588", "difficulty": "normal", "hypothesis": "x * y = y * (y * (z * y))", "goal": "x * y = z * (w * (z * w))", "label": "false"}
+{"id": "normal_0240", "difficulty": "normal", "hypothesis": "x = ((x * y) * (x * y)) * z", "goal": "x = (y * x) * ((z * y) * w)", "label": "false"}
+{"id": "normal_0735", "difficulty": "normal", "hypothesis": "x = (y * z) * (z * (z * y))", "goal": "x = y * (z * ((w * y) * z))", "label": "true"}
+{"id": "normal_0923", "difficulty": "normal", "hypothesis": "x = y * (x * x)", "goal": "x = (y * (z * (y * z))) * w", "label": "false"}
+{"id": "normal_0274", "difficulty": "normal", "hypothesis": "x * y = x * (y * (x * z))", "goal": "x = (y * (z * (z * z))) * w", "label": "false"}
+{"id": "normal_0892", "difficulty": "normal", "hypothesis": "x * y = (y * y) * (z * w)", "goal": "x = ((y * z) * w) * (z * u)", "label": "false"}
+{"id": "normal_0014", "difficulty": "normal", "hypothesis": "(x * y) * x = (y * z) * x", "goal": "x * y = (z * z) * y", "label": "false"}
+{"id": "normal_0850", "difficulty": "normal", "hypothesis": "x * y = (x * (z * z)) * w", "goal": "x = (y * (z * w)) * (w * z)", "label": "false"}
+{"id": "normal_0797", "difficulty": "normal", "hypothesis": "x = x * ((y * (x * x)) * z)", "goal": "x = (y * y) * ((x * z) * w)", "label": "false"}
+{"id": "normal_0025", "difficulty": "normal", "hypothesis": "x * x = y * (y * x)", "goal": "x = ((x * y) * x) * (x * y)", "label": "false"}
+{"id": "normal_0860", "difficulty": "normal", "hypothesis": "x * y = (z * w) * (u * y)", "goal": "x = y * ((z * (x * y)) * x)", "label": "false"}
+{"id": "normal_0407", "difficulty": "normal", "hypothesis": "x = ((y * z) * (z * w)) * y", "goal": "x * y = (x * x) * z", "label": "true"}
+{"id": "normal_0534", "difficulty": "normal", "hypothesis": "x * y = (z * x) * w", "goal": "x = (y * (x * x)) * y", "label": "false"}
+{"id": "normal_0310", "difficulty": "normal", "hypothesis": "x = (x * (y * z)) * (z * x)", "goal": "x = (y * z) * ((y * z) * z)", "label": "false"}
+{"id": "hard1_0030", "difficulty": "hard", "hypothesis": "x = (y * (x * (y * x))) * y", "goal": "x * (x * y) = z * (y * x)", "label": "false"}
+{"id": "normal_0288", "difficulty": "normal", "hypothesis": "x = y * (y * ((z * z) * y))", "goal": "x = (y * (z * x)) * (z * w)", "label": "true"}
+{"id": "normal_0695", "difficulty": "normal", "hypothesis": "x * y = z * (w * y)", "goal": "x = (y * ((z * w) * w)) * u", "label": "false"}
+{"id": "normal_0191", "difficulty": "normal", "hypothesis": "x = (y * (z * (w * y))) * x", "goal": "x = y * (z * (w * (x * z)))", "label": "false"}
+{"id": "normal_0361", "difficulty": "normal", "hypothesis": "x = (y * (z * (w * z))) * w", "goal": "x = y * (x * (y * z))", "label": "true"}
+{"id": "normal_0312", "difficulty": "normal", "hypothesis": "x * y = ((z * y) * x) * x", "goal": "x = ((y * (z * x)) * w) * z", "label": "false"}
+{"id": "normal_0393", "difficulty": "normal", "hypothesis": "x * y = ((x * x) * z) * w", "goal": "x * (y * z) = (z * y) * y", "label": "false"}
+{"id": "normal_0658", "difficulty": "normal", "hypothesis": "x = (y * (z * (y * y))) * y", "goal": "x = y * ((x * z) * x)", "label": "true"}
+{"id": "normal_0410", "difficulty": "normal", "hypothesis": "x = (y * (y * (x * z))) * z", "goal": "x * y = x * (x * (x * z))", "label": "false"}
+{"id": "normal_0204", "difficulty": "normal", "hypothesis": "x = (y * (y * (x * y))) * y", "goal": "x * y = (y * x) * (z * z)", "label": "false"}
+{"id": "normal_0174", "difficulty": "normal", "hypothesis": "x = (x * ((y * z) * y)) * y", "goal": "x = ((x * x) * (y * x)) * x", "label": "false"}
+{"id": "normal_0420", "difficulty": "normal", "hypothesis": "x = ((y * y) * z) * (w * x)", "goal": "x * y = (z * x) * (w * x)", "label": "false"}
+{"id": "normal_0519", "difficulty": "normal", "hypothesis": "x * y = (x * x) * (z * w)", "goal": "x = ((x * y) * z) * (w * w)", "label": "false"}
+{"id": "normal_0590", "difficulty": "normal", "hypothesis": "x = (y * (y * x)) * (y * z)", "goal": "x * (y * y) = (z * z) * z", "label": "true"}
+{"id": "normal_0062", "difficulty": "normal", "hypothesis": "x = ((y * x) * (y * z)) * y", "goal": "x = ((y * z) * (y * w)) * u", "label": "true"}
+{"id": "normal_0162", "difficulty": "normal", "hypothesis": "x = ((y * (z * z)) * y) * x", "goal": "x = (x * y) * (y * (y * z))", "label": "false"}
+{"id": "normal_0383", "difficulty": "normal", "hypothesis": "x = ((y * y) * y) * y", "goal": "x = (y * ((z * x) * x)) * y", "label": "true"}
+{"id": "normal_0751", "difficulty": "normal", "hypothesis": "x = (y * ((y * z) * w)) * y", "goal": "x = y * ((x * (z * y)) * x)", "label": "true"}
+{"id": "normal_0865", "difficulty": "normal", "hypothesis": "x * (y * x) = (x * z) * y", "goal": "x = y * ((x * y) * (z * y))", "label": "false"}
+{"id": "hard1_0026", "difficulty": "hard", "hypothesis": "x = ((x * (y * z)) * z) * x", "goal": "x * x = x * (y * (y * x))", "label": "false"}
+{"id": "normal_0731", "difficulty": "normal", "hypothesis": "x = (((y * z) * y) * w) * y", "goal": "x = (((x * x) * y) * x) * x", "label": "true"}
+{"id": "normal_0503", "difficulty": "normal", "hypothesis": "x = (y * ((x * z) * y)) * x", "goal": "x = ((x * (x * y)) * z) * w", "label": "false"}
+{"id": "normal_0342", "difficulty": "normal", "hypothesis": "x = y * (((y * x) * z) * w)", "goal": "x = ((y * z) * (z * x)) * y", "label": "true"}
+{"id": "normal_0826", "difficulty": "normal", "hypothesis": "x = y * (z * ((w * y) * y))", "goal": "x = y * ((z * z) * x)", "label": "true"}
+{"id": "normal_0415", "difficulty": "normal", "hypothesis": "x = y * ((y * x) * x)", "goal": "(x * y) * y = (y * x) * x", "label": "false"}
+{"id": "normal_0082", "difficulty": "normal", "hypothesis": "x = (y * ((x * x) * x)) * x", "goal": "x = ((y * z) * w) * (w * y)", "label": "false"}
+{"id": "normal_0926", "difficulty": "normal", "hypothesis": "x = (y * (x * z)) * (y * w)", "goal": "x = (y * z) * (x * (y * y))", "label": "true"}
+{"id": "normal_0437", "difficulty": "normal", "hypothesis": "x * (x * y) = (x * z) * y", "goal": "x = (y * ((x * z) * z)) * z", "label": "false"}
+{"id": "normal_0345", "difficulty": "normal", "hypothesis": "x = y * ((z * (w * y)) * y)", "goal": "x * x = ((y * x) * x) * y", "label": "true"}
+{"id": "normal_0662", "difficulty": "normal", "hypothesis": "x = (x * y) * ((z * y) * z)", "goal": "x = ((y * (z * y)) * y) * w", "label": "false"}
+{"id": "normal_0821", "difficulty": "normal", "hypothesis": "x = ((y * (z * w)) * y) * u", "goal": "x * (y * z) = (x * z) * w", "label": "true"}
+{"id": "normal_0469", "difficulty": "normal", "hypothesis": "x = y * (x * ((z * z) * y))", "goal": "x * (y * x) = x * (y * y)", "label": "false"}
+{"id": "normal_0058", "difficulty": "normal", "hypothesis": "x = (((y * z) * y) * y) * y", "goal": "x * y = ((x * x) * z) * w", "label": "true"}
+{"id": "hard1_0055", "difficulty": "hard", "hypothesis": "x = y * (((z * w) * x) * x)", "goal": "x = y * (((z * x) * w) * w)", "label": "false"}
+{"id": "normal_0261", "difficulty": "normal", "hypothesis": "x = (x * (y * (y * x))) * y", "goal": "x = y * ((x * x) * (y * z))", "label": "false"}
+{"id": "normal_0068", "difficulty": "normal", "hypothesis": "x * y = (z * w) * (z * x)", "goal": "x * y = z * (z * (x * x))", "label": "true"}
+{"id": "normal_0549", "difficulty": "normal", "hypothesis": "x = (y * ((x * z) * z)) * x", "goal": "x = (((y * z) * w) * y) * x", "label": "true"}
+{"id": "normal_0977", "difficulty": "normal", "hypothesis": "x = (((y * x) * z) * z) * y", "goal": "(x * y) * y = (y * z) * x", "label": "false"}
+{"id": "normal_0424", "difficulty": "normal", "hypothesis": "x * (x * y) = (x * x) * y", "goal": "x = (x * y) * (x * (x * x))", "label": "false"}
+{"id": "normal_0849", "difficulty": "normal", "hypothesis": "x = y * ((z * w) * z)", "goal": "x = (x * (y * z)) * (y * w)", "label": "true"}
+{"id": "normal_0711", "difficulty": "normal", "hypothesis": "x = x * ((y * (y * x)) * y)", "goal": "x = ((y * z) * y) * (w * z)", "label": "false"}
+{"id": "normal_0298", "difficulty": "normal", "hypothesis": "x = (x * (y * (x * x))) * y", "goal": "x = (y * (x * y)) * (z * w)", "label": "false"}
+{"id": "normal_0360", "difficulty": "normal", "hypothesis": "x = ((y * (x * z)) * y) * z", "goal": "x * y = (x * (y * z)) * x", "label": "false"}
+{"id": "normal_0305", "difficulty": "normal", "hypothesis": "x = (y * y) * ((x * z) * z)", "goal": "x = x * (y * (z * (y * z)))", "label": "false"}
+{"id": "normal_0583", "difficulty": "normal", "hypothesis": "x = ((y * (x * y)) * x) * z", "goal": "x * y = ((x * x) * x) * x", "label": "true"}
+{"id": "normal_0999", "difficulty": "normal", "hypothesis": "x = (y * (x * (y * y))) * x", "goal": "x * x = (y * x) * (z * z)", "label": "false"}
+{"id": "normal_0329", "difficulty": "normal", "hypothesis": "x = (y * z) * (w * (x * z))", "goal": "x = (y * ((z * w) * y)) * u", "label": "true"}
+{"id": "normal_0231", "difficulty": "normal", "hypothesis": "x = (y * z) * (y * (y * y))", "goal": "x = y * ((z * x) * z)", "label": "true"}
+{"id": "normal_0778", "difficulty": "normal", "hypothesis": "x * y = z * (w * (w * x))", "goal": "x = (y * x) * ((y * z) * x)", "label": "false"}
+{"id": "normal_0343", "difficulty": "normal", "hypothesis": "x = (y * (x * y)) * (x * y)", "goal": "x = y * (y * (z * (z * z)))", "label": "false"}
+{"id": "normal_0584", "difficulty": "normal", "hypothesis": "x = ((y * z) * w) * (x * u)", "goal": "x = y * (((x * y) * y) * y)", "label": "true"}
+{"id": "normal_0325", "difficulty": "normal", "hypothesis": "x * y = z * ((z * x) * z)", "goal": "x * x = y * (x * x)", "label": "true"}
+{"id": "normal_0447", "difficulty": "normal", "hypothesis": "x = (y * y) * (y * z)", "goal": "x = y * ((x * y) * (z * y))", "label": "true"}
+{"id": "normal_0516", "difficulty": "normal", "hypothesis": "x = (((y * y) * z) * w) * u", "goal": "x * (y * z) = (x * w) * x", "label": "true"}
+{"id": "normal_0914", "difficulty": "normal", "hypothesis": "x * y = ((z * x) * y) * z", "goal": "x = ((x * x) * y) * (x * y)", "label": "false"}
+{"id": "normal_0721", "difficulty": "normal", "hypothesis": "x = y * (y * (x * x))", "goal": "x = (x * ((y * z) * z)) * z", "label": "false"}
+{"id": "normal_0450", "difficulty": "normal", "hypothesis": "x * (x * x) = (y * x) * y", "goal": "x = (y * (y * (z * z))) * x", "label": "false"}
+{"id": "normal_0282", "difficulty": "normal", "hypothesis": "x = x * (((y * z) * z) * w)", "goal": "x * x = (x * (y * z)) * z", "label": "true"}
+{"id": "normal_0943", "difficulty": "normal", "hypothesis": "x = ((y * y) * y) * (y * z)", "goal": "x * x = (x * x) * (x * y)", "label": "true"}
+{"id": "normal_0377", "difficulty": "normal", "hypothesis": "x = ((y * x) * x) * (z * x)", "goal": "x = (x * (y * x)) * (x * y)", "label": "false"}
+{"id": "normal_0915", "difficulty": "normal", "hypothesis": "x = (x * x) * (y * (y * x))", "goal": "x = (y * ((x * x) * y)) * x", "label": "false"}
+{"id": "normal_0908", "difficulty": "normal", "hypothesis": "x = (y * (z * (z * y))) * w", "goal": "(x * y) * z = (y * w) * x", "label": "true"}
+{"id": "normal_0618", "difficulty": "normal", "hypothesis": "x = y * (y * (z * (z * x)))", "goal": "x = (x * y) * (z * x)", "label": "false"}
+{"id": "hard1_0069", "difficulty": "hard", "hypothesis": "x = ((y * y) * z) * x", "goal": "x = y * (y * (z * (w * x)))", "label": "true"}
+{"id": "hard1_0065", "difficulty": "hard", "hypothesis": "x = x * (y * (z * y))", "goal": "x = (x * (x * (x * y))) * x", "label": "true"}
+{"id": "normal_0840", "difficulty": "normal", "hypothesis": "x = ((y * x) * y) * (y * x)", "goal": "x = ((y * y) * (y * z)) * y", "label": "false"}
+{"id": "normal_0461", "difficulty": "normal", "hypothesis": "x = (y * ((z * x) * x)) * z", "goal": "x = x * ((y * z) * (w * z))", "label": "true"}
+{"id": "normal_0051", "difficulty": "normal", "hypothesis": "x = y * ((z * y) * x)", "goal": "x = (y * (x * y)) * (x * z)", "label": "false"}
+{"id": "normal_0949", "difficulty": "normal", "hypothesis": "x = y * ((x * z) * (x * w))", "goal": "x = (y * z) * ((w * z) * z)", "label": "true"}
+{"id": "normal_0249", "difficulty": "normal", "hypothesis": "x * y = ((z * w) * x) * u", "goal": "x = y * (z * ((w * z) * w))", "label": "false"}
+{"id": "normal_0032", "difficulty": "normal", "hypothesis": "x * y = y * (z * (y * z))", "goal": "x * y = y * ((y * z) * z)", "label": "true"}
+{"id": "normal_0946", "difficulty": "normal", "hypothesis": "x = y * (((z * w) * w) * u)", "goal": "x = y * (y * (z * (x * w)))", "label": "true"}
+{"id": "normal_0007", "difficulty": "normal", "hypothesis": "x = (y * z) * (z * (w * z))", "goal": "x * y = z * (w * (y * z))", "label": "true"}
+{"id": "normal_0387", "difficulty": "normal", "hypothesis": "x = (y * z) * ((z * z) * y)", "goal": "x = y * ((x * (z * w)) * w)", "label": "true"}
+{"id": "normal_0291", "difficulty": "normal", "hypothesis": "x = (x * ((y * z) * y)) * z", "goal": "x = y * ((z * z) * (y * x))", "label": "false"}
+{"id": "normal_0319", "difficulty": "normal", "hypothesis": "x = ((y * (y * y)) * z) * w", "goal": "x = (y * (z * (w * w))) * z", "label": "true"}
+{"id": "normal_0434", "difficulty": "normal", "hypothesis": "x = (y * y) * ((y * y) * x)", "goal": "x * y = ((z * w) * x) * w", "label": "false"}
+{"id": "normal_0651", "difficulty": "normal", "hypothesis": "x * x = y * ((y * z) * w)", "goal": "x = (x * x) * (x * x)", "label": "false"}
+{"id": "hard1_0054", "difficulty": "hard", "hypothesis": "x * y = ((z * w) * x) * u", "goal": "x * (y * y) = (x * x) * x", "label": "true"}
+{"id": "normal_0170", "difficulty": "normal", "hypothesis": "x = (y * (y * z)) * (y * z)", "goal": "x = y * (((x * z) * z) * w)", "label": "true"}
+{"id": "normal_0076", "difficulty": "normal", "hypothesis": "x = ((y * z) * (x * w)) * u", "goal": "x = y * (x * x)", "label": "true"}
+{"id": "hard1_0014", "difficulty": "hard", "hypothesis": "x = (y * x) * (x * (x * z))", "goal": "x = y * (z * (z * (x * y)))", "label": "false"}
+{"id": "normal_0827", "difficulty": "normal", "hypothesis": "x = y * ((z * (w * w)) * z)", "goal": "x = (((y * z) * z) * x) * z", "label": "true"}
+{"id": "normal_0510", "difficulty": "normal", "hypothesis": "x = (y * (y * y)) * (y * z)", "goal": "x = ((y * z) * w) * (y * y)", "label": "true"}
+{"id": "normal_0421", "difficulty": "normal", "hypothesis": "x = ((y * z) * w) * (w * z)", "goal": "x = y * ((x * (z * y)) * z)", "label": "true"}
+{"id": "normal_0844", "difficulty": "normal", "hypothesis": "x = (y * (z * x)) * (w * w)", "goal": "x = (x * ((x * x) * y)) * z", "label": "true"}
+{"id": "normal_0689", "difficulty": "normal", "hypothesis": "x * y = (y * (z * w)) * z", "goal": "x = (y * y) * (y * (z * y))", "label": "false"}
+{"id": "normal_0748", "difficulty": "normal", "hypothesis": "x = y * ((z * z) * (x * w))", "goal": "x * y = (z * (w * z)) * y", "label": "true"}
+{"id": "normal_0830", "difficulty": "normal", "hypothesis": "x = y * (((x * x) * x) * y)", "goal": "x = (y * x) * ((z * z) * y)", "label": "false"}
+{"id": "normal_0790", "difficulty": "normal", "hypothesis": "x * (x * y) = (x * z) * y", "goal": "x = ((x * x) * x) * (y * z)", "label": "false"}
+{"id": "normal_0040", "difficulty": "normal", "hypothesis": "x = y * (y * ((y * z) * y))", "goal": "x = (((y * z) * x) * x) * y", "label": "true"}
+{"id": "normal_0456", "difficulty": "normal", "hypothesis": "x = x * (((x * y) * y) * z)", "goal": "x = y * (z * (x * (w * w)))", "label": "false"}
+{"id": "normal_0253", "difficulty": "normal", "hypothesis": "x = ((y * z) * (x * z)) * z", "goal": "x * (y * z) = y * (x * w)", "label": "true"}
+{"id": "normal_0476", "difficulty": "normal", "hypothesis": "x = (y * y) * ((z * x) * y)", "goal": "x * x = (y * (y * x)) * y", "label": "true"}
+{"id": "normal_0333", "difficulty": "normal", "hypothesis": "x = (y * z) * (w * (x * x))", "goal": "x = (x * x) * (y * (x * x))", "label": "true"}
+{"id": "normal_0837", "difficulty": "normal", "hypothesis": "x = ((y * (x * x)) * y) * y", "goal": "x * y = z * ((z * y) * z)", "label": "false"}
+{"id": "normal_0971", "difficulty": "normal", "hypothesis": "x = (y * (x * z)) * (x * x)", "goal": "x * y = y * (x * (z * y))", "label": "false"}
+{"id": "hard1_0003", "difficulty": "hard", "hypothesis": "x = ((y * y) * z) * x", "goal": "x = x * (((y * x) * x) * x)", "label": "true"}
+{"id": "normal_0372", "difficulty": "normal", "hypothesis": "x = y * (z * (y * (w * w)))", "goal": "x * y = (y * (y * x)) * z", "label": "true"}
+{"id": "normal_0039", "difficulty": "normal", "hypothesis": "x = y * (((y * z) * w) * w)", "goal": "x = (y * (y * x)) * (y * y)", "label": "true"}
+{"id": "normal_0130", "difficulty": "normal", "hypothesis": "x = (y * (x * (z * y))) * x", "goal": "x = y * ((y * (z * x)) * z)", "label": "false"}
+{"id": "normal_0243", "difficulty": "normal", "hypothesis": "x = ((y * z) * x) * (z * z)", "goal": "x * y = (z * (y * x)) * x", "label": "true"}
+{"id": "normal_0034", "difficulty": "normal", "hypothesis": "x = ((y * (z * y)) * y) * z", "goal": "x = y * ((z * (w * x)) * z)", "label": "true"}
+{"id": "normal_0900", "difficulty": "normal", "hypothesis": "x * (x * y) = z * (w * x)", "goal": "x = y * (((z * y) * w) * u)", "label": "false"}
+{"id": "normal_0796", "difficulty": "normal", "hypothesis": "x * (y * z) = (z * y) * x", "goal": "x = x * (y * (y * (x * z)))", "label": "false"}
+{"id": "normal_0048", "difficulty": "normal", "hypothesis": "x = (y * z) * (w * (y * y))", "goal": "x = x * (((x * y) * x) * z)", "label": "true"}
+{"id": "normal_0895", "difficulty": "normal", "hypothesis": "x = (y * ((z * z) * y)) * z", "goal": "x * (y * z) = (w * x) * x", "label": "true"}
+{"id": "normal_0463", "difficulty": "normal", "hypothesis": "x = ((y * (z * x)) * w) * w", "goal": "x = y * (((z * w) * w) * y)", "label": "true"}
+{"id": "normal_0036", "difficulty": "normal", "hypothesis": "x * x = ((x * y) * y) * y", "goal": "x * x = y * (x * (y * y))", "label": "false"}
+{"id": "normal_0234", "difficulty": "normal", "hypothesis": "x = (y * (y * (z * z))) * w", "goal": "x * x = (y * z) * (z * z)", "label": "true"}
+{"id": "normal_0471", "difficulty": "normal", "hypothesis": "x = ((y * z) * w) * (x * w)", "goal": "x = x * (y * (y * (z * y)))", "label": "true"}
+{"id": "normal_0444", "difficulty": "normal", "hypothesis": "x = (x * y) * (z * (x * x))", "goal": "x * (y * y) = (z * w) * w", "label": "false"}
+{"id": "normal_0251", "difficulty": "normal", "hypothesis": "x = ((y * x) * (x * y)) * y", "goal": "x * x = x * y", "label": "false"}
+{"id": "normal_0552", "difficulty": "normal", "hypothesis": "x = (x * ((x * x) * y)) * x", "goal": "x * x = y * (z * (y * w))", "label": "false"}
+{"id": "normal_0973", "difficulty": "normal", "hypothesis": "x = x * (y * ((z * w) * u))", "goal": "(x * x) * y = (x * y) * z", "label": "true"}
+{"id": "hard1_0043", "difficulty": "hard", "hypothesis": "x * x = y * (x * (z * w))", "goal": "x * x = y * ((x * x) * z)", "label": "false"}
+{"id": "normal_0833", "difficulty": "normal", "hypothesis": "x * x = y * (z * z)", "goal": "x = y * (x * (z * (z * w)))", "label": "false"}
+{"id": "normal_0010", "difficulty": "normal", "hypothesis": "x * y = (z * w) * (w * z)", "goal": "(x * x) * y = (y * x) * x", "label": "true"}
+{"id": "normal_0612", "difficulty": "normal", "hypothesis": "x * (y * z) = (y * z) * w", "goal": "x = (x * x) * (y * (y * y))", "label": "false"}
+{"id": "normal_0026", "difficulty": "normal", "hypothesis": "x = ((x * y) * z) * (z * w)", "goal": "x = x * (((x * x) * y) * x)", "label": "false"}
+{"id": "normal_0566", "difficulty": "normal", "hypothesis": "x * y = z * (w * (u * x))", "goal": "x * y = z * (y * (y * w))", "label": "true"}
+{"id": "normal_0232", "difficulty": "normal", "hypothesis": "x = (y * ((x * z) * y)) * y", "goal": "x = (y * (x * z)) * (x * w)", "label": "true"}
+{"id": "hard1_0064", "difficulty": "hard", "hypothesis": "x = x * ((y * z) * (z * z))", "goal": "x = (x * ((y * y) * x)) * x", "label": "true"}
+{"id": "hard1_0041", "difficulty": "hard", "hypothesis": "x = (((y * x) * y) * z) * x", "goal": "x * y = z * (w * (z * y))", "label": "true"}
+{"id": "hard1_0020", "difficulty": "hard", "hypothesis": "x * (y * z) = (x * x) * z", "goal": "x * (y * z) = (y * y) * x", "label": "false"}
+{"id": "normal_0600", "difficulty": "normal", "hypothesis": "x = (y * y) * (z * (y * w))", "goal": "x = (y * (y * (z * w))) * w", "label": "true"}
+{"id": "normal_0798", "difficulty": "normal", "hypothesis": "x = y * ((x * (z * w)) * y)", "goal": "x = y * ((y * z) * (w * z))", "label": "true"}
+{"id": "normal_0438", "difficulty": "normal", "hypothesis": "x = (y * z) * (w * u)", "goal": "x = ((x * y) * x) * (z * z)", "label": "true"}
+{"id": "normal_0987", "difficulty": "normal", "hypothesis": "x * (y * z) = (w * z) * w", "goal": "x * y = z * ((w * z) * u)", "label": "false"}
+{"id": "normal_0643", "difficulty": "normal", "hypothesis": "x * y = y * ((y * y) * x)", "goal": "x = ((x * y) * x) * (z * x)", "label": "false"}
+{"id": "normal_0118", "difficulty": "normal", "hypothesis": "x = (y * ((z * w) * z)) * z", "goal": "x = x * (x * (y * (z * y)))", "label": "true"}
+{"id": "normal_0413", "difficulty": "normal", "hypothesis": "x = (y * (z * (y * w))) * u", "goal": "x = y * ((z * (w * w)) * x)", "label": "true"}
+{"id": "normal_0615", "difficulty": "normal", "hypothesis": "x = y * ((z * (z * z)) * z)", "goal": "x = y * ((x * y) * (x * y))", "label": "true"}
+{"id": "normal_0350", "difficulty": "normal", "hypothesis": "x = (x * y) * ((y * x) * x)", "goal": "x = y * (((y * z) * w) * y)", "label": "false"}
+{"id": "normal_0989", "difficulty": "normal", "hypothesis": "x = x * (((y * z) * z) * x)", "goal": "x * (x * x) = y * (y * x)", "label": "false"}
+{"id": "normal_0959", "difficulty": "normal", "hypothesis": "x = y * (((z * x) * z) * w)", "goal": "x * y = y * ((z * z) * y)", "label": "true"}
+{"id": "hard1_0010", "difficulty": "hard", "hypothesis": "(x * x) * y = (y * y) * z", "goal": "x * (y * y) = x * (z * z)", "label": "false"}
+{"id": "normal_0009", "difficulty": "normal", "hypothesis": "x = y * (((z * z) * w) * y)", "goal": "x * y = (y * z) * (x * z)", "label": "true"}
+{"id": "normal_0996", "difficulty": "normal", "hypothesis": "x * y = x * (z * (z * z))", "goal": "x = ((y * x) * z) * (w * w)", "label": "false"}
+{"id": "normal_0873", "difficulty": "normal", "hypothesis": "x = (((y * y) * y) * y) * y", "goal": "x * (y * z) = (y * w) * u", "label": "true"}
+{"id": "normal_0846", "difficulty": "normal", "hypothesis": "x = ((x * (x * y)) * z) * w", "goal": "x = (y * ((y * x) * z)) * y", "label": "false"}
+{"id": "normal_0811", "difficulty": "normal", "hypothesis": "x = y * ((x * z) * (w * u))", "goal": "x = (y * ((z * x) * x)) * w", "label": "true"}
+{"id": "normal_0504", "difficulty": "normal", "hypothesis": "x * y = (z * z) * (w * w)", "goal": "x * x = (x * (x * y)) * x", "label": "true"}
+{"id": "normal_0448", "difficulty": "normal", "hypothesis": "x = (y * y) * (z * z)", "goal": "x * y = ((z * x) * y) * z", "label": "true"}
+{"id": "normal_0722", "difficulty": "normal", "hypothesis": "x = x * ((y * (z * w)) * x)", "goal": "x = (x * x) * ((x * x) * y)", "label": "false"}
+{"id": "normal_0804", "difficulty": "normal", "hypothesis": "(x * y) * x = (y * z) * w", "goal": "x = (y * ((z * z) * y)) * y", "label": "false"}
+{"id": "normal_0220", "difficulty": "normal", "hypothesis": "x * y = (z * x) * (w * w)", "goal": "x = y * (y * ((z * y) * w))", "label": "false"}
+{"id": "normal_0983", "difficulty": "normal", "hypothesis": "x = (y * z) * (y * w)", "goal": "x = y * (z * (y * (y * x)))", "label": "true"}
+{"id": "normal_0263", "difficulty": "normal", "hypothesis": "x = y * (y * (x * (x * z)))", "goal": "x = ((y * x) * y) * x", "label": "true"}
+{"id": "normal_0425", "difficulty": "normal", "hypothesis": "x * (y * z) = (y * y) * x", "goal": "x = (y * ((z * y) * y)) * z", "label": "false"}
+{"id": "normal_0023", "difficulty": "normal", "hypothesis": "x = (y * (x * (z * x))) * y", "goal": "x * y = x * ((z * w) * z)", "label": "true"}
+{"id": "normal_0963", "difficulty": "normal", "hypothesis": "x = x * (x * ((y * y) * y))", "goal": "x = y * ((x * y) * (z * w))", "label": "false"}
+{"id": "normal_0330", "difficulty": "normal", "hypothesis": "x = (((y * x) * y) * x) * z", "goal": "x = (y * z) * ((z * w) * w)", "label": "true"}
+{"id": "normal_0317", "difficulty": "normal", "hypothesis": "x = ((y * x) * (y * z)) * w", "goal": "x = (x * x) * ((x * x) * y)", "label": "true"}
+{"id": "normal_0976", "difficulty": "normal", "hypothesis": "x = (y * (y * y)) * x", "goal": "x = y * ((z * x) * (z * z))", "label": "false"}
+{"id": "normal_0146", "difficulty": "normal", "hypothesis": "x = y * ((z * w) * (u * v))", "goal": "x = (y * (y * (z * w))) * u", "label": "true"}
+{"id": "hard1_0059", "difficulty": "hard", "hypothesis": "x = ((y * z) * z) * x", "goal": "x = x * ((y * (y * x)) * x)", "label": "true"}
+{"id": "normal_0639", "difficulty": "normal", "hypothesis": "x = x * (x * (x * (y * z)))", "goal": "x = (y * (z * (x * y))) * x", "label": "false"}
+{"id": "normal_0369", "difficulty": "normal", "hypothesis": "x = (y * (z * w)) * x", "goal": "x = (x * ((x * y) * z)) * z", "label": "false"}
+{"id": "normal_0610", "difficulty": "normal", "hypothesis": "x = ((y * x) * z) * w", "goal": "x * y = z * (y * (z * y))", "label": "true"}
+{"id": "normal_0392", "difficulty": "normal", "hypothesis": "x = y * ((z * (z * x)) * z)", "goal": "x * (x * y) = (z * w) * u", "label": "true"}
+{"id": "normal_0775", "difficulty": "normal", "hypothesis": "x * y = z * ((z * y) * z)", "goal": "x = (y * z) * ((w * x) * w)", "label": "false"}
+{"id": "normal_0810", "difficulty": "normal", "hypothesis": "x = (x * y) * (z * (x * x))", "goal": "x = (y * (x * (z * z))) * y", "label": "false"}
+{"id": "normal_0630", "difficulty": "normal", "hypothesis": "x = x * (x * ((y * z) * w))", "goal": "x = ((y * y) * (y * y)) * x", "label": "false"}
+{"id": "normal_0367", "difficulty": "normal", "hypothesis": "x = (x * (y * (z * y))) * w", "goal": "x * (y * z) = (x * x) * x", "label": "false"}
+{"id": "normal_0337", "difficulty": "normal", "hypothesis": "x = ((x * (x * x)) * y) * z", "goal": "x = (y * ((y * z) * z)) * y", "label": "false"}
+{"id": "normal_0990", "difficulty": "normal", "hypothesis": "x * (y * y) = (z * x) * x", "goal": "x * x = ((x * y) * z) * w", "label": "false"}
+{"id": "hard1_0035", "difficulty": "hard", "hypothesis": "x = x * ((y * z) * (w * u))", "goal": "x = (x * (x * (y * x))) * x", "label": "true"}
+{"id": "normal_0554", "difficulty": "normal", "hypothesis": "x = y * ((z * (z * y)) * x)", "goal": "x = y * (y * (x * (z * w)))", "label": "false"}
+{"id": "normal_0705", "difficulty": "normal", "hypothesis": "x * x = ((x * x) * y) * z", "goal": "x = (x * (y * y)) * (y * x)", "label": "false"}
+{"id": "normal_0489", "difficulty": "normal", "hypothesis": "x = ((y * z) * (z * z)) * w", "goal": "x = ((y * x) * x) * (z * x)", "label": "true"}
+{"id": "normal_0945", "difficulty": "normal", "hypothesis": "x = ((y * y) * (z * w)) * w", "goal": "x = (y * (x * (y * z))) * z", "label": "true"}
+{"id": "normal_0323", "difficulty": "normal", "hypothesis": "x = (y * (z * (w * w))) * u", "goal": "x = (y * (z * z)) * (z * z)", "label": "true"}
+{"id": "normal_0686", "difficulty": "normal", "hypothesis": "x * y = z * (z * (x * x))", "goal": "x * y = (z * y) * (z * z)", "label": "true"}
+{"id": "normal_0678", "difficulty": "normal", "hypothesis": "x * (x * x) = x * (y * z)", "goal": "x = y * ((y * x) * (z * w))", "label": "false"}
+{"id": "normal_0551", "difficulty": "normal", "hypothesis": "x = y * (x * z)", "goal": "x = (y * y) * (y * (x * z))", "label": "true"}
+{"id": "hard1_0034", "difficulty": "hard", "hypothesis": "x * y = (y * x) * z", "goal": "x * y = z * ((w * y) * y)", "label": "true"}
+{"id": "normal_0717", "difficulty": "normal", "hypothesis": "x * x = y * (x * (z * w))", "goal": "x * y = (y * (z * x)) * z", "label": "false"}
+{"id": "normal_0301", "difficulty": "normal", "hypothesis": "(x * y) * y = (y * z) * z", "goal": "x * (y * z) = (z * y) * x", "label": "false"}
+{"id": "normal_0646", "difficulty": "normal", "hypothesis": "x = (y * (z * w)) * (u * v)", "goal": "x = (y * (z * (w * x))) * z", "label": "true"}
+{"id": "normal_0074", "difficulty": "normal", "hypothesis": "x * y = (z * (w * x)) * z", "goal": "x = y * (z * (z * (z * x)))", "label": "false"}
+{"id": "normal_0046", "difficulty": "normal", "hypothesis": "x = (y * (x * z)) * (y * x)", "goal": "x = (y * y) * ((y * z) * x)", "label": "true"}
+{"id": "normal_0419", "difficulty": "normal", "hypothesis": "x = y * ((z * w) * u)", "goal": "x * y = (x * (z * z)) * w", "label": "true"}
+{"id": "normal_0136", "difficulty": "normal", "hypothesis": "x = (y * z) * (w * (u * y))", "goal": "x = (y * ((z * y) * z)) * z", "label": "true"}
+{"id": "normal_0047", "difficulty": "normal", "hypothesis": "x * x = y * (y * y)", "goal": "x = (x * y) * ((x * z) * x)", "label": "false"}
+{"id": "normal_0003", "difficulty": "normal", "hypothesis": "x = x * (y * ((z * x) * x))", "goal": "x = (y * ((z * z) * y)) * w", "label": "false"}
+{"id": "normal_0782", "difficulty": "normal", "hypothesis": "x = (y * ((y * y) * y)) * y", "goal": "x * y = z * ((w * y) * u)", "label": "true"}
+{"id": "normal_0843", "difficulty": "normal", "hypothesis": "x = (y * z) * ((w * w) * z)", "goal": "x = (y * x) * ((z * z) * w)", "label": "true"}
+{"id": "normal_0128", "difficulty": "normal", "hypothesis": "x * x = (x * y) * (z * x)", "goal": "(x * y) * x = (z * x) * y", "label": "false"}
+{"id": "normal_0103", "difficulty": "normal", "hypothesis": "x = (y * (z * z)) * z", "goal": "x = y * (x * ((z * w) * u))", "label": "true"}
+{"id": "normal_0336", "difficulty": "normal", "hypothesis": "x = ((y * z) * (w * x)) * u", "goal": "x * y = (z * (x * y)) * w", "label": "true"}
+{"id": "normal_0815", "difficulty": "normal", "hypothesis": "x = x * ((y * (y * x)) * z)", "goal": "x = ((y * z) * (w * x)) * z", "label": "false"}
+{"id": "normal_0981", "difficulty": "normal", "hypothesis": "x = (y * y) * ((y * y) * z)", "goal": "x = x * ((x * (y * y)) * z)", "label": "true"}
+{"id": "normal_0244", "difficulty": "normal", "hypothesis": "x = x * ((y * x) * (x * z))", "goal": "x = x * ((y * (y * z)) * w)", "label": "false"}
+{"id": "normal_0043", "difficulty": "normal", "hypothesis": "x = x * ((x * (y * x)) * z)", "goal": "x * y = (y * (x * y)) * y", "label": "false"}
+{"id": "normal_0919", "difficulty": "normal", "hypothesis": "x = y * (((x * y) * z) * w)", "goal": "(x * y) * y = (z * x) * w", "label": "true"}
+{"id": "normal_0803", "difficulty": "normal", "hypothesis": "x * y = (z * y) * (y * y)", "goal": "x * y = (z * (x * y)) * z", "label": "false"}
+{"id": "hard1_0056", "difficulty": "hard", "hypothesis": "x = (y * (y * z)) * (w * x)", "goal": "x = y * (z * (w * (u * x)))", "label": "true"}
+{"id": "normal_0808", "difficulty": "normal", "hypothesis": "x = ((x * (y * z)) * w) * w", "goal": "x = ((y * (x * z)) * w) * w", "label": "false"}
+{"id": "normal_0755", "difficulty": "normal", "hypothesis": "x * y = (y * x) * (z * w)", "goal": "x * x = (x * y) * (y * x)", "label": "true"}
+{"id": "normal_0112", "difficulty": "normal", "hypothesis": "x = y * ((z * w) * u)", "goal": "x = x * (((y * x) * x) * z)", "label": "true"}
+{"id": "normal_0774", "difficulty": "normal", "hypothesis": "x = y * (z * (z * (w * z)))", "goal": "x = y * (x * (z * (w * z)))", "label": "true"}
+{"id": "normal_0508", "difficulty": "normal", "hypothesis": "x = (((y * z) * y) * z) * w", "goal": "x = (((y * x) * z) * z) * z", "label": "true"}
+{"id": "normal_0560", "difficulty": "normal", "hypothesis": "x = y * (z * ((z * x) * y))", "goal": "x = y * (((z * z) * w) * u)", "label": "false"}
+{"id": "normal_0648", "difficulty": "normal", "hypothesis": "x = y * (z * (y * (w * w)))", "goal": "x = (y * (y * (z * y))) * w", "label": "true"}
+{"id": "normal_0542", "difficulty": "normal", "hypothesis": "x * x = (x * y) * (x * z)", "goal": "x * x = (y * x) * (x * y)", "label": "false"}
+{"id": "normal_0281", "difficulty": "normal", "hypothesis": "x = (y * z) * ((y * z) * z)", "goal": "x = (y * (y * (z * x))) * w", "label": "true"}
+{"id": "normal_1000", "difficulty": "normal", "hypothesis": "x = y * (y * (z * (y * y)))", "goal": "x = ((x * (y * z)) * x) * w", "label": "true"}
+{"id": "normal_0901", "difficulty": "normal", "hypothesis": "x = y * ((z * y) * (w * z))", "goal": "x * y = (y * (y * x)) * z", "label": "true"}
+{"id": "normal_0879", "difficulty": "normal", "hypothesis": "x = ((y * z) * z) * (y * w)", "goal": "x = y * ((z * x) * x)", "label": "true"}
+{"id": "normal_0938", "difficulty": "normal", "hypothesis": "x = y * (((z * x) * y) * w)", "goal": "x = y * (y * (y * y))", "label": "true"}
+{"id": "normal_0794", "difficulty": "normal", "hypothesis": "x = x * ((y * (z * y)) * x)", "goal": "x * y = y * (z * x)", "label": "false"}
+{"id": "normal_0138", "difficulty": "normal", "hypothesis": "x = y * ((x * x) * z)", "goal": "x * (y * z) = (w * w) * u", "label": "true"}
+{"id": "normal_0081", "difficulty": "normal", "hypothesis": "x = (y * y) * ((y * y) * y)", "goal": "x * y = (x * y) * (z * z)", "label": "true"}
+{"id": "normal_0599", "difficulty": "normal", "hypothesis": "x * y = ((x * x) * x) * z", "goal": "x * y = x * ((z * y) * x)", "label": "true"}
+{"id": "normal_0512", "difficulty": "normal", "hypothesis": "x * (x * y) = (z * y) * x", "goal": "(x * y) * x = (z * y) * z", "label": "false"}
+{"id": "normal_0820", "difficulty": "normal", "hypothesis": "x = y * (x * ((y * x) * z))", "goal": "x = (y * ((x * z) * x)) * x", "label": "true"}
+{"id": "normal_0816", "difficulty": "normal", "hypothesis": "x = (y * ((x * x) * x)) * z", "goal": "(x * x) * y = (y * x) * y", "label": "true"}
+{"id": "normal_0355", "difficulty": "normal", "hypothesis": "x = y * ((x * z) * (z * z))", "goal": "(x * x) * x = (y * y) * y", "label": "true"}
+{"id": "normal_0553", "difficulty": "normal", "hypothesis": "x = (y * ((z * w) * w)) * w", "goal": "x = x * (((y * z) * x) * w)", "label": "true"}
+{"id": "hard1_0023", "difficulty": "hard", "hypothesis": "x = (x * y) * (z * z)", "goal": "x * x = x * ((y * z) * w)", "label": "true"}
+{"id": "normal_0676", "difficulty": "normal", "hypothesis": "x = y * (((y * z) * z) * x)", "goal": "x = (x * y) * (y * (x * y))", "label": "false"}
+{"id": "normal_0344", "difficulty": "normal", "hypothesis": "x = ((y * y) * x) * (z * z)", "goal": "x = ((y * z) * (y * z)) * y", "label": "false"}
+{"id": "normal_0841", "difficulty": "normal", "hypothesis": "x = (x * (x * (x * x))) * y", "goal": "x * y = z * ((z * z) * z)", "label": "false"}
+{"id": "normal_0446", "difficulty": "normal", "hypothesis": "x = y * ((y * y) * x)", "goal": "x = ((y * x) * (z * z)) * x", "label": "false"}
+{"id": "normal_0661", "difficulty": "normal", "hypothesis": "x = (y * (x * (y * x))) * x", "goal": "x = y * ((z * w) * (z * w))", "label": "false"}
+{"id": "normal_0690", "difficulty": "normal", "hypothesis": "x * x = (y * (z * w)) * u", "goal": "x = ((y * (x * x)) * y) * z", "label": "false"}
+{"id": "normal_0742", "difficulty": "normal", "hypothesis": "x = (((y * z) * w) * u) * w", "goal": "x = (y * (z * (x * y))) * w", "label": "true"}
+{"id": "normal_0753", "difficulty": "normal", "hypothesis": "x = y * (z * (y * (y * z)))", "goal": "x = y * (((x * x) * x) * y)", "label": "true"}
+{"id": "normal_0654", "difficulty": "normal", "hypothesis": "x * y = (z * w) * (x * x)", "goal": "x * y = x * ((z * y) * z)", "label": "true"}
+{"id": "hard1_0016", "difficulty": "hard", "hypothesis": "x = (x * y) * (x * (y * z))", "goal": "x = (x * y) * (x * (z * y))", "label": "false"}
+{"id": "normal_0532", "difficulty": "normal", "hypothesis": "x = ((y * z) * (w * z)) * x", "goal": "x = y * (z * ((x * y) * z))", "label": "false"}
+{"id": "normal_0733", "difficulty": "normal", "hypothesis": "x = y * (y * ((y * y) * y))", "goal": "x = (x * ((x * y) * y)) * y", "label": "true"}
+{"id": "normal_0682", "difficulty": "normal", "hypothesis": "x = y * ((z * (x * w)) * w)", "goal": "x * y = z * ((x * w) * u)", "label": "true"}
+{"id": "normal_0380", "difficulty": "normal", "hypothesis": "x = (x * (y * z)) * (z * z)", "goal": "x * (x * y) = z * (w * x)", "label": "false"}
+{"id": "normal_0321", "difficulty": "normal", "hypothesis": "x = (((y * y) * z) * w) * x", "goal": "x = (y * (z * y)) * (y * x)", "label": "true"}
+{"id": "normal_0037", "difficulty": "normal", "hypothesis": "x = (y * (z * w)) * (z * y)", "goal": "x = ((y * (z * z)) * w) * z", "label": "true"}
+{"id": "normal_0008", "difficulty": "normal", "hypothesis": "x = ((x * x) * (y * y)) * y", "goal": "x * (y * x) = z * (x * w)", "label": "false"}
+{"id": "normal_0966", "difficulty": "normal", "hypothesis": "x = y * ((y * (y * z)) * z)", "goal": "x * y = ((y * z) * z) * y", "label": "true"}
+{"id": "hard1_0001", "difficulty": "hard", "hypothesis": "x = y * (y * ((x * y) * x))", "goal": "x * y = ((z * x) * w) * y", "label": "false"}
+{"id": "hard1_0047", "difficulty": "hard", "hypothesis": "x = (y * x) * (x * (z * z))", "goal": "x = y * ((y * x) * (z * y))", "label": "false"}
+{"id": "normal_0178", "difficulty": "normal", "hypothesis": "x = x * ((x * x) * (y * y))", "goal": "x = (y * (z * (x * z))) * x", "label": "false"}
+{"id": "normal_0635", "difficulty": "normal", "hypothesis": "x * y = (z * w) * (x * z)", "goal": "x * (x * y) = (y * y) * x", "label": "true"}
+{"id": "normal_0072", "difficulty": "normal", "hypothesis": "x = ((y * (z * y)) * w) * x", "goal": "x = (x * (y * (z * z))) * x", "label": "true"}
+{"id": "normal_0326", "difficulty": "normal", "hypothesis": "x = x * (y * ((y * z) * y))", "goal": "x = ((x * (x * y)) * y) * x", "label": "false"}
+{"id": "normal_0769", "difficulty": "normal", "hypothesis": "x = (x * y) * (x * (z * z))", "goal": "x = (y * (z * w)) * (y * w)", "label": "false"}
+{"id": "normal_0362", "difficulty": "normal", "hypothesis": "x * y = (z * w) * w", "goal": "(x * y) * y = (y * x) * z", "label": "true"}
+{"id": "normal_0593", "difficulty": "normal", "hypothesis": "x * y = (x * (y * x)) * x", "goal": "x * (y * y) = z * (y * x)", "label": "false"}
+{"id": "hard1_0038", "difficulty": "hard", "hypothesis": "x * y = (x * (x * y)) * z", "goal": "x * y = x * (z * (y * y))", "label": "false"}
+{"id": "hard1_0046", "difficulty": "hard", "hypothesis": "x * y = y * ((x * y) * z)", "goal": "x * x = y * (y * (y * y))", "label": "true"}
+{"id": "normal_0176", "difficulty": "normal", "hypothesis": "x = ((y * x) * x) * (y * y)", "goal": "(x * y) * x = (z * x) * y", "label": "false"}
+{"id": "normal_0236", "difficulty": "normal", "hypothesis": "x = x * (((x * y) * x) * y)", "goal": "(x * x) * y = (z * x) * y", "label": "false"}
+{"id": "normal_0221", "difficulty": "normal", "hypothesis": "x = x * (y * (x * (z * w)))", "goal": "x = (x * y) * ((x * z) * y)", "label": "true"}
+{"id": "normal_0316", "difficulty": "normal", "hypothesis": "x = y * (z * (w * (w * y)))", "goal": "x = (x * y) * (x * y)", "label": "true"}
+{"id": "normal_0403", "difficulty": "normal", "hypothesis": "x = x * ((y * x) * (x * y))", "goal": "x = ((y * (z * y)) * y) * x", "label": "false"}
+{"id": "normal_0667", "difficulty": "normal", "hypothesis": "x = (y * (z * (y * z))) * x", "goal": "x = ((y * (z * x)) * w) * w", "label": "false"}
+{"id": "normal_0443", "difficulty": "normal", "hypothesis": "x * y = ((x * x) * z) * x", "goal": "x = (y * z) * ((x * w) * u)", "label": "false"}
+{"id": "normal_0665", "difficulty": "normal", "hypothesis": "x = y * ((z * (y * y)) * w)", "goal": "x = ((y * x) * y) * z", "label": "true"}
+{"id": "normal_0772", "difficulty": "normal", "hypothesis": "x = (y * (y * (z * z))) * w", "goal": "x = (y * y) * (x * y)", "label": "true"}
+{"id": "normal_0252", "difficulty": "normal", "hypothesis": "x = y * (z * ((y * y) * z))", "goal": "x * y = z * (x * (z * z))", "label": "true"}
+{"id": "normal_0487", "difficulty": "normal", "hypothesis": "x * (y * z) = (z * z) * y", "goal": "x = (y * y) * (y * (z * z))", "label": "false"}
+{"id": "normal_0195", "difficulty": "normal", "hypothesis": "x = y * ((z * w) * (w * y))", "goal": "x = (y * x) * ((y * z) * y)", "label": "true"}
+{"id": "normal_0649", "difficulty": "normal", "hypothesis": "x = y * ((y * (y * x)) * z)", "goal": "(x * y) * z = (y * z) * w", "label": "true"}
+{"id": "normal_0728", "difficulty": "normal", "hypothesis": "x = ((y * z) * w) * x", "goal": "x = (y * x) * (y * (x * x))", "label": "true"}
+{"id": "normal_0016", "difficulty": "normal", "hypothesis": "(x * y) * z = (z * y) * x", "goal": "x * (y * x) = (x * z) * y", "label": "false"}
+{"id": "normal_0038", "difficulty": "normal", "hypothesis": "x = (y * y) * (z * (z * z))", "goal": "x = x * (x * (y * (y * x)))", "label": "true"}
+{"id": "normal_0257", "difficulty": "normal", "hypothesis": "x = y * (z * (z * (x * z)))", "goal": "x = y * (y * ((y * z) * x))", "label": "true"}
+{"id": "normal_0960", "difficulty": "normal", "hypothesis": "x = (x * (y * z)) * (z * x)", "goal": "x = (y * (z * (x * z))) * z", "label": "false"}
+{"id": "normal_0958", "difficulty": "normal", "hypothesis": "x * y = z * ((z * z) * z)", "goal": "x = y * ((z * (y * w)) * z)", "label": "false"}
+{"id": "normal_0278", "difficulty": "normal", "hypothesis": "x = (((y * x) * z) * x) * w", "goal": "x = y * (z * (z * (w * x)))", "label": "true"}
+{"id": "normal_0745", "difficulty": "normal", "hypothesis": "(x * y) * x = (y * z) * w", "goal": "x * y = x * (x * (x * y))", "label": "false"}
+{"id": "normal_0513", "difficulty": "normal", "hypothesis": "x = x * (y * ((z * y) * x))", "goal": "x = x * ((y * z) * w)", "label": "false"}
+{"id": "normal_0957", "difficulty": "normal", "hypothesis": "(x * x) * y = (z * x) * y", "goal": "x = ((y * z) * (w * u)) * z", "label": "false"}
+{"id": "normal_0297", "difficulty": "normal", "hypothesis": "x = (y * (y * (y * z))) * z", "goal": "x * y = ((x * z) * w) * w", "label": "true"}
+{"id": "normal_0819", "difficulty": "normal", "hypothesis": "x = y * (x * ((y * y) * y))", "goal": "x * y = (z * x) * y", "label": "false"}
+{"id": "normal_0313", "difficulty": "normal", "hypothesis": "x = (y * (z * (x * w))) * z", "goal": "x = ((y * x) * (z * z)) * w", "label": "true"}
+{"id": "normal_0832", "difficulty": "normal", "hypothesis": "x = ((x * x) * y) * (y * z)", "goal": "x * x = ((x * x) * y) * x", "label": "false"}
+{"id": "normal_0207", "difficulty": "normal", "hypothesis": "x * x = y * (x * (y * z))", "goal": "x * y = (z * (y * z)) * x", "label": "false"}
+{"id": "normal_0578", "difficulty": "normal", "hypothesis": "x * y = z * (x * (w * u))", "goal": "x * y = (x * z) * (w * z)", "label": "true"}
+{"id": "normal_0052", "difficulty": "normal", "hypothesis": "x * y = z * (z * (w * u))", "goal": "x = (((y * y) * x) * z) * y", "label": "false"}
+{"id": "normal_0269", "difficulty": "normal", "hypothesis": "x = y * (z * (x * (y * x)))", "goal": "x * y = z * (y * (w * x))", "label": "false"}
+{"id": "normal_0608", "difficulty": "normal", "hypothesis": "x = ((x * y) * x) * (z * x)", "goal": "x * (y * x) = (x * x) * z", "label": "false"}
+{"id": "normal_0862", "difficulty": "normal", "hypothesis": "x = y * (y * (y * (z * y)))", "goal": "x * x = y * (z * (w * y))", "label": "true"}
+{"id": "normal_0245", "difficulty": "normal", "hypothesis": "x * y = (x * (y * x)) * z", "goal": "x = (x * (y * y)) * (x * y)", "label": "false"}
+{"id": "normal_0807", "difficulty": "normal", "hypothesis": "x = (y * ((x * x) * z)) * x", "goal": "x * y = (y * (x * y)) * z", "label": "false"}
+{"id": "normal_0045", "difficulty": "normal", "hypothesis": "x * y = x * (x * x)", "goal": "x * y = (x * x) * y", "label": "false"}
+{"id": "normal_0655", "difficulty": "normal", "hypothesis": "x = (((y * x) * y) * z) * z", "goal": "x = y * (x * ((x * y) * z))", "label": "false"}
+{"id": "normal_0275", "difficulty": "normal", "hypothesis": "x = (y * z) * (w * (y * y))", "goal": "x = (y * x) * (x * z)", "label": "true"}
+{"id": "normal_0428", "difficulty": "normal", "hypothesis": "x = y * (y * ((y * z) * z))", "goal": "x = y * (z * ((w * y) * x))", "label": "true"}
+{"id": "normal_0902", "difficulty": "normal", "hypothesis": "x = (y * (y * (z * y))) * z", "goal": "x * y = (x * (z * y)) * x", "label": "true"}
+{"id": "normal_0012", "difficulty": "normal", "hypothesis": "x * x = (y * (x * y)) * y", "goal": "x * y = z * (z * (y * y))", "label": "false"}
+{"id": "normal_0465", "difficulty": "normal", "hypothesis": "x = y * (z * ((w * x) * w))", "goal": "x = (y * z) * (w * (u * w))", "label": "true"}
+{"id": "normal_0631", "difficulty": "normal", "hypothesis": "x = ((y * x) * (z * z)) * x", "goal": "x = (x * (y * (y * y))) * z", "label": "false"}
+{"id": "normal_0271", "difficulty": "normal", "hypothesis": "x = (x * (y * x)) * y", "goal": "x = (((y * z) * z) * w) * x", "label": "false"}
+{"id": "normal_0866", "difficulty": "normal", "hypothesis": "x * y = (z * (w * y)) * u", "goal": "x * y = x * ((y * x) * z)", "label": "true"}
+{"id": "normal_0228", "difficulty": "normal", "hypothesis": "x * (y * x) = y * (z * y)", "goal": "x = (y * y) * (x * (y * z))", "label": "false"}
+{"id": "normal_0086", "difficulty": "normal", "hypothesis": "x = (y * y) * (z * (z * z))", "goal": "x = (((x * y) * y) * y) * x", "label": "true"}
+{"id": "normal_0267", "difficulty": "normal", "hypothesis": "x * y = x * (y * (y * y))", "goal": "x = ((x * x) * (y * z)) * x", "label": "false"}
+{"id": "normal_0091", "difficulty": "normal", "hypothesis": "x = (y * ((y * x) * z)) * w", "goal": "x * y = z * ((y * x) * x)", "label": "true"}
+{"id": "normal_0018", "difficulty": "normal", "hypothesis": "x = y * ((x * (x * y)) * z)", "goal": "x = y * (z * ((x * y) * w))", "label": "true"}
+{"id": "normal_0276", "difficulty": "normal", "hypothesis": "x = ((y * z) * (w * w)) * x", "goal": "x = y * (z * (z * (w * x)))", "label": "false"}
+{"id": "normal_0680", "difficulty": "normal", "hypothesis": "x * y = y * ((x * y) * x)", "goal": "x = (y * (y * z)) * (y * w)", "label": "false"}
+{"id": "normal_0436", "difficulty": "normal", "hypothesis": "x = ((y * z) * w) * (y * u)", "goal": "x = y * ((x * y) * (y * y))", "label": "true"}
+{"id": "normal_0967", "difficulty": "normal", "hypothesis": "x = y * (z * ((w * u) * y))", "goal": "x = y * ((y * z) * (y * x))", "label": "true"}
+{"id": "normal_0961", "difficulty": "normal", "hypothesis": "x = ((y * y) * z) * (z * x)", "goal": "x = (y * ((x * x) * z)) * w", "label": "false"}
+{"id": "normal_0920", "difficulty": "normal", "hypothesis": "x = y * ((z * y) * (y * w))", "goal": "x = y * (((x * x) * x) * y)", "label": "true"}
+{"id": "normal_0092", "difficulty": "normal", "hypothesis": "x = (y * ((z * x) * w)) * z", "goal": "x = x * (y * (y * (z * z)))", "label": "true"}
+{"id": "normal_0335", "difficulty": "normal", "hypothesis": "x = y * (x * (x * y))", "goal": "x = (x * (y * (y * z))) * w", "label": "false"}
+{"id": "hard1_0012", "difficulty": "hard", "hypothesis": "(x * y) * x = (z * w) * u", "goal": "x * (x * x) = x * (y * y)", "label": "false"}
+{"id": "normal_0606", "difficulty": "normal", "hypothesis": "x = (y * (z * (w * u))) * w", "goal": "x * y = (z * w) * (x * w)", "label": "true"}
+{"id": "normal_0854", "difficulty": "normal", "hypothesis": "x = y * (((z * w) * u) * y)", "goal": "x * y = z * ((w * x) * x)", "label": "true"}
+{"id": "normal_0845", "difficulty": "normal", "hypothesis": "x = (x * x) * (y * (y * z))", "goal": "x * y = y * ((y * y) * x)", "label": "false"}
+{"id": "normal_0416", "difficulty": "normal", "hypothesis": "x = (y * (z * y)) * (w * y)", "goal": "x * y = z * w", "label": "true"}
+{"id": "normal_0265", "difficulty": "normal", "hypothesis": "x = (x * ((x * y) * y)) * z", "goal": "x = x * (y * (y * z))", "label": "false"}
+{"id": "normal_0433", "difficulty": "normal", "hypothesis": "x * y = ((z * y) * z) * w", "goal": "x * y = (y * z) * (x * w)", "label": "true"}
+{"id": "normal_0939", "difficulty": "normal", "hypothesis": "(x * y) * x = (y * z) * w", "goal": "x = y * (y * ((x * z) * y))", "label": "false"}
+{"id": "normal_0970", "difficulty": "normal", "hypothesis": "x = x * (y * (x * (y * x)))", "goal": "x = y * ((z * (y * w)) * z)", "label": "false"}
+{"id": "hard1_0053", "difficulty": "hard", "hypothesis": "x * y = (x * z) * (y * w)", "goal": "x * y = (x * y) * (z * x)", "label": "false"}
+{"id": "normal_0993", "difficulty": "normal", "hypothesis": "x = x * (x * (x * (y * z)))", "goal": "x = y * ((z * y) * (y * x))", "label": "false"}
+{"id": "normal_0279", "difficulty": "normal", "hypothesis": "x = (y * x) * (z * (z * x))", "goal": "(x * x) * y = (z * y) * x", "label": "false"}
+{"id": "normal_0825", "difficulty": "normal", "hypothesis": "x = (y * (z * x)) * y", "goal": "x = x * (((y * z) * y) * x)", "label": "true"}
+{"id": "normal_0736", "difficulty": "normal", "hypothesis": "x * x = (y * (x * z)) * x", "goal": "x * y = y * (x * x)", "label": "false"}
+{"id": "normal_0108", "difficulty": "normal", "hypothesis": "(x * y) * z = (w * u) * z", "goal": "x * y = (x * (z * x)) * z", "label": "false"}
+{"id": "normal_0235", "difficulty": "normal", "hypothesis": "x = (y * z) * (x * (x * z))", "goal": "x = x * (x * (x * (y * x)))", "label": "true"}
+{"id": "normal_0116", "difficulty": "normal", "hypothesis": "x = (y * z) * ((y * w) * x)", "goal": "x = (y * ((z * x) * y)) * z", "label": "false"}
+{"id": "normal_0066", "difficulty": "normal", "hypothesis": "x * y = (z * z) * (w * x)", "goal": "x * x = (x * (y * x)) * z", "label": "true"}
+{"id": "normal_0647", "difficulty": "normal", "hypothesis": "x = (((x * y) * y) * x) * z", "goal": "x = y * ((y * z) * (y * z))", "label": "false"}
+{"id": "normal_0303", "difficulty": "normal", "hypothesis": "x = (y * (z * x)) * z", "goal": "x = y * (((z * x) * x) * y)", "label": "true"}
+{"id": "normal_0691", "difficulty": "normal", "hypothesis": "x = y * (z * ((x * w) * z))", "goal": "x = ((y * y) * y) * (x * x)", "label": "true"}
+{"id": "normal_0340", "difficulty": "normal", "hypothesis": "x = y * (y * (x * y))", "goal": "x = ((y * x) * (y * x)) * z", "label": "false"}
+{"id": "normal_0394", "difficulty": "normal", "hypothesis": "x = y * (x * (z * (z * w)))", "goal": "x * y = (z * (w * w)) * y", "label": "true"}
+{"id": "normal_0019", "difficulty": "normal", "hypothesis": "x * y = z * (w * (u * y))", "goal": "x = ((y * x) * z) * (z * x)", "label": "false"}
+{"id": "normal_0864", "difficulty": "normal", "hypothesis": "x = ((y * (z * w)) * x) * w", "goal": "x = (y * (x * (z * x))) * y", "label": "true"}
+{"id": "normal_0694", "difficulty": "normal", "hypothesis": "x * y = ((x * z) * x) * y", "goal": "x * x = x * ((y * x) * z)", "label": "false"}
+{"id": "normal_0568", "difficulty": "normal", "hypothesis": "x * y = z * (w * (w * y))", "goal": "x = (y * ((z * x) * w)) * z", "label": "false"}
+{"id": "normal_0347", "difficulty": "normal", "hypothesis": "x = ((y * x) * (y * y)) * x", "goal": "x * x = (x * y) * z", "label": "false"}
+{"id": "normal_0683", "difficulty": "normal", "hypothesis": "x * (y * z) = (w * x) * x", "goal": "x = (y * (z * x)) * (y * z)", "label": "false"}
+{"id": "normal_0619", "difficulty": "normal", "hypothesis": "x * y = ((z * x) * z) * y", "goal": "x * (x * x) = x * (y * x)", "label": "false"}
+{"id": "normal_0095", "difficulty": "normal", "hypothesis": "x = ((x * y) * x) * (y * y)", "goal": "x = ((y * (y * y)) * z) * x", "label": "false"}
+{"id": "normal_0891", "difficulty": "normal", "hypothesis": "x = ((y * z) * x) * (w * u)", "goal": "x * y = z * (z * (y * y))", "label": "true"}
+{"id": "normal_0366", "difficulty": "normal", "hypothesis": "x = (y * (x * z)) * (w * w)", "goal": "x * y = ((z * z) * z) * x", "label": "true"}
+{"id": "normal_0201", "difficulty": "normal", "hypothesis": "x = (((y * y) * y) * z) * y", "goal": "x * y = z * ((z * y) * y)", "label": "true"}
+{"id": "normal_0994", "difficulty": "normal", "hypothesis": "x = (((x * x) * y) * y) * z", "goal": "x = x * ((y * (y * y)) * y)", "label": "false"}
+{"id": "normal_0348", "difficulty": "normal", "hypothesis": "x = ((x * y) * (z * w)) * w", "goal": "x = y * (z * ((w * z) * w))", "label": "false"}
+{"id": "normal_0414", "difficulty": "normal", "hypothesis": "x = (x * x) * (y * (x * z))", "goal": "x = (x * (y * y)) * (x * z)", "label": "true"}
+{"id": "normal_0887", "difficulty": "normal", "hypothesis": "x * y = x * (z * (y * w))", "goal": "x * y = z * (z * (x * w))", "label": "false"}
+{"id": "normal_0442", "difficulty": "normal", "hypothesis": "x * y = ((z * y) * w) * x", "goal": "x = y * ((y * y) * (z * x))", "label": "false"}
+{"id": "normal_0822", "difficulty": "normal", "hypothesis": "x * y = (x * (z * y)) * z", "goal": "x = y * ((y * z) * (w * w))", "label": "false"}
+{"id": "normal_0230", "difficulty": "normal", "hypothesis": "x = y * ((z * (z * w)) * z)", "goal": "x * y = x * (z * (w * z))", "label": "true"}
+{"id": "normal_0863", "difficulty": "normal", "hypothesis": "x = (y * z) * ((z * z) * y)", "goal": "x = (y * (z * z)) * w", "label": "true"}
+{"id": "normal_0499", "difficulty": "normal", "hypothesis": "x = (((x * y) * z) * y) * x", "goal": "x = ((y * z) * z) * (w * x)", "label": "false"}
+{"id": "normal_0875", "difficulty": "normal", "hypothesis": "x = (((x * y) * y) * z) * x", "goal": "x = (y * ((z * z) * w)) * y", "label": "false"}
+{"id": "normal_0097", "difficulty": "normal", "hypothesis": "x = (x * (x * y)) * (z * z)", "goal": "x * y = (z * z) * (z * y)", "label": "false"}
+{"id": "normal_0225", "difficulty": "normal", "hypothesis": "x * y = z * (w * (z * u))", "goal": "x * y = (z * (x * w)) * y", "label": "true"}
+{"id": "normal_0479", "difficulty": "normal", "hypothesis": "x * y = (y * (y * z)) * y", "goal": "x = ((y * x) * (z * z)) * z", "label": "false"}
+{"id": "normal_0886", "difficulty": "normal", "hypothesis": "x * y = ((z * x) * w) * w", "goal": "x * x = ((y * z) * x) * x", "label": "true"}
+{"id": "normal_0260", "difficulty": "normal", "hypothesis": "x = (y * z) * ((w * x) * z)", "goal": "x * x = (y * z) * (x * y)", "label": "true"}
+{"id": "normal_0147", "difficulty": "normal", "hypothesis": "x = (x * x) * (y * (y * z))", "goal": "x = (y * x) * (z * (y * y))", "label": "false"}
+{"id": "normal_0375", "difficulty": "normal", "hypothesis": "x * y = (z * (y * x)) * z", "goal": "x = x * (((y * z) * w) * z)", "label": "false"}
+{"id": "normal_0159", "difficulty": "normal", "hypothesis": "x * x = ((y * z) * w) * w", "goal": "x = (y * (z * w)) * (w * w)", "label": "false"}
+{"id": "normal_0984", "difficulty": "normal", "hypothesis": "x = (y * x) * (z * (y * w))", "goal": "x = (y * (x * (x * y))) * y", "label": "true"}
+{"id": "normal_0311", "difficulty": "normal", "hypothesis": "x * x = ((y * y) * z) * w", "goal": "x = (x * ((x * y) * x)) * z", "label": "false"}
+{"id": "normal_0706", "difficulty": "normal", "hypothesis": "x = (y * z) * (z * (x * w))", "goal": "x = (y * y) * (y * (z * y))", "label": "true"}
+{"id": "normal_0726", "difficulty": "normal", "hypothesis": "x * x = (y * x) * x", "goal": "x = y * ((z * (x * x)) * w)", "label": "false"}
+{"id": "normal_0439", "difficulty": "normal", "hypothesis": "x * y = (y * x) * (y * x)", "goal": "x = (y * y) * (x * (x * x))", "label": "false"}
+{"id": "normal_0703", "difficulty": "normal", "hypothesis": "x * (y * z) = (z * x) * x", "goal": "x * y = z * ((w * w) * w)", "label": "false"}
+{"id": "hard1_0005", "difficulty": "hard", "hypothesis": "x = ((y * z) * (z * x)) * y", "goal": "x * x = (y * (y * y)) * y", "label": "false"}
+{"id": "normal_0324", "difficulty": "normal", "hypothesis": "x * x = ((y * x) * x) * z", "goal": "x * x = ((y * z) * z) * x", "label": "true"}
+{"id": "hard1_0045", "difficulty": "hard", "hypothesis": "x = (y * x) * (x * (x * z))", "goal": "x = (x * (y * z)) * (w * w)", "label": "false"}
+{"id": "hard1_0028", "difficulty": "hard", "hypothesis": "x * y = z * ((x * x) * y)", "goal": "x * (x * y) = (y * x) * y", "label": "false"}
+{"id": "normal_0125", "difficulty": "normal", "hypothesis": "x * y = z * (w * (z * u))", "goal": "x * x = (y * (z * w)) * y", "label": "true"}
+{"id": "normal_0427", "difficulty": "normal", "hypothesis": "x * y = (x * (x * z)) * z", "goal": "x = y * (z * ((w * u) * v))", "label": "false"}
+{"id": "normal_0925", "difficulty": "normal", "hypothesis": "x = (y * z) * ((x * w) * u)", "goal": "x = (y * y) * (x * z)", "label": "true"}
+{"id": "normal_0459", "difficulty": "normal", "hypothesis": "x * y = y * ((z * x) * w)", "goal": "x = y * (((z * z) * z) * x)", "label": "false"}
+{"id": "normal_0208", "difficulty": "normal", "hypothesis": "x * y = (y * z) * (y * z)", "goal": "x = (y * x) * (y * (z * x))", "label": "false"}
+{"id": "normal_0877", "difficulty": "normal", "hypothesis": "x * y = (z * (w * z)) * u", "goal": "x = ((y * z) * (w * z)) * z", "label": "false"}
+{"id": "normal_0916", "difficulty": "normal", "hypothesis": "x * y = z * ((z * z) * x)", "goal": "x = (y * ((x * z) * x)) * y", "label": "false"}
+{"id": "normal_0536", "difficulty": "normal", "hypothesis": "x * y = y * ((y * x) * x)", "goal": "x * y = z * ((w * z) * y)", "label": "false"}
+{"id": "normal_0937", "difficulty": "normal", "hypothesis": "x = (((x * x) * y) * z) * y", "goal": "x * y = x * (x * y)", "label": "true"}
+{"id": "normal_0657", "difficulty": "normal", "hypothesis": "x = ((y * z) * (y * w)) * y", "goal": "x = x * ((y * z) * (w * z))", "label": "true"}
+{"id": "normal_0746", "difficulty": "normal", "hypothesis": "x * y = (z * (y * x)) * w", "goal": "x = y * ((y * x) * (z * x))", "label": "false"}
+{"id": "normal_0547", "difficulty": "normal", "hypothesis": "x * y = (z * x) * (y * y)", "goal": "x = y * (z * (z * w))", "label": "false"}
+{"id": "normal_0521", "difficulty": "normal", "hypothesis": "x = y * ((z * w) * (z * w))", "goal": "x * x = y * (z * (y * z))", "label": "true"}
+{"id": "normal_0656", "difficulty": "normal", "hypothesis": "x * y = (z * (z * z)) * w", "goal": "x * x = (y * y) * (x * z)", "label": "true"}
+{"id": "normal_0660", "difficulty": "normal", "hypothesis": "x = y * (((z * w) * y) * y)", "goal": "x = x * ((x * (x * x)) * y)", "label": "true"}
+{"id": "hard1_0009", "difficulty": "hard", "hypothesis": "x = ((x * x) * (y * z)) * y", "goal": "x = ((x * (y * x)) * x) * y", "label": "false"}
+{"id": "hard1_0002", "difficulty": "hard", "hypothesis": "x * (y * z) = (z * w) * w", "goal": "x * (y * x) = (x * y) * z", "label": "false"}
+{"id": "normal_0621", "difficulty": "normal", "hypothesis": "x = y * ((y * z) * (w * y))", "goal": "x = x * (((y * x) * x) * x)", "label": "true"}
+{"id": "normal_0518", "difficulty": "normal", "hypothesis": "x = (x * (x * x)) * (x * y)", "goal": "x * y = y * ((y * z) * y)", "label": "false"}
+{"id": "normal_0793", "difficulty": "normal", "hypothesis": "x = y * ((y * (x * z)) * w)", "goal": "x * x = y * ((y * y) * z)", "label": "true"}
+{"id": "normal_0670", "difficulty": "normal", "hypothesis": "x = ((x * y) * (y * x)) * y", "goal": "x * (y * x) = z * (y * y)", "label": "false"}
+{"id": "normal_0454", "difficulty": "normal", "hypothesis": "x * y = (x * (z * w)) * u", "goal": "x = x * ((y * z) * (x * w))", "label": "false"}
+{"id": "normal_0065", "difficulty": "normal", "hypothesis": "x = ((y * z) * w) * (x * y)", "goal": "x * y = y * (y * (z * z))", "label": "true"}
+{"id": "hard1_0057", "difficulty": "hard", "hypothesis": "x = y * ((z * y) * (y * x))", "goal": "x = y * (x * ((z * w) * x))", "label": "false"}
+{"id": "normal_0576", "difficulty": "normal", "hypothesis": "x = (((y * x) * z) * z) * w", "goal": "x = ((y * y) * (y * x)) * y", "label": "true"}
+{"id": "normal_0464", "difficulty": "normal", "hypothesis": "x = ((y * (z * w)) * z) * w", "goal": "x * (x * x) = y * (y * x)", "label": "true"}
+{"id": "normal_0520", "difficulty": "normal", "hypothesis": "x = ((x * (y * z)) * y) * z", "goal": "x * x = ((x * y) * x) * x", "label": "false"}
+{"id": "normal_0101", "difficulty": "normal", "hypothesis": "x * y = ((z * y) * y) * w", "goal": "x * y = (y * x) * z", "label": "true"}
+{"id": "normal_0044", "difficulty": "normal", "hypothesis": "x * (x * y) = (y * x) * y", "goal": "x = x * (y * ((x * z) * w))", "label": "false"}
+{"id": "normal_0284", "difficulty": "normal", "hypothesis": "x = y * (z * ((z * z) * w))", "goal": "x * (y * z) = (x * z) * z", "label": "true"}
+{"id": "normal_0867", "difficulty": "normal", "hypothesis": "x = ((y * z) * z) * (x * z)", "goal": "x * x = y * (z * (w * u))", "label": "true"}
+{"id": "hard1_0022", "difficulty": "hard", "hypothesis": "x * y = (y * (y * x)) * x", "goal": "x * y = (x * y) * (x * y)", "label": "false"}
+{"id": "normal_0059", "difficulty": "normal", "hypothesis": "x = x * (y * ((z * z) * z))", "goal": "x = ((y * (z * w)) * w) * z", "label": "false"}
+{"id": "normal_0574", "difficulty": "normal", "hypothesis": "x = (x * x) * (y * (y * x))", "goal": "x = ((y * y) * z) * (z * x)", "label": "false"}
+{"id": "normal_0109", "difficulty": "normal", "hypothesis": "x * y = (z * w) * (y * x)", "goal": "x = y * (z * z)", "label": "false"}
+{"id": "normal_0760", "difficulty": "normal", "hypothesis": "x = (y * ((y * x) * z)) * x", "goal": "x = x * (y * ((z * z) * w))", "label": "false"}
+{"id": "normal_0569", "difficulty": "normal", "hypothesis": "x * x = (x * (y * x)) * y", "goal": "x = (y * (z * (x * z))) * y", "label": "false"}
+{"id": "normal_0544", "difficulty": "normal", "hypothesis": "x = y * (z * (w * (u * w)))", "goal": "x * x = (x * (y * z)) * z", "label": "true"}
+{"id": "normal_0785", "difficulty": "normal", "hypothesis": "x * (y * y) = (z * w) * u", "goal": "x = y * (z * (w * (u * y)))", "label": "false"}
+{"id": "normal_0701", "difficulty": "normal", "hypothesis": "x = ((y * y) * z) * z", "goal": "x = y * (z * ((w * y) * x))", "label": "true"}
+{"id": "normal_0868", "difficulty": "normal", "hypothesis": "x = y * ((z * (z * w)) * y)", "goal": "x * y = (y * (x * x)) * y", "label": "true"}
+{"id": "normal_0570", "difficulty": "normal", "hypothesis": "x = x * ((y * (z * w)) * z)", "goal": "x * x = (y * x) * (z * y)", "label": "false"}
+{"id": "normal_0124", "difficulty": "normal", "hypothesis": "x = (y * y) * ((x * z) * y)", "goal": "x = (y * ((z * w) * w)) * z", "label": "true"}
+{"id": "normal_0634", "difficulty": "normal", "hypothesis": "x = (((x * y) * y) * x) * z", "goal": "x = x * ((x * y) * x)", "label": "false"}
+{"id": "normal_0485", "difficulty": "normal", "hypothesis": "x = y * (z * y)", "goal": "x * y = x * (y * (z * y))", "label": "true"}
+{"id": "normal_0145", "difficulty": "normal", "hypothesis": "x = ((y * z) * (z * w)) * w", "goal": "x = (y * y) * (y * (z * z))", "label": "true"}
+{"id": "hard1_0058", "difficulty": "hard", "hypothesis": "x * (y * z) = (w * w) * z", "goal": "x * (y * x) = (x * z) * x", "label": "false"}
+{"id": "normal_0154", "difficulty": "normal", "hypothesis": "x = ((y * (y * z)) * x) * y", "goal": "x = (y * z) * (w * z)", "label": "true"}
+{"id": "normal_0898", "difficulty": "normal", "hypothesis": "x = (y * ((y * y) * z)) * x", "goal": "x = (y * x) * (y * y)", "label": "false"}
+{"id": "hard1_0006", "difficulty": "hard", "hypothesis": "x * x = (x * y) * z", "goal": "x * x = (y * z) * w", "label": "false"}
+{"id": "normal_0188", "difficulty": "normal", "hypothesis": "x * y = (y * y) * (z * w)", "goal": "x * (x * y) = (z * w) * u", "label": "true"}
+{"id": "normal_0451", "difficulty": "normal", "hypothesis": "x = y * ((z * y) * (w * w))", "goal": "x * y = (z * w) * y", "label": "true"}
+{"id": "normal_0020", "difficulty": "normal", "hypothesis": "x = (x * (x * x)) * (y * y)", "goal": "x = (y * x) * ((x * x) * y)", "label": "false"}
+{"id": "normal_0523", "difficulty": "normal", "hypothesis": "x = y * ((z * (y * x)) * x)", "goal": "x = ((x * y) * (x * x)) * x", "label": "false"}
+{"id": "normal_0537", "difficulty": "normal", "hypothesis": "x = x * (y * (z * (w * y)))", "goal": "x * x = ((y * y) * z) * y", "label": "false"}
+{"id": "normal_0997", "difficulty": "normal", "hypothesis": "x = (y * z) * (x * (z * x))", "goal": "x * x = (y * (y * y)) * x", "label": "false"}
+{"id": "normal_0545", "difficulty": "normal", "hypothesis": "x * x = x * ((y * z) * x)", "goal": "x * x = (y * x) * (x * x)", "label": "false"}
+{"id": "normal_0134", "difficulty": "normal", "hypothesis": "x = y * ((x * x) * z)", "goal": "x = (y * (y * y)) * (z * y)", "label": "true"}
+{"id": "normal_0704", "difficulty": "normal", "hypothesis": "x = ((y * z) * w) * (x * x)", "goal": "x = y * (((z * x) * y) * w)", "label": "false"}
+{"id": "normal_0431", "difficulty": "normal", "hypothesis": "x = (((y * x) * z) * x) * x", "goal": "x = (y * ((z * x) * w)) * y", "label": "false"}
+{"id": "normal_0530", "difficulty": "normal", "hypothesis": "x * y = (y * (y * z)) * w", "goal": "x = (((x * y) * y) * z) * w", "label": "false"}
+{"id": "normal_0598", "difficulty": "normal", "hypothesis": "x = y * ((z * z) * (z * x))", "goal": "x * x = x * (x * (y * y))", "label": "false"}
+{"id": "normal_0679", "difficulty": "normal", "hypothesis": "x = y * (z * (w * (z * z)))", "goal": "x * y = z * (w * w)", "label": "true"}
+{"id": "normal_0470", "difficulty": "normal", "hypothesis": "x = (y * (z * w)) * (y * z)", "goal": "x = (x * (y * x)) * z", "label": "true"}
+{"id": "normal_0363", "difficulty": "normal", "hypothesis": "x = ((y * z) * w) * (x * z)", "goal": "x = y * (x * ((x * x) * y))", "label": "true"}
+{"id": "normal_0965", "difficulty": "normal", "hypothesis": "x = (y * (y * (z * w))) * u", "goal": "x * y = (z * w) * (y * y)", "label": "true"}
+{"id": "normal_0718", "difficulty": "normal", "hypothesis": "x = y * ((y * (x * x)) * z)", "goal": "x = (((x * x) * y) * x) * z", "label": "true"}
+{"id": "normal_0896", "difficulty": "normal", "hypothesis": "x = y * (z * (x * (y * w)))", "goal": "x = (x * (y * (z * y))) * z", "label": "true"}
+{"id": "normal_0558", "difficulty": "normal", "hypothesis": "x = (y * (y * (z * w))) * u", "goal": "x = (y * (y * y)) * (x * x)", "label": "true"}
+{"id": "normal_0792", "difficulty": "normal", "hypothesis": "(x * x) * y = (z * x) * w", "goal": "x = (((x * y) * z) * w) * y", "label": "false"}
+{"id": "normal_0334", "difficulty": "normal", "hypothesis": "x = (y * z) * ((z * w) * y)", "goal": "x = y * (((z * y) * y) * w)", "label": "true"}
+{"id": "normal_0601", "difficulty": "normal", "hypothesis": "x = y * ((z * (z * w)) * x)", "goal": "x * y = (y * (x * x)) * y", "label": "true"}
+{"id": "normal_0247", "difficulty": "normal", "hypothesis": "x = y * ((y * y) * (x * x))", "goal": "(x * y) * y = (x * y) * z", "label": "false"}
+{"id": "normal_0514", "difficulty": "normal", "hypothesis": "x = (((y * x) * z) * w) * x", "goal": "x * y = (y * (x * x)) * x", "label": "false"}
+{"id": "normal_0300", "difficulty": "normal", "hypothesis": "x = (y * ((z * x) * w)) * x", "goal": "x = ((y * z) * w) * (x * x)", "label": "true"}
+{"id": "normal_0218", "difficulty": "normal", "hypothesis": "x * y = (y * z) * (z * w)", "goal": "x = x * ((x * x) * x)", "label": "false"}
+{"id": "normal_0258", "difficulty": "normal", "hypothesis": "(x * x) * y = (x * x) * z", "goal": "x * x = y * ((y * z) * x)", "label": "false"}
+{"id": "normal_0732", "difficulty": "normal", "hypothesis": "x * y = (x * (z * y)) * w", "goal": "x * y = ((z * x) * x) * z", "label": "false"}
+{"id": "normal_0217", "difficulty": "normal", "hypothesis": "x = (y * (y * y)) * (x * x)", "goal": "x = (y * (y * z)) * (z * w)", "label": "false"}
+{"id": "normal_0801", "difficulty": "normal", "hypothesis": "x = ((y * y) * (y * y)) * x", "goal": "x = ((y * (x * x)) * x) * x", "label": "false"}
+{"id": "normal_0744", "difficulty": "normal", "hypothesis": "x = (y * x) * ((y * y) * z)", "goal": "x = y * (((z * z) * y) * x)", "label": "true"}
+{"id": "normal_0143", "difficulty": "normal", "hypothesis": "x * x = (x * x) * (y * y)", "goal": "x * (y * z) = (x * w) * y", "label": "false"}
+{"id": "normal_0540", "difficulty": "normal", "hypothesis": "x * x = (y * (z * z)) * z", "goal": "x * x = (x * (x * x)) * y", "label": "true"}
+{"id": "normal_0106", "difficulty": "normal", "hypothesis": "x = (x * ((y * y) * z)) * x", "goal": "x * x = (y * z) * (z * w)", "label": "false"}
+{"id": "normal_0666", "difficulty": "normal", "hypothesis": "x = y * (y * (z * (z * y)))", "goal": "x = y * ((y * (y * z)) * z)", "label": "true"}
+{"id": "normal_0015", "difficulty": "normal", "hypothesis": "x * y = ((z * y) * z) * w", "goal": "x = y * (y * (z * (z * z)))", "label": "false"}
+{"id": "normal_0022", "difficulty": "normal", "hypothesis": "x = ((y * y) * (x * y)) * z", "goal": "x * y = z * (w * (u * y))", "label": "true"}
+{"id": "normal_0135", "difficulty": "normal", "hypothesis": "x = ((y * (z * y)) * z) * y", "goal": "x = (x * x) * (y * y)", "label": "true"}
+{"id": "normal_0720", "difficulty": "normal", "hypothesis": "x = y * ((x * z) * (x * z))", "goal": "x * x = (y * y) * (y * y)", "label": "true"}
+{"id": "normal_0562", "difficulty": "normal", "hypothesis": "x * y = (z * (w * u)) * y", "goal": "x = ((x * (y * z)) * x) * z", "label": "false"}
+{"id": "normal_0160", "difficulty": "normal", "hypothesis": "x = y * (z * (w * (z * z)))", "goal": "x = (y * (z * w)) * x", "label": "true"}
+{"id": "normal_0980", "difficulty": "normal", "hypothesis": "x = y * ((z * x) * (w * w))", "goal": "x = (x * (y * (x * x))) * y", "label": "true"}
+{"id": "normal_0674", "difficulty": "normal", "hypothesis": "x = (y * y) * ((x * y) * z)", "goal": "x = x * (y * (x * y))", "label": "true"}
+{"id": "normal_0924", "difficulty": "normal", "hypothesis": "x = y * (((z * x) * y) * x)", "goal": "x * (y * z) = (w * z) * y", "label": "false"}
+{"id": "normal_0611", "difficulty": "normal", "hypothesis": "x * y = z * (z * (w * u))", "goal": "x * y = (z * w) * (x * x)", "label": "true"}
+{"id": "normal_0627", "difficulty": "normal", "hypothesis": "x = ((x * y) * (z * w)) * z", "goal": "x = (y * ((x * y) * x)) * z", "label": "false"}
+{"id": "normal_0985", "difficulty": "normal", "hypothesis": "x * y = (y * y) * (x * z)", "goal": "x = ((x * y) * (z * z)) * y", "label": "false"}
+{"id": "normal_0672", "difficulty": "normal", "hypothesis": "x = (y * (z * (y * z))) * w", "goal": "x * y = x * ((z * z) * x)", "label": "true"}
+{"id": "normal_0477", "difficulty": "normal", "hypothesis": "x = y * (((y * z) * w) * w)", "goal": "x = y * ((z * y) * (y * y))", "label": "true"}
+{"id": "normal_0605", "difficulty": "normal", "hypothesis": "x = (y * (z * w)) * y", "goal": "x * x = y * ((z * y) * y)", "label": "true"}
+{"id": "normal_0855", "difficulty": "normal", "hypothesis": "x = ((y * y) * x) * x", "goal": "x = (y * (z * (y * w))) * y", "label": "false"}
+{"id": "normal_0780", "difficulty": "normal", "hypothesis": "x * y = x * (x * y)", "goal": "x = (x * x) * ((y * z) * y)", "label": "false"}
+{"id": "normal_0131", "difficulty": "normal", "hypothesis": "x = ((x * (y * y)) * z) * z", "goal": "x = (((y * z) * w) * z) * w", "label": "false"}
+{"id": "normal_0175", "difficulty": "normal", "hypothesis": "x * y = (z * (w * u)) * w", "goal": "x = x * (y * (x * (x * x)))", "label": "false"}
+{"id": "normal_0163", "difficulty": "normal", "hypothesis": "x * y = (x * z) * (y * x)", "goal": "x = (x * ((y * y) * y)) * x", "label": "false"}
+{"id": "normal_0752", "difficulty": "normal", "hypothesis": "x = y * (((z * y) * z) * x)", "goal": "x = (y * ((y * y) * x)) * y", "label": "false"}
+{"id": "hard1_0025", "difficulty": "hard", "hypothesis": "x = ((y * (z * z)) * x) * y", "goal": "x = y * ((y * (z * x)) * z)", "label": "false"}
+{"id": "normal_0475", "difficulty": "normal", "hypothesis": "x = (y * x) * (z * (w * y))", "goal": "x = x * (y * (x * (z * y)))", "label": "true"}
+{"id": "normal_0406", "difficulty": "normal", "hypothesis": "x = y * (z * (y * w))", "goal": "x = ((y * (x * z)) * w) * x", "label": "true"}
+{"id": "normal_0740", "difficulty": "normal", "hypothesis": "x = ((x * x) * (y * y)) * y", "goal": "x = ((y * x) * z) * (w * x)", "label": "false"}
+{"id": "normal_0089", "difficulty": "normal", "hypothesis": "x = (y * (z * w)) * (w * u)", "goal": "x = ((y * (x * z)) * y) * w", "label": "true"}
+{"id": "normal_0341", "difficulty": "normal", "hypothesis": "x = y * (z * (w * (w * y)))", "goal": "x = (y * z) * ((w * x) * u)", "label": "true"}
+{"id": "normal_0795", "difficulty": "normal", "hypothesis": "x = (y * ((x * x) * x)) * y", "goal": "x = y * (z * ((z * y) * w))", "label": "false"}
+{"id": "normal_0445", "difficulty": "normal", "hypothesis": "x = (y * ((z * y) * x)) * w", "goal": "x = y * ((y * (z * y)) * z)", "label": "true"}
+{"id": "normal_0183", "difficulty": "normal", "hypothesis": "x = ((y * (z * w)) * y) * x", "goal": "x * y = ((y * x) * x) * z", "label": "false"}
+{"id": "normal_0490", "difficulty": "normal", "hypothesis": "x * y = x * (z * (w * u))", "goal": "x = x * (x * y)", "label": "false"}
+{"id": "normal_0786", "difficulty": "normal", "hypothesis": "x = (y * y) * (z * (w * x))", "goal": "x = y * (x * (z * (w * w)))", "label": "false"}
+{"id": "normal_0729", "difficulty": "normal", "hypothesis": "x = (y * (y * (z * x))) * y", "goal": "x = (y * ((y * x) * x)) * x", "label": "true"}
+{"id": "normal_0398", "difficulty": "normal", "hypothesis": "x = (y * z) * ((w * z) * w)", "goal": "x = x * (y * ((y * y) * z))", "label": "true"}
+{"id": "hard1_0031", "difficulty": "hard", "hypothesis": "x = ((y * x) * x) * (x * z)", "goal": "x = y * ((x * z) * (z * w))", "label": "false"}
+{"id": "normal_0677", "difficulty": "normal", "hypothesis": "x = ((y * z) * (w * y)) * y", "goal": "x = y * ((z * y) * (z * w))", "label": "true"}
+{"id": "normal_0087", "difficulty": "normal", "hypothesis": "x = y * ((x * y) * (z * y))", "goal": "x * y = (z * (w * w)) * w", "label": "true"}
+{"id": "normal_0992", "difficulty": "normal", "hypothesis": "x = (y * x) * ((z * w) * y)", "goal": "x * y = z * (y * (y * y))", "label": "true"}
+{"id": "normal_0773", "difficulty": "normal", "hypothesis": "x = (y * ((z * z) * x)) * z", "goal": "x = (x * (x * y)) * (z * z)", "label": "true"}
+{"id": "normal_0669", "difficulty": "normal", "hypothesis": "x = ((y * y) * y) * (z * z)", "goal": "x * y = z * ((w * z) * w)", "label": "true"}
+{"id": "normal_0824", "difficulty": "normal", "hypothesis": "x = ((x * x) * (x * x)) * x", "goal": "x = ((x * y) * (y * x)) * x", "label": "false"}
+{"id": "normal_0002", "difficulty": "normal", "hypothesis": "x * y = z * (w * (u * u))", "goal": "x * (y * y) = (z * w) * z", "label": "true"}
+{"id": "normal_0934", "difficulty": "normal", "hypothesis": "x * y = z * (x * (x * w))", "goal": "x * x = y * ((y * x) * y)", "label": "true"}
+{"id": "normal_0640", "difficulty": "normal", "hypothesis": "x = ((y * y) * z) * (w * u)", "goal": "x * (x * y) = y * (y * x)", "label": "true"}
+{"id": "normal_0495", "difficulty": "normal", "hypothesis": "x = y * (z * (z * (w * u)))", "goal": "x = (x * y) * ((z * w) * x)", "label": "true"}
+{"id": "normal_0210", "difficulty": "normal", "hypothesis": "x = (y * (z * (w * y))) * y", "goal": "x = (((y * z) * y) * w) * x", "label": "true"}
+{"id": "normal_0346", "difficulty": "normal", "hypothesis": "x = (((y * x) * x) * z) * y", "goal": "x = x * (y * (z * (y * x)))", "label": "true"}
+{"id": "normal_0202", "difficulty": "normal", "hypothesis": "x = (y * (z * (y * y))) * y", "goal": "x = (((y * z) * z) * w) * u", "label": "true"}
+{"id": "normal_0482", "difficulty": "normal", "hypothesis": "x * x = x * ((x * y) * x)", "goal": "x * (y * z) = (w * w) * y", "label": "false"}
+{"id": "normal_0941", "difficulty": "normal", "hypothesis": "x = (y * z) * ((x * z) * w)", "goal": "x * x = y * (y * z)", "label": "true"}
+{"id": "normal_0829", "difficulty": "normal", "hypothesis": "x * y = x * ((z * w) * x)", "goal": "x = (y * ((z * z) * w)) * u", "label": "false"}
+{"id": "normal_0226", "difficulty": "normal", "hypothesis": "x * y = (z * (w * x)) * z", "goal": "x = y * ((z * (x * y)) * w)", "label": "false"}
+{"id": "normal_0932", "difficulty": "normal", "hypothesis": "x = y * ((x * x) * z)", "goal": "x = (((y * z) * x) * w) * y", "label": "true"}
+{"id": "normal_0374", "difficulty": "normal", "hypothesis": "x = x * (y * (y * (y * z)))", "goal": "x = y * (x * (z * (y * z)))", "label": "false"}
+{"id": "normal_0358", "difficulty": "normal", "hypothesis": "x * y = ((x * z) * z) * z", "goal": "x * y = ((z * x) * y) * w", "label": "false"}
+{"id": "hard1_0024", "difficulty": "hard", "hypothesis": "x = y * (y * ((x * y) * x))", "goal": "x = x * ((y * z) * (z * x))", "label": "false"}
+{"id": "hard1_0049", "difficulty": "hard", "hypothesis": "x * (y * z) = (z * x) * y", "goal": "x * (y * z) = (w * u) * y", "label": "false"}
+{"id": "normal_0353", "difficulty": "normal", "hypothesis": "x * x = (x * (x * x)) * x", "goal": "x * y = (y * (z * z)) * x", "label": "false"}
+{"id": "normal_0620", "difficulty": "normal", "hypothesis": "x = (y * (z * w)) * (x * x)", "goal": "x * y = ((x * z) * z) * y", "label": "true"}
+{"id": "normal_0710", "difficulty": "normal", "hypothesis": "x = ((x * (y * z)) * w) * w", "goal": "x = y * (((y * y) * z) * x)", "label": "false"}
+{"id": "normal_0199", "difficulty": "normal", "hypothesis": "x * x = ((y * x) * y) * z", "goal": "x = (y * z) * ((w * x) * x)", "label": "false"}
+{"id": "normal_0266", "difficulty": "normal", "hypothesis": "x = x * ((y * x) * y)", "goal": "x * x = ((y * x) * z) * w", "label": "false"}
+{"id": "normal_0484", "difficulty": "normal", "hypothesis": "x = ((y * z) * (y * x)) * y", "goal": "x = ((y * (z * w)) * y) * y", "label": "true"}
+{"id": "normal_0287", "difficulty": "normal", "hypothesis": "x = ((y * z) * (x * y)) * y", "goal": "x * y = (x * (z * z)) * y", "label": "true"}
+{"id": "normal_0029", "difficulty": "normal", "hypothesis": "x = x * (x * ((y * z) * z))", "goal": "x = (x * x) * (y * (z * y))", "label": "false"}
+{"id": "normal_0030", "difficulty": "normal", "hypothesis": "x = x * (y * ((z * x) * x))", "goal": "x * y = ((y * z) * x) * y", "label": "false"}
+{"id": "normal_0964", "difficulty": "normal", "hypothesis": "x = y * ((y * y) * (x * x))", "goal": "x = (x * y) * ((z * w) * w)", "label": "false"}
+{"id": "normal_0802", "difficulty": "normal", "hypothesis": "x = (((y * y) * z) * w) * x", "goal": "x = ((y * (x * y)) * x) * x", "label": "true"}
+{"id": "normal_0505", "difficulty": "normal", "hypothesis": "x = y * (y * (z * (x * x)))", "goal": "x = y * (z * (y * z))", "label": "false"}
+{"id": "normal_0805", "difficulty": "normal", "hypothesis": "x = (y * (y * z)) * (y * w)", "goal": "x = y * ((x * z) * (z * w))", "label": "true"}
+{"id": "normal_0205", "difficulty": "normal", "hypothesis": "x = y * (((z * y) * w) * u)", "goal": "x = (y * (x * x)) * (z * y)", "label": "true"}
+{"id": "normal_0233", "difficulty": "normal", "hypothesis": "x * y = z * (x * (w * w))", "goal": "x = y * ((y * z) * (y * y))", "label": "false"}
+{"id": "normal_0883", "difficulty": "normal", "hypothesis": "x = ((y * z) * (w * y)) * x", "goal": "x * (y * z) = (x * y) * y", "label": "false"}
+{"id": "normal_0869", "difficulty": "normal", "hypothesis": "x = y * ((z * w) * (w * z))", "goal": "x = (x * ((y * y) * z)) * x", "label": "true"}
+{"id": "normal_0246", "difficulty": "normal", "hypothesis": "x * y = z * ((w * y) * x)", "goal": "x = x * (y * ((z * w) * y))", "label": "false"}
+{"id": "hard1_0033", "difficulty": "hard", "hypothesis": "x = ((y * (z * y)) * y) * x", "goal": "x = (y * ((z * w) * y)) * x", "label": "false"}
+{"id": "normal_0812", "difficulty": "normal", "hypothesis": "x * y = z * ((x * w) * z)", "goal": "x = (y * z) * ((x * w) * z)", "label": "false"}
+{"id": "normal_0628", "difficulty": "normal", "hypothesis": "x = ((y * y) * (x * x)) * y", "goal": "x = y * (z * ((z * y) * w))", "label": "false"}
+{"id": "normal_0800", "difficulty": "normal", "hypothesis": "x * y = (z * z) * (x * x)", "goal": "x * y = (y * (x * z)) * x", "label": "true"}
+{"id": "normal_0652", "difficulty": "normal", "hypothesis": "x = y * (z * ((z * x) * z))", "goal": "x = x * (y * ((x * x) * x))", "label": "true"}
+{"id": "normal_0338", "difficulty": "normal", "hypothesis": "x = ((x * x) * x) * (y * y)", "goal": "x = (y * y) * (z * (w * z))", "label": "false"}
+{"id": "normal_0515", "difficulty": "normal", "hypothesis": "(x * x) * y = (y * z) * w", "goal": "x = ((y * (z * y)) * w) * w", "label": "false"}
+{"id": "normal_0555", "difficulty": "normal", "hypothesis": "x = ((y * z) * (w * w)) * u", "goal": "x = (y * ((y * y) * z)) * w", "label": "true"}
+{"id": "normal_0546", "difficulty": "normal", "hypothesis": "x * y = (y * y) * x", "goal": "x = x * (y * ((x * x) * y))", "label": "false"}
+{"id": "normal_0229", "difficulty": "normal", "hypothesis": "x = y * ((z * w) * (y * y))", "goal": "x = (y * z) * (w * (w * x))", "label": "true"}
+{"id": "normal_0791", "difficulty": "normal", "hypothesis": "x = y * ((z * y) * y)", "goal": "x = (y * z) * ((y * x) * w)", "label": "true"}
+{"id": "normal_0365", "difficulty": "normal", "hypothesis": "x = y * (((z * x) * x) * z)", "goal": "x = (x * ((y * x) * y)) * z", "label": "true"}
+{"id": "normal_0172", "difficulty": "normal", "hypothesis": "x = (y * (z * (w * w))) * w", "goal": "x = (((y * x) * x) * y) * x", "label": "true"}
+{"id": "normal_0376", "difficulty": "normal", "hypothesis": "x = y * ((y * (y * z)) * y)", "goal": "x = (((x * x) * y) * z) * x", "label": "true"}
+{"id": "normal_0531", "difficulty": "normal", "hypothesis": "x * y = (z * (w * x)) * w", "goal": "x = (y * x) * (z * (z * z))", "label": "false"}
+{"id": "normal_0268", "difficulty": "normal", "hypothesis": "x = (y * (x * x)) * z", "goal": "x = y * ((z * (y * y)) * z)", "label": "true"}
+{"id": "normal_0713", "difficulty": "normal", "hypothesis": "x * (y * x) = z * (w * z)", "goal": "x = y * (z * ((x * y) * z))", "label": "false"}
+{"id": "normal_0094", "difficulty": "normal", "hypothesis": "x * (x * y) = z * (x * z)", "goal": "x * y = (z * w) * w", "label": "false"}
+{"id": "normal_0659", "difficulty": "normal", "hypothesis": "x = (y * (y * z)) * (x * w)", "goal": "x = y * ((z * w) * (z * w))", "label": "true"}
+{"id": "normal_0306", "difficulty": "normal", "hypothesis": "x * (y * x) = (y * x) * z", "goal": "x = x * (y * ((z * y) * w))", "label": "false"}
+{"id": "normal_0878", "difficulty": "normal", "hypothesis": "x = y * ((y * x) * (x * x))", "goal": "x = ((x * x) * x) * (x * y)", "label": "false"}
+{"id": "normal_0777", "difficulty": "normal", "hypothesis": "x = ((y * x) * y) * (x * x)", "goal": "x = y * ((z * w) * (z * x))", "label": "false"}
+{"id": "normal_0028", "difficulty": "normal", "hypothesis": "x = y * ((z * (z * y)) * y)", "goal": "x = y * (z * ((w * y) * x))", "label": "true"}
+{"id": "normal_0557", "difficulty": "normal", "hypothesis": "x = (y * ((y * z) * y)) * w", "goal": "x * y = ((y * x) * y) * y", "label": "true"}
+{"id": "normal_0707", "difficulty": "normal", "hypothesis": "x * (y * z) = (w * x) * u", "goal": "x = ((y * y) * z) * (y * w)", "label": "false"}
+{"id": "normal_0151", "difficulty": "normal", "hypothesis": "x * (x * y) = y * (x * y)", "goal": "x = y * (((z * z) * z) * z)", "label": "false"}
+{"id": "hard1_0037", "difficulty": "hard", "hypothesis": "x = y * (((y * z) * y) * x)", "goal": "x = x * (x * (y * (y * x)))", "label": "false"}
+{"id": "normal_0541", "difficulty": "normal", "hypothesis": "x * y = ((z * y) * x) * x", "goal": "x = y * (((y * x) * z) * y)", "label": "false"}
+{"id": "normal_0211", "difficulty": "normal", "hypothesis": "x = y * (((z * z) * y) * w)", "goal": "x = y * ((y * (z * x)) * y)", "label": "true"}
+{"id": "normal_0950", "difficulty": "normal", "hypothesis": "x * y = (x * x) * (y * y)", "goal": "x * x = x * (y * x)", "label": "false"}
+{"id": "normal_0529", "difficulty": "normal", "hypothesis": "x = y * (z * (x * (y * x)))", "goal": "x = (y * z) * (y * (y * z))", "label": "false"}
+{"id": "normal_0166", "difficulty": "normal", "hypothesis": "x = y * (((z * x) * z) * z)", "goal": "x = (x * (y * x)) * z", "label": "true"}
+{"id": "normal_0709", "difficulty": "normal", "hypothesis": "x = (((y * y) * z) * w) * x", "goal": "x * x = ((x * y) * x) * z", "label": "false"}
+{"id": "normal_0491", "difficulty": "normal", "hypothesis": "x = (y * x) * ((x * z) * y)", "goal": "x = (((x * y) * z) * w) * w", "label": "true"}
+{"id": "normal_0272", "difficulty": "normal", "hypothesis": "x = (y * ((x * x) * y)) * y", "goal": "(x * y) * z = (x * z) * w", "label": "false"}
+{"id": "normal_0759", "difficulty": "normal", "hypothesis": "(x * x) * y = (z * x) * x", "goal": "x = y * (((y * z) * x) * z)", "label": "false"}
+{"id": "normal_0998", "difficulty": "normal", "hypothesis": "x = (y * ((z * w) * y)) * u", "goal": "x * y = z * (z * (y * x))", "label": "true"}
+{"id": "normal_0768", "difficulty": "normal", "hypothesis": "x = ((y * x) * (z * w)) * u", "goal": "x * y = z * (y * (z * x))", "label": "true"}
+{"id": "normal_0858", "difficulty": "normal", "hypothesis": "x = y * ((x * (x * z)) * x)", "goal": "x = y * ((x * z) * (x * z))", "label": "false"}
+{"id": "normal_0148", "difficulty": "normal", "hypothesis": "x = ((y * (z * w)) * w) * w", "goal": "x * y = z * ((w * w) * z)", "label": "true"}
+{"id": "normal_0088", "difficulty": "normal", "hypothesis": "x = (x * x) * ((y * z) * z)", "goal": "x = y * (z * (z * (z * z)))", "label": "false"}
+{"id": "normal_0320", "difficulty": "normal", "hypothesis": "x = y * (y * z)", "goal": "(x * y) * x = (z * y) * w", "label": "true"}
+{"id": "normal_0496", "difficulty": "normal", "hypothesis": "x = (((y * z) * w) * u) * y", "goal": "x * y = (z * (x * w)) * w", "label": "true"}
+{"id": "normal_0492", "difficulty": "normal", "hypothesis": "x = y * (x * ((z * y) * y))", "goal": "x = ((x * x) * x) * (y * y)", "label": "true"}
+{"id": "normal_0478", "difficulty": "normal", "hypothesis": "x = x * ((y * (y * y)) * y)", "goal": "x = ((y * z) * x) * (x * z)", "label": "false"}
+{"id": "normal_0500", "difficulty": "normal", "hypothesis": "x = ((y * z) * w) * (x * w)", "goal": "x * y = z * ((z * y) * z)", "label": "true"}
+{"id": "hard1_0062", "difficulty": "hard", "hypothesis": "x = ((y * x) * z) * (z * y)", "goal": "x = (y * (y * (x * x))) * x", "label": "false"}
+{"id": "normal_0126", "difficulty": "normal", "hypothesis": "x = (((y * x) * x) * z) * z", "goal": "x * (y * x) = (x * z) * w", "label": "true"}
+{"id": "normal_0969", "difficulty": "normal", "hypothesis": "x * y = (z * w) * y", "goal": "x = y * (z * (w * (y * u)))", "label": "false"}
+{"id": "normal_0903", "difficulty": "normal", "hypothesis": "x * y = y * (x * (x * x))", "goal": "x * y = ((z * y) * z) * x", "label": "false"}
+{"id": "normal_0617", "difficulty": "normal", "hypothesis": "x * x = y * (x * (x * x))", "goal": "x = ((y * z) * (w * u)) * z", "label": "false"}
+{"id": "normal_0951", "difficulty": "normal", "hypothesis": "x = (y * z) * (w * (z * y))", "goal": "x = ((y * (z * y)) * y) * y", "label": "true"}
+{"id": "normal_0259", "difficulty": "normal", "hypothesis": "x = y * ((y * y) * (y * z))", "goal": "x = (y * z) * (w * (x * z))", "label": "true"}
+{"id": "hard1_0052", "difficulty": "hard", "hypothesis": "x = (y * x) * (y * x)", "goal": "x = ((x * y) * x) * (z * x)", "label": "true"}
+{"id": "normal_0153", "difficulty": "normal", "hypothesis": "x = (y * ((z * y) * x)) * y", "goal": "x = (y * (x * y)) * z", "label": "true"}
+{"id": "normal_0386", "difficulty": "normal", "hypothesis": "x = x * (y * ((x * y) * x))", "goal": "x = y * ((z * (w * w)) * w)", "label": "false"}
+{"id": "normal_0851", "difficulty": "normal", "hypothesis": "x = (y * ((x * x) * x)) * z", "goal": "x * y = (z * w) * (w * w)", "label": "true"}
+{"id": "normal_0213", "difficulty": "normal", "hypothesis": "x = ((y * z) * w) * (u * v)", "goal": "(x * x) * y = (x * y) * y", "label": "true"}
+{"id": "normal_0073", "difficulty": "normal", "hypothesis": "x * (x * y) = (x * z) * x", "goal": "x = (y * z) * (z * (w * w))", "label": "false"}
+{"id": "normal_0027", "difficulty": "normal", "hypothesis": "x * y = ((y * x) * x) * x", "goal": "x = (x * x) * (y * (y * y))", "label": "false"}
+{"id": "normal_0629", "difficulty": "normal", "hypothesis": "x = (y * z) * (w * (y * u))", "goal": "x * x = (x * (y * z)) * z", "label": "true"}
+{"id": "normal_0373", "difficulty": "normal", "hypothesis": "x = x * (((y * z) * z) * w)", "goal": "x * x = ((y * z) * z) * z", "label": "false"}
+{"id": "normal_0104", "difficulty": "normal", "hypothesis": "x = (y * z) * (w * (z * z))", "goal": "x = y * ((z * (w * y)) * u)", "label": "true"}
+{"id": "normal_0550", "difficulty": "normal", "hypothesis": "x * x = (y * z) * y", "goal": "x = y * (((z * w) * w) * z)", "label": "false"}
+{"id": "normal_0953", "difficulty": "normal", "hypothesis": "x = ((y * z) * (z * y)) * z", "goal": "x = (y * (x * (x * z))) * w", "label": "true"}

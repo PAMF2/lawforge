@@ -1,0 +1,400 @@
+{"id": "hard3_0001", "difficulty": "hard", "hypothesis": "x = y * x", "goal": "x = x * (x * ((y * z) * x))", "label": "true"}
+{"id": "hard3_0002", "difficulty": "hard", "hypothesis": "x = x * (x * y)", "goal": "x = (x * ((x * x) * x)) * x", "label": "true"}
+{"id": "hard3_0003", "difficulty": "hard", "hypothesis": "x = y * (x * x)", "goal": "x = y * (z * (z * (w * x)))", "label": "true"}
+{"id": "hard3_0004", "difficulty": "hard", "hypothesis": "x = y * (z * w)", "goal": "x * (y * y) = y * (z * w)", "label": "true"}
+{"id": "hard3_0005", "difficulty": "hard", "hypothesis": "x = (y * z) * x", "goal": "x * y = y * ((y * x) * y)", "label": "true"}
+{"id": "hard3_0006", "difficulty": "hard", "hypothesis": "x * x = x * y", "goal": "x * (x * x) = x * (y * z)", "label": "true"}
+{"id": "hard3_0007", "difficulty": "hard", "hypothesis": "x * x = x * y", "goal": "x * (y * z) = (x * z) * w", "label": "false"}
+{"id": "hard3_0008", "difficulty": "hard", "hypothesis": "x * x = y * z", "goal": "x * (x * y) = (y * x) * z", "label": "true"}
+{"id": "hard3_0009", "difficulty": "hard", "hypothesis": "x = x * (x * (x * y))", "goal": "x = (x * (y * (x * x))) * z", "label": "false"}
+{"id": "hard3_0010", "difficulty": "hard", "hypothesis": "x = x * (x * (y * x))", "goal": "x * x = (x * (y * x)) * x", "label": "false"}
+{"id": "hard3_0011", "difficulty": "hard", "hypothesis": "x = x * (x * (y * z))", "goal": "x = ((x * (y * x)) * x) * x", "label": "false"}
+{"id": "hard3_0012", "difficulty": "hard", "hypothesis": "x = x * (y * (x * x))", "goal": "x * x = (x * y) * (x * x)", "label": "false"}
+{"id": "hard3_0013", "difficulty": "hard", "hypothesis": "x = x * (y * (z * x))", "goal": "x = (((x * x) * x) * x) * x", "label": "false"}
+{"id": "hard3_0014", "difficulty": "hard", "hypothesis": "x = x * (y * (z * y))", "goal": "x = (((x * y) * z) * x) * y", "label": "true"}
+{"id": "hard3_0015", "difficulty": "hard", "hypothesis": "x = x * (y * (z * z))", "goal": "x * y = x * (z * (y * w))", "label": "true"}
+{"id": "hard3_0016", "difficulty": "hard", "hypothesis": "x = y * (x * (x * x))", "goal": "x * y = (y * y) * (y * y)", "label": "false"}
+{"id": "hard3_0017", "difficulty": "hard", "hypothesis": "x = y * (y * (x * x))", "goal": "x = (x * (y * z)) * x", "label": "false"}
+{"id": "hard3_0018", "difficulty": "hard", "hypothesis": "x = y * (y * (x * x))", "goal": "x = y * (z * (y * (x * x)))", "label": "false"}
+{"id": "hard3_0019", "difficulty": "hard", "hypothesis": "x = y * (y * (z * x))", "goal": "x = y * (((z * w) * y) * x)", "label": "false"}
+{"id": "hard3_0020", "difficulty": "hard", "hypothesis": "x = y * (z * (z * x))", "goal": "x = (x * x) * (x * (y * x))", "label": "true"}
+{"id": "hard3_0021", "difficulty": "hard", "hypothesis": "x = x * ((x * x) * y)", "goal": "x = x * ((y * y) * (y * x))", "label": "false"}
+{"id": "hard3_0022", "difficulty": "hard", "hypothesis": "x = x * ((x * y) * z)", "goal": "x * y = x * ((y * x) * y)", "label": "false"}
+{"id": "hard3_0023", "difficulty": "hard", "hypothesis": "x = x * ((y * z) * x)", "goal": "x = x * (y * x)", "label": "true"}
+{"id": "hard3_0024", "difficulty": "hard", "hypothesis": "x = x * ((y * z) * z)", "goal": "x = (x * (y * (z * y))) * x", "label": "true"}
+{"id": "hard3_0025", "difficulty": "hard", "hypothesis": "x = y * ((y * x) * x)", "goal": "x = (y * z) * ((y * y) * x)", "label": "false"}
+{"id": "hard3_0026", "difficulty": "hard", "hypothesis": "x = y * ((y * y) * x)", "goal": "x = ((y * y) * z) * (y * x)", "label": "false"}
+{"id": "hard3_0027", "difficulty": "hard", "hypothesis": "x = y * ((z * x) * x)", "goal": "x = (y * y) * (x * x)", "label": "true"}
+{"id": "hard3_0028", "difficulty": "hard", "hypothesis": "x = y * ((z * x) * x)", "goal": "x = ((y * z) * w) * (z * x)", "label": "true"}
+{"id": "hard3_0029", "difficulty": "hard", "hypothesis": "x = y * ((z * y) * x)", "goal": "x * y = ((y * z) * z) * y", "label": "false"}
+{"id": "hard3_0030", "difficulty": "hard", "hypothesis": "x = (x * x) * (y * z)", "goal": "x * y = x * ((x * x) * y)", "label": "true"}
+{"id": "hard3_0031", "difficulty": "hard", "hypothesis": "x = (x * y) * (x * x)", "goal": "x * y = x * (z * (z * y))", "label": "false"}
+{"id": "hard3_0032", "difficulty": "hard", "hypothesis": "x = (y * x) * (x * z)", "goal": "x * y = (x * (z * x)) * y", "label": "false"}
+{"id": "hard3_0033", "difficulty": "hard", "hypothesis": "x = (y * x) * (z * x)", "goal": "x * x = ((y * x) * x) * x", "label": "true"}
+{"id": "hard3_0034", "difficulty": "hard", "hypothesis": "x = (y * y) * (x * x)", "goal": "x = y * ((x * (z * y)) * x)", "label": "true"}
+{"id": "hard3_0035", "difficulty": "hard", "hypothesis": "x = (y * z) * (z * x)", "goal": "x = y * ((x * (x * y)) * x)", "label": "false"}
+{"id": "hard3_0036", "difficulty": "hard", "hypothesis": "x = (x * (x * x)) * y", "goal": "x = (x * x) * (x * (x * x))", "label": "true"}
+{"id": "hard3_0037", "difficulty": "hard", "hypothesis": "x = (x * (x * y)) * x", "goal": "x * x = x * ((y * y) * x)", "label": "false"}
+{"id": "hard3_0038", "difficulty": "hard", "hypothesis": "x = (x * (x * y)) * z", "goal": "x * x = x * (x * (y * y))", "label": "true"}
+{"id": "hard3_0039", "difficulty": "hard", "hypothesis": "x = (x * (y * x)) * y", "goal": "x = (x * x) * (x * (y * z))", "label": "false"}
+{"id": "hard3_0040", "difficulty": "hard", "hypothesis": "x = (x * (y * z)) * y", "goal": "x = (((x * x) * x) * x) * x", "label": "false"}
+{"id": "hard3_0041", "difficulty": "hard", "hypothesis": "x = ((x * x) * x) * y", "goal": "x = (x * ((y * z) * x)) * y", "label": "false"}
+{"id": "hard3_0042", "difficulty": "hard", "hypothesis": "x = ((x * x) * y) * y", "goal": "x = x * ((y * y) * (z * w))", "label": "false"}
+{"id": "hard3_0043", "difficulty": "hard", "hypothesis": "x = ((x * x) * y) * z", "goal": "x = ((x * y) * (z * y)) * y", "label": "true"}
+{"id": "hard3_0044", "difficulty": "hard", "hypothesis": "x = ((x * y) * z) * w", "goal": "x * y = (x * (z * w)) * w", "label": "false"}
+{"id": "hard3_0045", "difficulty": "hard", "hypothesis": "x = ((y * x) * y) * x", "goal": "x * (y * z) = y * (x * z)", "label": "false"}
+{"id": "hard3_0046", "difficulty": "hard", "hypothesis": "x = ((y * z) * y) * x", "goal": "x = (y * (x * (z * z))) * x", "label": "true"}
+{"id": "hard3_0047", "difficulty": "hard", "hypothesis": "x = ((y * z) * y) * x", "goal": "x * y = ((y * x) * x) * y", "label": "true"}
+{"id": "hard3_0048", "difficulty": "hard", "hypothesis": "x = ((y * z) * z) * x", "goal": "x * (y * z) = (w * y) * z", "label": "true"}
+{"id": "hard3_0049", "difficulty": "hard", "hypothesis": "x = ((y * z) * w) * x", "goal": "x = y * (z * (x * (w * x)))", "label": "true"}
+{"id": "hard3_0050", "difficulty": "hard", "hypothesis": "x * x = y * (y * x)", "goal": "x * y = ((z * x) * y) * y", "label": "false"}
+{"id": "hard3_0051", "difficulty": "hard", "hypothesis": "x * y = z * (x * z)", "goal": "x * y = (y * (y * y)) * y", "label": "true"}
+{"id": "hard3_0052", "difficulty": "hard", "hypothesis": "x * y = z * (y * z)", "goal": "x * y = (x * z) * (x * w)", "label": "true"}
+{"id": "hard3_0053", "difficulty": "hard", "hypothesis": "x * y = z * (y * z)", "goal": "x * (y * z) = y * (w * z)", "label": "true"}
+{"id": "hard3_0054", "difficulty": "hard", "hypothesis": "x * y = z * (z * w)", "goal": "x * y = (x * (z * w)) * u", "label": "true"}
+{"id": "hard3_0055", "difficulty": "hard", "hypothesis": "x * x = (x * y) * z", "goal": "x * y = ((x * x) * x) * y", "label": "false"}
+{"id": "hard3_0056", "difficulty": "hard", "hypothesis": "x * x = (y * x) * z", "goal": "x * (x * y) = x * (z * z)", "label": "false"}
+{"id": "hard3_0057", "difficulty": "hard", "hypothesis": "x * x = (y * z) * z", "goal": "x * x = y * (y * x)", "label": "false"}
+{"id": "hard3_0058", "difficulty": "hard", "hypothesis": "x * x = (y * z) * w", "goal": "x * x = (x * x) * x", "label": "true"}
+{"id": "hard3_0059", "difficulty": "hard", "hypothesis": "x * x = (y * z) * w", "goal": "x * (x * y) = (z * x) * y", "label": "false"}
+{"id": "hard3_0060", "difficulty": "hard", "hypothesis": "x * y = (z * z) * x", "goal": "x * y = (z * w) * (w * u)", "label": "true"}
+{"id": "hard3_0061", "difficulty": "hard", "hypothesis": "x * y = (z * z) * z", "goal": "x * y = x * (z * (w * z))", "label": "true"}
+{"id": "hard3_0062", "difficulty": "hard", "hypothesis": "x = x * (x * (y * (y * x)))", "goal": "x = x * ((y * y) * (x * x))", "label": "false"}
+{"id": "hard3_0063", "difficulty": "hard", "hypothesis": "x = x * (x * (y * (z * y)))", "goal": "x = x * ((y * (z * w)) * w)", "label": "false"}
+{"id": "hard3_0064", "difficulty": "hard", "hypothesis": "x = x * (x * (y * (z * z)))", "goal": "x = (x * ((y * y) * x)) * x", "label": "false"}
+{"id": "hard3_0065", "difficulty": "hard", "hypothesis": "x = x * (y * (x * (x * z)))", "goal": "x * x = (x * x) * y", "label": "false"}
+{"id": "hard3_0066", "difficulty": "hard", "hypothesis": "x = x * (y * (x * (z * w)))", "goal": "x = (x * y) * ((z * w) * z)", "label": "true"}
+{"id": "hard3_0067", "difficulty": "hard", "hypothesis": "x = x * (y * (z * (y * w)))", "goal": "x = x * (x * ((x * x) * y))", "label": "true"}
+{"id": "hard3_0068", "difficulty": "hard", "hypothesis": "x = x * (y * (z * (z * z)))", "goal": "x = x * ((y * (y * z)) * x)", "label": "true"}
+{"id": "hard3_0069", "difficulty": "hard", "hypothesis": "x = y * (x * (z * (x * x)))", "goal": "x = ((y * x) * x) * (x * x)", "label": "false"}
+{"id": "hard3_0070", "difficulty": "hard", "hypothesis": "x = y * (x * (z * (y * x)))", "goal": "x = y * ((x * x) * x)", "label": "false"}
+{"id": "hard3_0071", "difficulty": "hard", "hypothesis": "x = y * (y * (y * (x * y)))", "goal": "x = ((y * y) * x) * (z * z)", "label": "false"}
+{"id": "hard3_0072", "difficulty": "hard", "hypothesis": "x = y * (y * (y * (x * y)))", "goal": "x = (((y * z) * z) * x) * y", "label": "false"}
+{"id": "hard3_0073", "difficulty": "hard", "hypothesis": "x = y * (z * (x * (y * x)))", "goal": "x = y * (((z * y) * x) * x)", "label": "false"}
+{"id": "hard3_0074", "difficulty": "hard", "hypothesis": "x = y * (z * (x * (z * x)))", "goal": "x = (x * (x * x)) * (x * x)", "label": "false"}
+{"id": "hard3_0075", "difficulty": "hard", "hypothesis": "x = y * (z * (x * (z * x)))", "goal": "x = ((x * x) * y) * (y * x)", "label": "false"}
+{"id": "hard3_0076", "difficulty": "hard", "hypothesis": "x = y * (z * (x * (w * x)))", "goal": "x = (y * (z * x)) * (z * x)", "label": "false"}
+{"id": "hard3_0077", "difficulty": "hard", "hypothesis": "x = y * (z * (y * (x * x)))", "goal": "x * y = (x * (z * x)) * y", "label": "true"}
+{"id": "hard3_0078", "difficulty": "hard", "hypothesis": "x = y * (z * (y * (x * z)))", "goal": "x * (x * y) = (x * x) * y", "label": "false"}
+{"id": "hard3_0079", "difficulty": "hard", "hypothesis": "x = y * (z * (z * (z * x)))", "goal": "x = ((y * y) * z) * (x * x)", "label": "false"}
+{"id": "hard3_0080", "difficulty": "hard", "hypothesis": "x = x * (x * ((x * y) * z))", "goal": "x * y = x * (x * (y * z))", "label": "false"}
+{"id": "hard3_0081", "difficulty": "hard", "hypothesis": "x = x * (x * ((y * y) * y))", "goal": "x = x * ((y * (x * x)) * x)", "label": "false"}
+{"id": "hard3_0082", "difficulty": "hard", "hypothesis": "x = x * (x * ((y * z) * x))", "goal": "x = ((x * x) * (x * y)) * x", "label": "false"}
+{"id": "hard3_0083", "difficulty": "hard", "hypothesis": "x = x * (x * ((y * z) * y))", "goal": "x * y = (x * z) * (w * y)", "label": "false"}
+{"id": "hard3_0084", "difficulty": "hard", "hypothesis": "x = x * (x * ((y * z) * z))", "goal": "x * x = (x * (y * x)) * z", "label": "false"}
+{"id": "hard3_0085", "difficulty": "hard", "hypothesis": "x = x * (y * ((y * y) * z))", "goal": "x = (x * ((y * x) * z)) * x", "label": "true"}
+{"id": "hard3_0086", "difficulty": "hard", "hypothesis": "x = x * (y * ((y * z) * y))", "goal": "x * y = ((x * z) * y) * w", "label": "false"}
+{"id": "hard3_0087", "difficulty": "hard", "hypothesis": "x = x * (y * ((y * z) * w))", "goal": "x = (((x * y) * x) * x) * z", "label": "true"}
+{"id": "hard3_0088", "difficulty": "hard", "hypothesis": "x = x * (y * ((y * z) * w))", "goal": "x * x = (x * (y * x)) * z", "label": "true"}
+{"id": "hard3_0089", "difficulty": "hard", "hypothesis": "x = x * (y * ((z * x) * w))", "goal": "x * x = x * (y * (z * z))", "label": "true"}
+{"id": "hard3_0090", "difficulty": "hard", "hypothesis": "x = x * (y * ((z * z) * w))", "goal": "x = (x * (y * x)) * (x * y)", "label": "true"}
+{"id": "hard3_0091", "difficulty": "hard", "hypothesis": "x = y * (y * ((x * y) * y))", "goal": "x = (y * (z * z)) * (y * x)", "label": "false"}
+{"id": "hard3_0092", "difficulty": "hard", "hypothesis": "x = y * (y * ((x * y) * y))", "goal": "x * x = ((y * y) * x) * x", "label": "false"}
+{"id": "hard3_0093", "difficulty": "hard", "hypothesis": "x = y * (y * ((y * x) * y))", "goal": "x = y * ((x * (x * y)) * x)", "label": "false"}
+{"id": "hard3_0094", "difficulty": "hard", "hypothesis": "x = y * (y * ((z * x) * x))", "goal": "x = (((x * y) * z) * y) * x", "label": "false"}
+{"id": "hard3_0095", "difficulty": "hard", "hypothesis": "x = y * (y * ((z * w) * x))", "goal": "x = ((y * z) * (z * z)) * x", "label": "false"}
+{"id": "hard3_0096", "difficulty": "hard", "hypothesis": "x = y * (z * ((x * w) * x))", "goal": "x = (x * (x * x)) * x", "label": "false"}
+{"id": "hard3_0097", "difficulty": "hard", "hypothesis": "x = y * (z * ((x * w) * x))", "goal": "x = (y * ((y * z) * y)) * x", "label": "false"}
+{"id": "hard3_0098", "difficulty": "hard", "hypothesis": "x = y * (z * ((y * y) * x))", "goal": "x = ((x * x) * x) * (y * x)", "label": "false"}
+{"id": "hard3_0099", "difficulty": "hard", "hypothesis": "x = y * (z * ((y * y) * x))", "goal": "x = ((x * (y * x)) * x) * x", "label": "false"}
+{"id": "hard3_0100", "difficulty": "hard", "hypothesis": "x = y * (z * ((w * y) * x))", "goal": "x = y * ((y * (x * z)) * x)", "label": "false"}
+{"id": "hard3_0101", "difficulty": "hard", "hypothesis": "x = y * (z * ((w * y) * x))", "goal": "x = ((y * z) * x) * (y * x)", "label": "false"}
+{"id": "hard3_0102", "difficulty": "hard", "hypothesis": "x = y * (z * ((w * w) * x))", "goal": "x = ((x * (y * x)) * z) * x", "label": "false"}
+{"id": "hard3_0103", "difficulty": "hard", "hypothesis": "x = x * ((x * y) * (y * z))", "goal": "x * y = x * (z * (y * w))", "label": "false"}
+{"id": "hard3_0104", "difficulty": "hard", "hypothesis": "x = x * ((x * y) * (z * y))", "goal": "x * (y * y) = (x * z) * z", "label": "false"}
+{"id": "hard3_0105", "difficulty": "hard", "hypothesis": "x = x * ((x * y) * (z * z))", "goal": "x * y = x * (z * (x * z))", "label": "false"}
+{"id": "hard3_0106", "difficulty": "hard", "hypothesis": "x = x * ((y * z) * (x * y))", "goal": "x = (x * y) * (y * y)", "label": "true"}
+{"id": "hard3_0107", "difficulty": "hard", "hypothesis": "x = x * ((y * z) * (y * w))", "goal": "x = ((x * (y * y)) * z) * x", "label": "true"}
+{"id": "hard3_0108", "difficulty": "hard", "hypothesis": "x = x * ((y * z) * (z * x))", "goal": "x * (y * x) = x * (z * x)", "label": "false"}
+{"id": "hard3_0109", "difficulty": "hard", "hypothesis": "x = x * ((y * z) * (w * w))", "goal": "(x * y) * x = (x * z) * y", "label": "true"}
+{"id": "hard3_0110", "difficulty": "hard", "hypothesis": "x = y * ((x * y) * (z * x))", "goal": "x = ((y * (y * x)) * y) * x", "label": "false"}
+{"id": "hard3_0111", "difficulty": "hard", "hypothesis": "x = y * ((x * z) * (z * x))", "goal": "x * x = x * ((y * z) * x)", "label": "false"}
+{"id": "hard3_0112", "difficulty": "hard", "hypothesis": "x = y * ((y * x) * (x * x))", "goal": "x = x * (((x * y) * y) * x)", "label": "false"}
+{"id": "hard3_0113", "difficulty": "hard", "hypothesis": "x = y * ((y * y) * (x * x))", "goal": "x = x * (((y * x) * x) * x)", "label": "false"}
+{"id": "hard3_0114", "difficulty": "hard", "hypothesis": "x = y * ((y * y) * (z * x))", "goal": "x = (x * y) * (x * (y * x))", "label": "true"}
+{"id": "hard3_0115", "difficulty": "hard", "hypothesis": "x = y * ((y * z) * (x * x))", "goal": "x = (y * x) * (z * (y * x))", "label": "true"}
+{"id": "hard3_0116", "difficulty": "hard", "hypothesis": "x = y * ((y * z) * (y * x))", "goal": "x = ((y * (z * y)) * z) * x", "label": "false"}
+{"id": "hard3_0117", "difficulty": "hard", "hypothesis": "x = y * ((z * x) * (x * x))", "goal": "x * y = (y * (y * x)) * y", "label": "true"}
+{"id": "hard3_0118", "difficulty": "hard", "hypothesis": "x = y * ((z * x) * (y * x))", "goal": "x = (((y * x) * z) * y) * x", "label": "false"}
+{"id": "hard3_0119", "difficulty": "hard", "hypothesis": "x = y * ((z * z) * (x * x))", "goal": "x = x * (((x * y) * y) * x)", "label": "false"}
+{"id": "hard3_0120", "difficulty": "hard", "hypothesis": "x = y * ((z * z) * (x * x))", "goal": "x = (x * (y * y)) * (y * x)", "label": "false"}
+{"id": "hard3_0121", "difficulty": "hard", "hypothesis": "x = y * ((z * w) * (x * x))", "goal": "x = (y * ((z * w) * z)) * x", "label": "false"}
+{"id": "hard3_0122", "difficulty": "hard", "hypothesis": "x = y * ((z * w) * (w * x))", "goal": "x = y * ((y * z) * x)", "label": "false"}
+{"id": "hard3_0123", "difficulty": "hard", "hypothesis": "x = y * ((z * w) * (u * x))", "goal": "x * y = z * (w * y)", "label": "false"}
+{"id": "hard3_0124", "difficulty": "hard", "hypothesis": "x = y * ((z * w) * (u * x))", "goal": "x = (y * z) * (y * (z * x))", "label": "true"}
+{"id": "hard3_0125", "difficulty": "hard", "hypothesis": "x = y * ((z * w) * (u * x))", "goal": "x = (y * (x * (z * z))) * x", "label": "false"}
+{"id": "hard3_0126", "difficulty": "hard", "hypothesis": "x = y * ((z * w) * (u * x))", "goal": "x = (x * ((y * z) * y)) * x", "label": "false"}
+{"id": "hard3_0127", "difficulty": "hard", "hypothesis": "x = y * ((z * w) * (u * x))", "goal": "x * y = ((y * x) * y) * y", "label": "true"}
+{"id": "hard3_0128", "difficulty": "hard", "hypothesis": "x = x * ((x * (y * z)) * y)", "goal": "x = ((x * y) * z) * (y * z)", "label": "false"}
+{"id": "hard3_0129", "difficulty": "hard", "hypothesis": "x = x * ((x * (y * z)) * w)", "goal": "(x * y) * x = (x * y) * z", "label": "false"}
+{"id": "hard3_0130", "difficulty": "hard", "hypothesis": "x = x * ((y * (x * x)) * z)", "goal": "x * y = x * ((z * y) * y)", "label": "false"}
+{"id": "hard3_0131", "difficulty": "hard", "hypothesis": "x = x * ((y * (y * x)) * z)", "goal": "x = (x * y) * (z * (x * z))", "label": "true"}
+{"id": "hard3_0132", "difficulty": "hard", "hypothesis": "x = x * ((y * (y * y)) * z)", "goal": "x * y = x * (y * (y * z))", "label": "false"}
+{"id": "hard3_0133", "difficulty": "hard", "hypothesis": "x = x * ((y * (y * z)) * w)", "goal": "x = (x * (y * (y * x))) * y", "label": "true"}
+{"id": "hard3_0134", "difficulty": "hard", "hypothesis": "x = x * ((y * (z * x)) * z)", "goal": "x * y = x * (z * y)", "label": "true"}
+{"id": "hard3_0135", "difficulty": "hard", "hypothesis": "x = x * ((y * (z * x)) * z)", "goal": "x = (x * y) * (y * (y * x))", "label": "true"}
+{"id": "hard3_0136", "difficulty": "hard", "hypothesis": "x = x * ((y * (z * y)) * w)", "goal": "x * (x * x) = x * (y * z)", "label": "true"}
+{"id": "hard3_0137", "difficulty": "hard", "hypothesis": "x = x * ((y * (z * z)) * z)", "goal": "x = (x * y) * ((x * y) * x)", "label": "true"}
+{"id": "hard3_0138", "difficulty": "hard", "hypothesis": "x = x * ((y * (z * w)) * u)", "goal": "(x * y) * x = (x * z) * x", "label": "true"}
+{"id": "hard3_0139", "difficulty": "hard", "hypothesis": "x = y * ((x * (x * x)) * x)", "goal": "x = x * ((y * y) * x)", "label": "true"}
+{"id": "hard3_0140", "difficulty": "hard", "hypothesis": "x = y * ((x * (x * x)) * x)", "goal": "x = x * (((y * y) * y) * x)", "label": "true"}
+{"id": "hard3_0141", "difficulty": "hard", "hypothesis": "x = y * ((x * (y * y)) * x)", "goal": "x * x = ((y * y) * y) * x", "label": "false"}
+{"id": "hard3_0142", "difficulty": "hard", "hypothesis": "x = y * ((x * (z * x)) * x)", "goal": "x = (y * y) * (x * x)", "label": "true"}
+{"id": "hard3_0143", "difficulty": "hard", "hypothesis": "x = y * ((x * (z * y)) * x)", "goal": "x = y * (x * (y * (y * x)))", "label": "false"}
+{"id": "hard3_0144", "difficulty": "hard", "hypothesis": "x = y * ((y * (y * z)) * x)", "goal": "x = (y * (z * w)) * (y * x)", "label": "true"}
+{"id": "hard3_0145", "difficulty": "hard", "hypothesis": "x = y * ((z * (z * x)) * y)", "goal": "x = y * (((x * y) * y) * y)", "label": "true"}
+{"id": "hard3_0146", "difficulty": "hard", "hypothesis": "x = y * ((z * (z * x)) * y)", "goal": "x = (x * x) * (x * (y * y))", "label": "false"}
+{"id": "hard3_0147", "difficulty": "hard", "hypothesis": "x = y * ((z * (w * w)) * x)", "goal": "x = x * ((y * (x * z)) * x)", "label": "true"}
+{"id": "hard3_0148", "difficulty": "hard", "hypothesis": "x = y * ((z * (w * u)) * x)", "goal": "x = ((x * y) * x) * (z * x)", "label": "true"}
+{"id": "hard3_0149", "difficulty": "hard", "hypothesis": "x = x * (((x * y) * y) * y)", "goal": "x * y = (x * z) * (z * y)", "label": "false"}
+{"id": "hard3_0150", "difficulty": "hard", "hypothesis": "x = x * (((y * x) * y) * z)", "goal": "x = x * ((y * (z * w)) * x)", "label": "false"}
+{"id": "hard3_0151", "difficulty": "hard", "hypothesis": "x = x * (((y * x) * y) * z)", "goal": "(x * x) * x = (x * x) * y", "label": "false"}
+{"id": "hard3_0152", "difficulty": "hard", "hypothesis": "x = x * (((y * y) * y) * y)", "goal": "x = x * ((x * (x * x)) * x)", "label": "false"}
+{"id": "hard3_0153", "difficulty": "hard", "hypothesis": "x = x * (((y * z) * x) * y)", "goal": "x * (y * x) = x * (z * z)", "label": "false"}
+{"id": "hard3_0154", "difficulty": "hard", "hypothesis": "x = y * (((x * x) * z) * x)", "goal": "x * y = z * (y * (x * y))", "label": "true"}
+{"id": "hard3_0155", "difficulty": "hard", "hypothesis": "x = y * (((x * x) * z) * x)", "goal": "x * y = z * (y * (w * y))", "label": "true"}
+{"id": "hard3_0156", "difficulty": "hard", "hypothesis": "x = y * (((y * x) * z) * x)", "goal": "x = ((x * y) * z) * (z * x)", "label": "true"}
+{"id": "hard3_0157", "difficulty": "hard", "hypothesis": "x = y * (((y * y) * z) * x)", "goal": "x = y * ((x * (x * z)) * x)", "label": "true"}
+{"id": "hard3_0158", "difficulty": "hard", "hypothesis": "x = y * (((y * z) * x) * x)", "goal": "x = y * ((z * (x * x)) * x)", "label": "true"}
+{"id": "hard3_0159", "difficulty": "hard", "hypothesis": "x = y * (((y * z) * z) * x)", "goal": "(x * y) * x = (y * x) * x", "label": "false"}
+{"id": "hard3_0160", "difficulty": "hard", "hypothesis": "x = (x * x) * (y * (x * z))", "goal": "(x * y) * x = (x * z) * x", "label": "true"}
+{"id": "hard3_0161", "difficulty": "hard", "hypothesis": "x = (x * y) * (y * (z * y))", "goal": "x = (x * (y * y)) * (y * z)", "label": "false"}
+{"id": "hard3_0162", "difficulty": "hard", "hypothesis": "x = (x * y) * (z * (x * y))", "goal": "x * y = ((x * y) * z) * z", "label": "true"}
+{"id": "hard3_0163", "difficulty": "hard", "hypothesis": "x = (y * x) * (x * (x * z))", "goal": "x = y * (y * (z * (z * x)))", "label": "false"}
+{"id": "hard3_0164", "difficulty": "hard", "hypothesis": "x = (y * x) * (x * (z * x))", "goal": "x = (y * (y * (z * y))) * x", "label": "false"}
+{"id": "hard3_0165", "difficulty": "hard", "hypothesis": "x = (y * x) * (x * (z * w))", "goal": "x = (y * (y * y)) * y", "label": "false"}
+{"id": "hard3_0166", "difficulty": "hard", "hypothesis": "x = (y * x) * (x * (z * w))", "goal": "x = ((y * y) * z) * y", "label": "false"}
+{"id": "hard3_0167", "difficulty": "hard", "hypothesis": "x = (y * x) * (x * (z * w))", "goal": "x * y = z * (x * (z * z))", "label": "false"}
+{"id": "hard3_0168", "difficulty": "hard", "hypothesis": "x = (y * x) * (z * (z * x))", "goal": "x * x = (x * x) * x", "label": "true"}
+{"id": "hard3_0169", "difficulty": "hard", "hypothesis": "x = (y * x) * (z * (z * x))", "goal": "x = ((y * z) * (z * w)) * x", "label": "false"}
+{"id": "hard3_0170", "difficulty": "hard", "hypothesis": "x = (y * x) * (z * (w * x))", "goal": "x = y * ((z * (y * x)) * x)", "label": "false"}
+{"id": "hard3_0171", "difficulty": "hard", "hypothesis": "x = (y * x) * (z * (w * x))", "goal": "x = ((y * y) * y) * (z * x)", "label": "false"}
+{"id": "hard3_0172", "difficulty": "hard", "hypothesis": "x = (y * y) * (x * (z * x))", "goal": "x = y * (x * (z * (x * x)))", "label": "false"}
+{"id": "hard3_0173", "difficulty": "hard", "hypothesis": "x = (y * y) * (z * (y * x))", "goal": "x = y * (y * (z * (y * x)))", "label": "false"}
+{"id": "hard3_0174", "difficulty": "hard", "hypothesis": "x = (y * y) * (z * (y * x))", "goal": "x = (y * ((x * z) * z)) * x", "label": "false"}
+{"id": "hard3_0175", "difficulty": "hard", "hypothesis": "x = (y * z) * (x * (z * x))", "goal": "x * y = ((x * x) * y) * y", "label": "false"}
+{"id": "hard3_0176", "difficulty": "hard", "hypothesis": "x = (y * z) * (y * (x * z))", "goal": "x = (y * ((y * y) * x)) * y", "label": "true"}
+{"id": "hard3_0177", "difficulty": "hard", "hypothesis": "x = (y * z) * (y * (y * x))", "goal": "x = (((x * y) * x) * y) * x", "label": "false"}
+{"id": "hard3_0178", "difficulty": "hard", "hypothesis": "x = (y * z) * (y * (y * x))", "goal": "x * (y * x) = (y * y) * x", "label": "false"}
+{"id": "hard3_0179", "difficulty": "hard", "hypothesis": "x = (y * z) * (z * (x * x))", "goal": "x = (y * ((z * x) * y)) * x", "label": "false"}
+{"id": "hard3_0180", "difficulty": "hard", "hypothesis": "x = (y * z) * (z * (z * x))", "goal": "x = ((x * x) * (x * x)) * x", "label": "false"}
+{"id": "hard3_0181", "difficulty": "hard", "hypothesis": "x = (y * z) * (w * (x * x))", "goal": "x = ((y * y) * (x * x)) * x", "label": "false"}
+{"id": "hard3_0182", "difficulty": "hard", "hypothesis": "x = (y * z) * (w * (w * x))", "goal": "x = (((x * y) * z) * z) * x", "label": "false"}
+{"id": "hard3_0183", "difficulty": "hard", "hypothesis": "x = (x * x) * ((y * z) * z)", "goal": "x = (x * x) * (y * (x * y))", "label": "true"}
+{"id": "hard3_0184", "difficulty": "hard", "hypothesis": "x = (x * y) * ((y * z) * y)", "goal": "x = (((x * y) * y) * y) * x", "label": "false"}
+{"id": "hard3_0185", "difficulty": "hard", "hypothesis": "x = (x * y) * ((y * z) * y)", "goal": "x * y = x * ((z * w) * x)", "label": "false"}
+{"id": "hard3_0186", "difficulty": "hard", "hypothesis": "x = (x * y) * ((y * z) * w)", "goal": "x = (x * (y * z)) * x", "label": "false"}
+{"id": "hard3_0187", "difficulty": "hard", "hypothesis": "x = (x * y) * ((z * y) * y)", "goal": "x = (x * y) * (z * (z * w))", "label": "true"}
+{"id": "hard3_0188", "difficulty": "hard", "hypothesis": "x = (x * y) * ((z * w) * w)", "goal": "x * y = x * (z * (z * y))", "label": "true"}
+{"id": "hard3_0189", "difficulty": "hard", "hypothesis": "x = (y * x) * ((x * x) * x)", "goal": "x = ((y * z) * z) * (z * x)", "label": "false"}
+{"id": "hard3_0190", "difficulty": "hard", "hypothesis": "x = (y * x) * ((x * x) * y)", "goal": "x * (y * z) = (x * z) * y", "label": "false"}
+{"id": "hard3_0191", "difficulty": "hard", "hypothesis": "x = (y * x) * ((x * z) * x)", "goal": "x * y = x * (x * (z * y))", "label": "false"}
+{"id": "hard3_0192", "difficulty": "hard", "hypothesis": "x = (y * x) * ((y * y) * y)", "goal": "x = y * (x * ((y * y) * y))", "label": "true"}
+{"id": "hard3_0193", "difficulty": "hard", "hypothesis": "x = (y * x) * ((y * z) * z)", "goal": "x = y * ((x * (x * y)) * x)", "label": "true"}
+{"id": "hard3_0194", "difficulty": "hard", "hypothesis": "x = (y * x) * ((z * z) * x)", "goal": "x = (y * (y * z)) * (x * x)", "label": "true"}
+{"id": "hard3_0195", "difficulty": "hard", "hypothesis": "x = (y * z) * ((x * z) * x)", "goal": "x * y = ((x * z) * y) * y", "label": "false"}
+{"id": "hard3_0196", "difficulty": "hard", "hypothesis": "x = (y * z) * ((w * x) * x)", "goal": "x = y * (z * (x * (z * x)))", "label": "true"}
+{"id": "hard3_0197", "difficulty": "hard", "hypothesis": "x = (y * z) * ((w * x) * x)", "goal": "x * y = x * (y * (x * y))", "label": "true"}
+{"id": "hard3_0198", "difficulty": "hard", "hypothesis": "x = (y * z) * ((w * u) * x)", "goal": "x = y * (((z * w) * z) * x)", "label": "true"}
+{"id": "hard3_0199", "difficulty": "hard", "hypothesis": "x = (x * (x * y)) * (z * y)", "goal": "x = (x * ((x * y) * x)) * z", "label": "true"}
+{"id": "hard3_0200", "difficulty": "hard", "hypothesis": "x = (x * (x * y)) * (z * z)", "goal": "x = (x * (y * x)) * (z * w)", "label": "false"}
+{"id": "hard3_0201", "difficulty": "hard", "hypothesis": "x = (x * (y * x)) * (y * z)", "goal": "x = (((x * y) * z) * y) * x", "label": "false"}
+{"id": "hard3_0202", "difficulty": "hard", "hypothesis": "x = (x * (y * z)) * (y * w)", "goal": "x * y = x * ((y * z) * x)", "label": "true"}
+{"id": "hard3_0203", "difficulty": "hard", "hypothesis": "x = (x * (y * z)) * (w * w)", "goal": "x * y = ((x * x) * z) * z", "label": "true"}
+{"id": "hard3_0204", "difficulty": "hard", "hypothesis": "x = (y * (x * x)) * (z * x)", "goal": "x = y * (((x * z) * z) * x)", "label": "true"}
+{"id": "hard3_0205", "difficulty": "hard", "hypothesis": "x = (y * (x * x)) * (z * x)", "goal": "x * x = (x * (y * z)) * x", "label": "true"}
+{"id": "hard3_0206", "difficulty": "hard", "hypothesis": "x = (y * (y * x)) * (y * x)", "goal": "x * y = x * (z * (w * y))", "label": "false"}
+{"id": "hard3_0207", "difficulty": "hard", "hypothesis": "x = (y * (y * z)) * (x * z)", "goal": "x * y = (z * (z * x)) * y", "label": "true"}
+{"id": "hard3_0208", "difficulty": "hard", "hypothesis": "x = (y * (z * x)) * (y * x)", "goal": "x * y = ((y * z) * x) * y", "label": "true"}
+{"id": "hard3_0209", "difficulty": "hard", "hypothesis": "x = (y * (z * x)) * (z * x)", "goal": "x = ((y * z) * z) * (w * x)", "label": "true"}
+{"id": "hard3_0210", "difficulty": "hard", "hypothesis": "x = (y * (z * x)) * (w * x)", "goal": "x = ((x * y) * y) * (y * x)", "label": "true"}
+{"id": "hard3_0211", "difficulty": "hard", "hypothesis": "x = (y * (z * y)) * (y * x)", "goal": "x * (y * y) = z * (y * y)", "label": "false"}
+{"id": "hard3_0212", "difficulty": "hard", "hypothesis": "x = (y * (z * z)) * (w * x)", "goal": "x = x * ((y * x) * x)", "label": "true"}
+{"id": "hard3_0213", "difficulty": "hard", "hypothesis": "x = (y * (z * z)) * (w * x)", "goal": "x * x = (y * (x * z)) * x", "label": "true"}
+{"id": "hard3_0214", "difficulty": "hard", "hypothesis": "x = ((x * x) * y) * (x * z)", "goal": "x = ((x * y) * (z * w)) * y", "label": "true"}
+{"id": "hard3_0215", "difficulty": "hard", "hypothesis": "x = ((x * x) * y) * (z * x)", "goal": "x = x * ((y * (z * z)) * x)", "label": "false"}
+{"id": "hard3_0216", "difficulty": "hard", "hypothesis": "x = ((x * x) * y) * (z * z)", "goal": "x * (y * z) = (x * y) * z", "label": "false"}
+{"id": "hard3_0217", "difficulty": "hard", "hypothesis": "x = ((x * x) * y) * (z * w)", "goal": "x = (x * (y * z)) * y", "label": "false"}
+{"id": "hard3_0218", "difficulty": "hard", "hypothesis": "x = ((x * y) * x) * (z * w)", "goal": "x = x * (y * (z * (w * u)))", "label": "false"}
+{"id": "hard3_0219", "difficulty": "hard", "hypothesis": "x = ((x * y) * x) * (z * w)", "goal": "x = (((x * y) * y) * x) * z", "label": "false"}
+{"id": "hard3_0220", "difficulty": "hard", "hypothesis": "x = ((x * y) * y) * (z * w)", "goal": "x = (x * x) * ((y * x) * y)", "label": "false"}
+{"id": "hard3_0221", "difficulty": "hard", "hypothesis": "x = ((x * y) * z) * (y * y)", "goal": "x = ((x * (y * y)) * x) * x", "label": "true"}
+{"id": "hard3_0222", "difficulty": "hard", "hypothesis": "x = ((x * y) * z) * (z * w)", "goal": "x = x * (y * ((z * y) * w))", "label": "false"}
+{"id": "hard3_0223", "difficulty": "hard", "hypothesis": "x = ((x * y) * z) * (w * y)", "goal": "x = (x * y) * ((x * y) * x)", "label": "false"}
+{"id": "hard3_0224", "difficulty": "hard", "hypothesis": "x = ((x * y) * z) * (w * y)", "goal": "x = (x * (x * x)) * (x * y)", "label": "false"}
+{"id": "hard3_0225", "difficulty": "hard", "hypothesis": "x = ((x * y) * z) * (w * y)", "goal": "x = (x * (x * (y * x))) * x", "label": "false"}
+{"id": "hard3_0226", "difficulty": "hard", "hypothesis": "x = ((x * y) * z) * (w * z)", "goal": "x = (x * x) * (x * (y * z))", "label": "false"}
+{"id": "hard3_0227", "difficulty": "hard", "hypothesis": "x = ((x * y) * z) * (w * z)", "goal": "x = (((x * y) * z) * z) * z", "label": "false"}
+{"id": "hard3_0228", "difficulty": "hard", "hypothesis": "x = ((x * y) * z) * (w * u)", "goal": "x = x * (y * (y * y))", "label": "false"}
+{"id": "hard3_0229", "difficulty": "hard", "hypothesis": "x = ((y * x) * x) * (z * x)", "goal": "x = (y * (x * x)) * (z * x)", "label": "false"}
+{"id": "hard3_0230", "difficulty": "hard", "hypothesis": "x = ((y * x) * y) * (z * x)", "goal": "x * y = ((y * z) * w) * y", "label": "true"}
+{"id": "hard3_0231", "difficulty": "hard", "hypothesis": "x = ((y * x) * y) * (z * z)", "goal": "x = (y * (x * (y * x))) * x", "label": "true"}
+{"id": "hard3_0232", "difficulty": "hard", "hypothesis": "x = ((y * x) * z) * (y * z)", "goal": "x * y = x * ((z * z) * y)", "label": "true"}
+{"id": "hard3_0233", "difficulty": "hard", "hypothesis": "x = ((y * x) * z) * (w * x)", "goal": "(x * y) * y = (x * z) * y", "label": "true"}
+{"id": "hard3_0234", "difficulty": "hard", "hypothesis": "x = ((y * y) * x) * (x * z)", "goal": "x = y * ((y * x) * x)", "label": "false"}
+{"id": "hard3_0235", "difficulty": "hard", "hypothesis": "x = ((y * y) * x) * (x * z)", "goal": "x = x * ((y * (z * w)) * u)", "label": "false"}
+{"id": "hard3_0236", "difficulty": "hard", "hypothesis": "x = ((y * y) * x) * (x * z)", "goal": "x = (y * x) * ((y * x) * x)", "label": "false"}
+{"id": "hard3_0237", "difficulty": "hard", "hypothesis": "x = ((y * y) * x) * (x * z)", "goal": "x * y = (x * z) * (x * w)", "label": "false"}
+{"id": "hard3_0238", "difficulty": "hard", "hypothesis": "x = ((y * y) * z) * (x * x)", "goal": "x = (y * y) * ((y * z) * x)", "label": "true"}
+{"id": "hard3_0239", "difficulty": "hard", "hypothesis": "x = ((y * y) * z) * (w * x)", "goal": "x = (y * (x * x)) * (y * x)", "label": "true"}
+{"id": "hard3_0240", "difficulty": "hard", "hypothesis": "x = ((y * y) * z) * (w * x)", "goal": "x = ((y * x) * y) * (x * x)", "label": "true"}
+{"id": "hard3_0241", "difficulty": "hard", "hypothesis": "x = ((y * z) * x) * (x * w)", "goal": "x = (x * x) * ((y * x) * x)", "label": "false"}
+{"id": "hard3_0242", "difficulty": "hard", "hypothesis": "x = ((y * z) * x) * (x * w)", "goal": "x = ((x * x) * y) * (y * y)", "label": "false"}
+{"id": "hard3_0243", "difficulty": "hard", "hypothesis": "x = ((y * z) * x) * (w * x)", "goal": "x = (y * (z * w)) * (y * x)", "label": "true"}
+{"id": "hard3_0244", "difficulty": "hard", "hypothesis": "x = ((y * z) * y) * (w * x)", "goal": "x * y = z * (x * (z * y))", "label": "true"}
+{"id": "hard3_0245", "difficulty": "hard", "hypothesis": "x = ((y * z) * w) * (u * x)", "goal": "x * x = x * (y * (y * x))", "label": "true"}
+{"id": "hard3_0246", "difficulty": "hard", "hypothesis": "x = (x * (x * (y * y))) * z", "goal": "x * x = x * (y * (x * y))", "label": "true"}
+{"id": "hard3_0247", "difficulty": "hard", "hypothesis": "x = (x * (y * (x * x))) * z", "goal": "x = (x * ((y * z) * z)) * w", "label": "true"}
+{"id": "hard3_0248", "difficulty": "hard", "hypothesis": "x = (x * (y * (x * y))) * y", "goal": "(x * x) * x = (x * x) * y", "label": "false"}
+{"id": "hard3_0249", "difficulty": "hard", "hypothesis": "x = (x * (y * (x * z))) * w", "goal": "x = (x * (y * x)) * (y * y)", "label": "true"}
+{"id": "hard3_0250", "difficulty": "hard", "hypothesis": "x = (x * (y * (y * x))) * z", "goal": "x * y = x * (z * (w * x))", "label": "true"}
+{"id": "hard3_0251", "difficulty": "hard", "hypothesis": "x = (x * (y * (y * y))) * z", "goal": "x = (x * (y * x)) * (y * y)", "label": "true"}
+{"id": "hard3_0252", "difficulty": "hard", "hypothesis": "x = (x * (y * (y * y))) * z", "goal": "x = (x * (y * y)) * (z * w)", "label": "true"}
+{"id": "hard3_0253", "difficulty": "hard", "hypothesis": "x = (x * (y * (y * z))) * y", "goal": "x * (x * y) = x * (z * z)", "label": "false"}
+{"id": "hard3_0254", "difficulty": "hard", "hypothesis": "x = (y * (z * (x * x))) * x", "goal": "x * x = (y * z) * (x * x)", "label": "false"}
+{"id": "hard3_0255", "difficulty": "hard", "hypothesis": "x = (y * (z * (y * w))) * x", "goal": "x * (x * x) = y * (x * x)", "label": "true"}
+{"id": "hard3_0256", "difficulty": "hard", "hypothesis": "x = (y * (z * (z * w))) * x", "goal": "x = (x * ((y * x) * x)) * x", "label": "true"}
+{"id": "hard3_0257", "difficulty": "hard", "hypothesis": "x = (y * (z * (w * w))) * x", "goal": "x = ((y * y) * (y * y)) * x", "label": "true"}
+{"id": "hard3_0258", "difficulty": "hard", "hypothesis": "x = (x * ((x * y) * y)) * z", "goal": "x = (x * (x * (x * y))) * x", "label": "true"}
+{"id": "hard3_0259", "difficulty": "hard", "hypothesis": "x = (x * ((y * x) * z)) * z", "goal": "x = (x * (y * (z * x))) * x", "label": "true"}
+{"id": "hard3_0260", "difficulty": "hard", "hypothesis": "x = (x * ((y * z) * x)) * z", "goal": "x = (x * (y * (z * w))) * z", "label": "true"}
+{"id": "hard3_0261", "difficulty": "hard", "hypothesis": "x = (x * ((y * z) * y)) * w", "goal": "x = (x * y) * (z * (x * x))", "label": "true"}
+{"id": "hard3_0262", "difficulty": "hard", "hypothesis": "x = (x * ((y * z) * w)) * u", "goal": "x * y = ((x * z) * w) * x", "label": "true"}
+{"id": "hard3_0263", "difficulty": "hard", "hypothesis": "x = (y * ((x * x) * x)) * x", "goal": "x = (((x * x) * x) * y) * x", "label": "false"}
+{"id": "hard3_0264", "difficulty": "hard", "hypothesis": "x = (y * ((x * z) * x)) * x", "goal": "x * y = ((z * w) * u) * y", "label": "false"}
+{"id": "hard3_0265", "difficulty": "hard", "hypothesis": "x = (y * ((x * z) * y)) * z", "goal": "x * (x * y) = (y * x) * x", "label": "true"}
+{"id": "hard3_0266", "difficulty": "hard", "hypothesis": "x = (y * ((x * z) * z)) * x", "goal": "x = (x * (y * z)) * (w * x)", "label": "true"}
+{"id": "hard3_0267", "difficulty": "hard", "hypothesis": "x = (y * ((x * z) * w)) * x", "goal": "x = ((x * y) * (x * x)) * x", "label": "true"}
+{"id": "hard3_0268", "difficulty": "hard", "hypothesis": "x = (y * ((x * z) * w)) * x", "goal": "x * y = (z * z) * (x * y)", "label": "true"}
+{"id": "hard3_0269", "difficulty": "hard", "hypothesis": "x = (y * ((y * z) * w)) * x", "goal": "x = ((y * x) * y) * (y * x)", "label": "true"}
+{"id": "hard3_0270", "difficulty": "hard", "hypothesis": "x = (y * ((z * x) * x)) * x", "goal": "x = ((x * (x * x)) * y) * x", "label": "false"}
+{"id": "hard3_0271", "difficulty": "hard", "hypothesis": "x = (y * ((z * x) * z)) * x", "goal": "x = ((y * z) * w) * (w * x)", "label": "true"}
+{"id": "hard3_0272", "difficulty": "hard", "hypothesis": "x = (y * ((z * x) * w)) * x", "goal": "x = ((x * (y * z)) * x) * x", "label": "true"}
+{"id": "hard3_0273", "difficulty": "hard", "hypothesis": "x = (y * ((z * w) * w)) * x", "goal": "x * x = (x * y) * (z * x)", "label": "true"}
+{"id": "hard3_0274", "difficulty": "hard", "hypothesis": "x = ((x * x) * (x * x)) * y", "goal": "x = (x * (y * (z * w))) * z", "label": "false"}
+{"id": "hard3_0275", "difficulty": "hard", "hypothesis": "x = ((x * x) * (y * x)) * y", "goal": "x * y = (x * (z * z)) * y", "label": "false"}
+{"id": "hard3_0276", "difficulty": "hard", "hypothesis": "x = ((x * x) * (y * x)) * z", "goal": "x * y = (x * (y * z)) * w", "label": "false"}
+{"id": "hard3_0277", "difficulty": "hard", "hypothesis": "x = ((x * y) * (x * x)) * y", "goal": "x * x = x * (y * (x * y))", "label": "false"}
+{"id": "hard3_0278", "difficulty": "hard", "hypothesis": "x = ((x * y) * (x * x)) * z", "goal": "x * y = x * (z * w)", "label": "true"}
+{"id": "hard3_0279", "difficulty": "hard", "hypothesis": "x = ((x * y) * (x * z)) * w", "goal": "x * y = x * ((z * x) * z)", "label": "true"}
+{"id": "hard3_0280", "difficulty": "hard", "hypothesis": "x = ((x * y) * (y * z)) * x", "goal": "x * y = x * (x * (z * y))", "label": "false"}
+{"id": "hard3_0281", "difficulty": "hard", "hypothesis": "x = ((x * y) * (y * z)) * w", "goal": "x = x * (x * (y * (x * y)))", "label": "false"}
+{"id": "hard3_0282", "difficulty": "hard", "hypothesis": "x = ((x * y) * (y * z)) * w", "goal": "x = (x * (y * y)) * (y * y)", "label": "false"}
+{"id": "hard3_0283", "difficulty": "hard", "hypothesis": "x = ((x * y) * (y * z)) * w", "goal": "x = ((x * x) * x) * (y * z)", "label": "true"}
+{"id": "hard3_0284", "difficulty": "hard", "hypothesis": "x = ((x * y) * (y * z)) * w", "goal": "x * x = x * ((y * x) * y)", "label": "true"}
+{"id": "hard3_0285", "difficulty": "hard", "hypothesis": "x = ((x * y) * (y * z)) * w", "goal": "x * y = x * ((x * z) * z)", "label": "true"}
+{"id": "hard3_0286", "difficulty": "hard", "hypothesis": "x = ((x * y) * (z * x)) * y", "goal": "x * y = (x * (z * z)) * x", "label": "false"}
+{"id": "hard3_0287", "difficulty": "hard", "hypothesis": "x = ((x * y) * (z * y)) * x", "goal": "x * y = (x * x) * (y * y)", "label": "false"}
+{"id": "hard3_0288", "difficulty": "hard", "hypothesis": "x = ((x * y) * (z * z)) * w", "goal": "x = ((x * (y * x)) * z) * z", "label": "true"}
+{"id": "hard3_0289", "difficulty": "hard", "hypothesis": "x = ((x * y) * (z * w)) * z", "goal": "x = x * (x * (y * (z * x)))", "label": "false"}
+{"id": "hard3_0290", "difficulty": "hard", "hypothesis": "x = ((y * x) * (x * x)) * x", "goal": "x = (x * (x * x)) * x", "label": "true"}
+{"id": "hard3_0291", "difficulty": "hard", "hypothesis": "x = ((y * x) * (z * w)) * x", "goal": "x * (y * y) = z * (w * y)", "label": "true"}
+{"id": "hard3_0292", "difficulty": "hard", "hypothesis": "x = ((y * y) * (z * y)) * x", "goal": "x = x * ((y * x) * (y * x))", "label": "true"}
+{"id": "hard3_0293", "difficulty": "hard", "hypothesis": "x = ((y * z) * (y * x)) * x", "goal": "x = y * (x * (x * (y * x)))", "label": "false"}
+{"id": "hard3_0294", "difficulty": "hard", "hypothesis": "x = ((y * z) * (y * x)) * x", "goal": "x = ((y * (z * z)) * x) * x", "label": "true"}
+{"id": "hard3_0295", "difficulty": "hard", "hypothesis": "x = ((y * z) * (z * w)) * x", "goal": "x = (y * (y * z)) * (w * x)", "label": "true"}
+{"id": "hard3_0296", "difficulty": "hard", "hypothesis": "x = ((y * z) * (z * w)) * x", "goal": "x = (((y * z) * y) * y) * x", "label": "true"}
+{"id": "hard3_0297", "difficulty": "hard", "hypothesis": "x = ((y * z) * (w * z)) * x", "goal": "x = ((x * y) * y) * (x * x)", "label": "true"}
+{"id": "hard3_0298", "difficulty": "hard", "hypothesis": "x = ((y * z) * (w * z)) * x", "goal": "x * (x * x) = (y * x) * x", "label": "true"}
+{"id": "hard3_0299", "difficulty": "hard", "hypothesis": "x = ((y * z) * (w * u)) * x", "goal": "x * (x * x) = y * (y * x)", "label": "true"}
+{"id": "hard3_0300", "difficulty": "hard", "hypothesis": "x = ((x * (x * x)) * x) * y", "goal": "x = x * ((y * (z * z)) * x)", "label": "false"}
+{"id": "hard3_0301", "difficulty": "hard", "hypothesis": "x = ((x * (x * x)) * y) * z", "goal": "x = x * ((y * y) * z)", "label": "false"}
+{"id": "hard3_0302", "difficulty": "hard", "hypothesis": "x = ((x * (x * y)) * x) * x", "goal": "x = ((x * (y * z)) * y) * x", "label": "false"}
+{"id": "hard3_0303", "difficulty": "hard", "hypothesis": "x = ((x * (x * y)) * y) * y", "goal": "x = x * (x * ((x * y) * x))", "label": "false"}
+{"id": "hard3_0304", "difficulty": "hard", "hypothesis": "x = ((x * (x * y)) * z) * y", "goal": "x = (x * y) * ((x * y) * x)", "label": "false"}
+{"id": "hard3_0305", "difficulty": "hard", "hypothesis": "x = ((x * (y * x)) * x) * z", "goal": "x = x * (x * ((y * y) * z))", "label": "false"}
+{"id": "hard3_0306", "difficulty": "hard", "hypothesis": "x = ((x * (y * x)) * z) * w", "goal": "x = x * ((y * z) * (x * w))", "label": "false"}
+{"id": "hard3_0307", "difficulty": "hard", "hypothesis": "x = ((x * (y * y)) * x) * z", "goal": "x = ((x * (x * y)) * y) * z", "label": "true"}
+{"id": "hard3_0308", "difficulty": "hard", "hypothesis": "x = ((x * (y * z)) * x) * z", "goal": "x = ((x * x) * y) * (y * z)", "label": "true"}
+{"id": "hard3_0309", "difficulty": "hard", "hypothesis": "x = ((x * (y * z)) * y) * y", "goal": "x * y = x * ((x * z) * z)", "label": "false"}
+{"id": "hard3_0310", "difficulty": "hard", "hypothesis": "x = ((x * (y * z)) * y) * w", "goal": "x = (x * y) * z", "label": "false"}
+{"id": "hard3_0311", "difficulty": "hard", "hypothesis": "x = ((x * (y * z)) * z) * z", "goal": "x * y = ((x * x) * x) * z", "label": "false"}
+{"id": "hard3_0312", "difficulty": "hard", "hypothesis": "x = ((x * (y * z)) * w) * z", "goal": "x = x * (y * (y * x))", "label": "false"}
+{"id": "hard3_0313", "difficulty": "hard", "hypothesis": "x = ((y * (x * x)) * z) * x", "goal": "x * (y * z) = (w * y) * z", "label": "true"}
+{"id": "hard3_0314", "difficulty": "hard", "hypothesis": "x = ((y * (x * z)) * y) * x", "goal": "x = (y * z) * (w * (u * x))", "label": "true"}
+{"id": "hard3_0315", "difficulty": "hard", "hypothesis": "x = ((y * (x * z)) * z) * x", "goal": "x = y * (z * ((y * z) * x))", "label": "true"}
+{"id": "hard3_0316", "difficulty": "hard", "hypothesis": "x = ((y * (x * z)) * z) * x", "goal": "x * x = (y * (y * y)) * x", "label": "true"}
+{"id": "hard3_0317", "difficulty": "hard", "hypothesis": "x = ((y * (x * z)) * z) * x", "goal": "(x * x) * y = (y * z) * y", "label": "true"}
+{"id": "hard3_0318", "difficulty": "hard", "hypothesis": "x = ((y * (x * z)) * w) * x", "goal": "x = (x * ((y * z) * z)) * x", "label": "true"}
+{"id": "hard3_0319", "difficulty": "hard", "hypothesis": "x = ((y * (x * z)) * w) * x", "goal": "x * (y * y) = (z * z) * y", "label": "true"}
+{"id": "hard3_0320", "difficulty": "hard", "hypothesis": "x = ((y * (z * x)) * x) * x", "goal": "x * y = ((x * x) * z) * y", "label": "false"}
+{"id": "hard3_0321", "difficulty": "hard", "hypothesis": "x = ((y * (z * x)) * w) * x", "goal": "x = y * (((z * y) * z) * x)", "label": "true"}
+{"id": "hard3_0322", "difficulty": "hard", "hypothesis": "x = ((y * (z * y)) * z) * x", "goal": "x * x = (x * (y * y)) * x", "label": "false"}
+{"id": "hard3_0323", "difficulty": "hard", "hypothesis": "x = ((y * (z * w)) * z) * x", "goal": "x = x * (x * (y * (y * x)))", "label": "true"}
+{"id": "hard3_0324", "difficulty": "hard", "hypothesis": "x = ((y * (z * w)) * z) * x", "goal": "x = x * (((x * y) * x) * x)", "label": "true"}
+{"id": "hard3_0325", "difficulty": "hard", "hypothesis": "x = ((y * (z * w)) * z) * x", "goal": "x * y = (y * y) * (y * y)", "label": "true"}
+{"id": "hard3_0326", "difficulty": "hard", "hypothesis": "x = ((y * (z * w)) * w) * x", "goal": "x = (((x * y) * x) * x) * x", "label": "true"}
+{"id": "hard3_0327", "difficulty": "hard", "hypothesis": "x = (((x * x) * y) * z) * y", "goal": "x = (x * y) * (z * (x * y))", "label": "false"}
+{"id": "hard3_0328", "difficulty": "hard", "hypothesis": "x = (((x * y) * x) * y) * y", "goal": "x = (x * x) * (y * x)", "label": "false"}
+{"id": "hard3_0329", "difficulty": "hard", "hypothesis": "x = (((x * y) * x) * z) * w", "goal": "x * (x * y) = x * (z * z)", "label": "true"}
+{"id": "hard3_0330", "difficulty": "hard", "hypothesis": "x = (((x * y) * z) * x) * y", "goal": "x = (x * (y * (x * z))) * w", "label": "false"}
+{"id": "hard3_0331", "difficulty": "hard", "hypothesis": "x = (((x * y) * z) * y) * w", "goal": "x = (((x * y) * y) * z) * x", "label": "true"}
+{"id": "hard3_0332", "difficulty": "hard", "hypothesis": "x = (((x * y) * z) * z) * z", "goal": "x = (x * ((y * x) * z)) * w", "label": "false"}
+{"id": "hard3_0333", "difficulty": "hard", "hypothesis": "x = (((y * x) * y) * z) * x", "goal": "x * (y * z) = (y * x) * z", "label": "true"}
+{"id": "hard3_0334", "difficulty": "hard", "hypothesis": "x = (((y * x) * z) * z) * x", "goal": "x = (y * (y * y)) * x", "label": "true"}
+{"id": "hard3_0335", "difficulty": "hard", "hypothesis": "x = (((y * x) * z) * z) * x", "goal": "x = ((y * x) * z) * (w * x)", "label": "true"}
+{"id": "hard3_0336", "difficulty": "hard", "hypothesis": "x = (((y * y) * z) * w) * x", "goal": "x = x * ((x * x) * x)", "label": "true"}
+{"id": "hard3_0337", "difficulty": "hard", "hypothesis": "x = (((y * y) * z) * w) * x", "goal": "x * x = (x * y) * (y * x)", "label": "true"}
+{"id": "hard3_0338", "difficulty": "hard", "hypothesis": "x = (((y * y) * z) * w) * x", "goal": "x * (y * y) = (y * x) * y", "label": "true"}
+{"id": "hard3_0339", "difficulty": "hard", "hypothesis": "x = (((y * z) * y) * x) * x", "goal": "x = ((y * z) * (y * w)) * x", "label": "false"}
+{"id": "hard3_0340", "difficulty": "hard", "hypothesis": "x = (((y * z) * w) * u) * x", "goal": "x = ((y * x) * z) * x", "label": "true"}
+{"id": "hard3_0341", "difficulty": "hard", "hypothesis": "x = (((y * z) * w) * u) * x", "goal": "x = (y * (z * (y * z))) * x", "label": "true"}
+{"id": "hard3_0342", "difficulty": "hard", "hypothesis": "x * x = y * (x * (x * z))", "goal": "x * y = (x * z) * (y * y)", "label": "false"}
+{"id": "hard3_0343", "difficulty": "hard", "hypothesis": "x * x = y * (x * (x * z))", "goal": "x * x = ((y * y) * y) * x", "label": "false"}
+{"id": "hard3_0344", "difficulty": "hard", "hypothesis": "x * x = y * (x * (y * z))", "goal": "x * (x * y) = z * (w * w)", "label": "false"}
+{"id": "hard3_0345", "difficulty": "hard", "hypothesis": "x * x = y * (x * (z * w))", "goal": "x * (y * x) = x * (y * y)", "label": "false"}
+{"id": "hard3_0346", "difficulty": "hard", "hypothesis": "x * x = y * (x * (z * w))", "goal": "x * (y * z) = y * (z * w)", "label": "false"}
+{"id": "hard3_0347", "difficulty": "hard", "hypothesis": "x * x = y * (x * (z * w))", "goal": "x * (y * x) = (x * z) * z", "label": "false"}
+{"id": "hard3_0348", "difficulty": "hard", "hypothesis": "x * x = y * (y * (x * z))", "goal": "x * y = (y * z) * (z * y)", "label": "false"}
+{"id": "hard3_0349", "difficulty": "hard", "hypothesis": "x * x = y * (y * (y * z))", "goal": "x * (y * x) = x * (z * x)", "label": "false"}
+{"id": "hard3_0350", "difficulty": "hard", "hypothesis": "x * x = y * (z * (x * w))", "goal": "x * (y * y) = (y * x) * y", "label": "false"}
+{"id": "hard3_0351", "difficulty": "hard", "hypothesis": "x * y = x * (y * (z * x))", "goal": "x * y = x * ((z * y) * w)", "label": "false"}
+{"id": "hard3_0352", "difficulty": "hard", "hypothesis": "x * y = x * (z * (x * w))", "goal": "x * y = x * (x * (z * z))", "label": "true"}
+{"id": "hard3_0353", "difficulty": "hard", "hypothesis": "x * y = y * (x * (z * y))", "goal": "(x * y) * z = (y * w) * z", "label": "true"}
+{"id": "hard3_0354", "difficulty": "hard", "hypothesis": "x * y = y * (y * (z * z))", "goal": "x * y = (x * y) * z", "label": "true"}
+{"id": "hard3_0355", "difficulty": "hard", "hypothesis": "x * y = y * (y * (z * z))", "goal": "x * x = y * ((z * w) * z)", "label": "true"}
+{"id": "hard3_0356", "difficulty": "hard", "hypothesis": "x * y = z * (x * (x * y))", "goal": "x * y = ((y * y) * z) * y", "label": "false"}
+{"id": "hard3_0357", "difficulty": "hard", "hypothesis": "x * y = z * (z * (y * x))", "goal": "x * y = (x * z) * (y * z)", "label": "false"}
+{"id": "hard3_0358", "difficulty": "hard", "hypothesis": "x * x = y * ((x * y) * z)", "goal": "x * (y * y) = (x * x) * y", "label": "false"}
+{"id": "hard3_0359", "difficulty": "hard", "hypothesis": "x * x = y * ((y * x) * z)", "goal": "x * y = (y * y) * (z * z)", "label": "false"}
+{"id": "hard3_0360", "difficulty": "hard", "hypothesis": "x * x = y * ((y * z) * w)", "goal": "x * y = z * (w * y)", "label": "false"}
+{"id": "hard3_0361", "difficulty": "hard", "hypothesis": "x * x = y * ((y * z) * w)", "goal": "x * x = y * ((x * x) * x)", "label": "true"}
+{"id": "hard3_0362", "difficulty": "hard", "hypothesis": "x * x = y * ((z * z) * x)", "goal": "x * y = z * (w * (z * y))", "label": "false"}
+{"id": "hard3_0363", "difficulty": "hard", "hypothesis": "x * x = y * ((z * z) * w)", "goal": "x * x = ((y * z) * z) * y", "label": "false"}
+{"id": "hard3_0364", "difficulty": "hard", "hypothesis": "x * y = x * ((x * z) * x)", "goal": "x * (y * x) = x * (z * z)", "label": "true"}
+{"id": "hard3_0365", "difficulty": "hard", "hypothesis": "x * y = x * ((z * z) * x)", "goal": "x * y = x * (y * y)", "label": "true"}
+{"id": "hard3_0366", "difficulty": "hard", "hypothesis": "x * y = z * ((z * y) * y)", "goal": "x * x = y * ((x * x) * x)", "label": "true"}
+{"id": "hard3_0367", "difficulty": "hard", "hypothesis": "x * y = z * ((z * w) * y)", "goal": "x * y = ((z * x) * w) * y", "label": "true"}
+{"id": "hard3_0368", "difficulty": "hard", "hypothesis": "x * x = (x * y) * (y * z)", "goal": "x * y = x * (z * (z * x))", "label": "false"}
+{"id": "hard3_0369", "difficulty": "hard", "hypothesis": "x * x = (y * x) * (x * z)", "goal": "(x * y) * z = (y * w) * z", "label": "false"}
+{"id": "hard3_0370", "difficulty": "hard", "hypothesis": "x * x = (y * x) * (z * w)", "goal": "x * y = z * ((x * z) * w)", "label": "false"}
+{"id": "hard3_0371", "difficulty": "hard", "hypothesis": "x * x = (y * z) * (z * w)", "goal": "x * (y * z) = y * (x * z)", "label": "false"}
+{"id": "hard3_0372", "difficulty": "hard", "hypothesis": "x * y = (x * y) * (z * y)", "goal": "x * (y * z) = (x * x) * z", "label": "false"}
+{"id": "hard3_0373", "difficulty": "hard", "hypothesis": "x * y = (x * y) * (z * w)", "goal": "x * x = x * (y * (z * y))", "label": "false"}
+{"id": "hard3_0374", "difficulty": "hard", "hypothesis": "x * y = (x * z) * (w * z)", "goal": "x * y = (x * y) * x", "label": "true"}
+{"id": "hard3_0375", "difficulty": "hard", "hypothesis": "x * y = (y * z) * (y * y)", "goal": "x * y = ((x * y) * z) * y", "label": "true"}
+{"id": "hard3_0376", "difficulty": "hard", "hypothesis": "x * y = (z * x) * (y * z)", "goal": "x * (x * y) = x * (y * x)", "label": "true"}
+{"id": "hard3_0377", "difficulty": "hard", "hypothesis": "x * y = (z * x) * (w * y)", "goal": "x * y = (z * y) * y", "label": "false"}
+{"id": "hard3_0378", "difficulty": "hard", "hypothesis": "x * y = (z * y) * (z * y)", "goal": "x * y = (z * w) * (w * y)", "label": "true"}
+{"id": "hard3_0379", "difficulty": "hard", "hypothesis": "x * y = (z * w) * (u * y)", "goal": "x * (y * x) = x * (z * x)", "label": "true"}
+{"id": "hard3_0380", "difficulty": "hard", "hypothesis": "x * x = (y * (y * x)) * z", "goal": "x * (x * x) = x * (y * y)", "label": "true"}
+{"id": "hard3_0381", "difficulty": "hard", "hypothesis": "x * y = (x * (z * y)) * w", "goal": "x * y = (x * (z * x)) * z", "label": "true"}
+{"id": "hard3_0382", "difficulty": "hard", "hypothesis": "x * y = (x * (z * w)) * x", "goal": "x * (y * y) = x * (y * z)", "label": "true"}
+{"id": "hard3_0383", "difficulty": "hard", "hypothesis": "x * y = (y * (z * x)) * y", "goal": "x * y = ((y * y) * y) * y", "label": "false"}
+{"id": "hard3_0384", "difficulty": "hard", "hypothesis": "x * x = ((y * x) * z) * z", "goal": "x * x = (y * z) * (y * z)", "label": "true"}
+{"id": "hard3_0385", "difficulty": "hard", "hypothesis": "x * x = ((y * y) * z) * w", "goal": "x * x = (x * x) * x", "label": "true"}
+{"id": "hard3_0386", "difficulty": "hard", "hypothesis": "x * x = ((y * z) * z) * z", "goal": "x * x = (x * x) * x", "label": "true"}
+{"id": "hard3_0387", "difficulty": "hard", "hypothesis": "x * y = ((x * z) * x) * w", "goal": "x * y = ((x * y) * z) * z", "label": "true"}
+{"id": "hard3_0388", "difficulty": "hard", "hypothesis": "x * y = ((z * x) * w) * y", "goal": "x * y = (z * x) * y", "label": "true"}
+{"id": "hard3_0389", "difficulty": "hard", "hypothesis": "x * y = ((z * y) * z) * y", "goal": "x * (y * z) = y * (x * z)", "label": "true"}
+{"id": "hard3_0390", "difficulty": "hard", "hypothesis": "x * y = ((z * y) * w) * y", "goal": "x * y = ((x * z) * w) * y", "label": "true"}
+{"id": "hard3_0391", "difficulty": "hard", "hypothesis": "x * (x * x) = (y * z) * y", "goal": "(x * y) * z = (y * x) * z", "label": "false"}
+{"id": "hard3_0392", "difficulty": "hard", "hypothesis": "x * (x * y) = (x * z) * w", "goal": "x * (y * x) = (x * x) * y", "label": "false"}
+{"id": "hard3_0393", "difficulty": "hard", "hypothesis": "x * (x * y) = (y * z) * w", "goal": "(x * x) * y = (z * z) * w", "label": "true"}
+{"id": "hard3_0394", "difficulty": "hard", "hypothesis": "x * (y * z) = (y * y) * x", "goal": "x * y = z * (w * (y * u))", "label": "false"}
+{"id": "hard3_0395", "difficulty": "hard", "hypothesis": "x * (y * z) = (z * y) * y", "goal": "x * (x * x) = y * (z * y)", "label": "true"}
+{"id": "hard3_0396", "difficulty": "hard", "hypothesis": "x * (y * z) = (w * x) * y", "goal": "x * (y * z) = (x * w) * y", "label": "true"}
+{"id": "hard3_0397", "difficulty": "hard", "hypothesis": "x * (y * z) = (w * w) * y", "goal": "x * (x * y) = z * (y * w)", "label": "true"}
+{"id": "hard3_0398", "difficulty": "hard", "hypothesis": "x * (y * z) = (w * w) * y", "goal": "x * (y * y) = y * (x * x)", "label": "true"}
+{"id": "hard3_0399", "difficulty": "hard", "hypothesis": "x * (y * z) = (w * u) * x", "goal": "(x * x) * y = (z * w) * y", "label": "true"}
+{"id": "hard3_0400", "difficulty": "hard", "hypothesis": "x * (y * z) = (w * u) * z", "goal": "(x * y) * x = (x * z) * x", "label": "true"}
