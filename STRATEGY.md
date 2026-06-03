@@ -4,7 +4,7 @@
 
 Stage 2 does **not** host our model weights. The organizer runs the LLM behind
 a proxy; our solver calls it via stdin/stdout JSON. So fine-tuning gpt-oss-20b
-on our side is **wrong** — we would never ship those weights to the evaluator.
+on our side is **wrong** - we would never ship those weights to the evaluator.
 
 What we **do** ship: a single `solver.py` ≤ 500 KB containing prompt template,
 cheatsheet, deterministic search code, and the strategy ladder below.
@@ -23,7 +23,7 @@ layers go first to spend tokens only when needed.
 | **L2** | Mace4-style brute-force counterexample, orders 2-5 | 0 | 1-30s |
 | **L3** | LLM one-shot with cheatsheet (tactic ladder: rfl/decide/aesop/polyrith) | ~2k | 30s |
 | **L4** | DeepSeek-Prover-V2-style subgoal decomposition (LLM lists 3 subgoals, proves each) | ~10k | 5min |
-| **L5** | Verifier-in-loop refinement — feed Lean error back to LLM, retry K times | ~20k | rest |
+| **L5** | Verifier-in-loop refinement - feed Lean error back to LLM, retry K times | ~20k | rest |
 
 Solo per-problem budget: 3600 s / 65536 tokens / 100 KB Lean.
 Marathon per-run budget: `0.5 × N × Solo` shared across N problems.
@@ -34,21 +34,21 @@ Single metric: `val_solved_rate` on `data/dev_split.jsonl`. Tiebreaker:
 `val_tokens_per_solve` (lower is better).
 
 Each generation:
-1. **autoresearch** (every 5 gens) — scan arXiv, score abstracts, write
+1. **autoresearch** (every 5 gens) - scan arXiv, score abstracts, write
    `evolve/autoresearch/proposals.jsonl`.
-2. **Agent57.select()** — UCB1-tuned + windowed mean (w=8) + novelty bonus
+2. **Agent57.select()** - UCB1-tuned + windowed mean (w=8) + novelty bonus
    over 22 core arms + dynamic autoresearch arms.
-3. **arm.apply(repo_root)** — mutate `solver/`, `train.py`, flag files.
+3. **arm.apply(repo_root)** - mutate `solver/`, `train.py`, flag files.
 4. **git commit** "gen{N}: try arm={name}".
-5. **train.py --smoke --budget-sec 300** — calibration pass: run solver
+5. **train.py --smoke --budget-sec 300** - calibration pass: run solver
    against `train_split.jsonl` (up to budget), cache accepted proofs into
    `proofs/accepted/<hash>.lean`.
-6. **eval.py --split dev --limit 50** — solver against dev_split via
+6. **eval.py --split dev --limit 50** - solver against dev_split via
    subprocess; eval harness plays both LLM proxy and Lean judge roles.
    Prints `SOLVED_RATE=<float>`.
 7. **Decision**: if `Δ rate ≥ 0.5pp`, KEEP commit; else `git reset --hard
    pre_sha`.
-8. **Agent57.update(arm, reward=Δ)** — bandit learns.
+8. **Agent57.update(arm, reward=Δ)** - bandit learns.
 9. **Log** to `evolve/results.tsv` (gen, arm, before, after, kept, commit).
 
 ## Stop criteria
@@ -72,7 +72,7 @@ Each generation:
 `curriculum_hard` (hard1 only).
 
 **Reward shaping:** `reward_shaping_{on,off}` (partial credit for `incorrect`
-vs `unparsed` — risk of reward hacking, monitor).
+vs `unparsed` - risk of reward hacking, monitor).
 
 **Dynamic (autoresearch):** New arms added from arXiv proposals after manual
 or LLM-driven code-edit-agent review.

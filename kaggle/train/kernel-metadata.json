@@ -1,7 +1,7 @@
 {
-  "id": "pedroafonso2/lawforge-finetune-goedel",
-  "title": "lawforge-finetune-goedel",
-  "code_file": "lawforge_finetune_goedel.ipynb",
+  "id": "pedroafonso2/lawforge-train",
+  "title": "lawforge-train",
+  "code_file": "lawforge_train.ipynb",
   "language": "python",
   "kernel_type": "notebook",
   "is_private": "true",

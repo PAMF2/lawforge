@@ -1,7 +1,7 @@
 """Distill accepted Lean proofs into the shipped cheatsheet (Honda 2025 pattern).
 
 Inputs:  proofs/accepted/*.lean   (mined by train_grpo or by the Karpathy loop)
-Output:  solver/cheatsheet.md     (overwritten — gets re-emitted with pattern blocks)
+Output:  solver/cheatsheet.md     (overwritten - gets re-emitted with pattern blocks)
 
 Strategy (single-pass, deterministic):
   1. Group accepted proofs by their dominant tactic chain (rfl / decide / aesop / calc / refine).
@@ -96,7 +96,7 @@ def distill(
     n_proofs = sum(len(v) for v in groups.values())
     if n_proofs == 0:
         print(
-            f"[distill] no valid Lean blocks in {accepted_dir} — preserving seed {out}"
+            f"[distill] no valid Lean blocks in {accepted_dir} - preserving seed {out}"
         )
         return
     lines = ["# Lawforge Cheatsheet (distilled from accepted proofs)\n"]

@@ -28,7 +28,7 @@ def _load_split(name: str, limit: int) -> list[dict]:
     p = next((c for c in candidates if c.exists()), None)
     if p is None:
         sys.stderr.write(
-            f"missing data file for split={name} — run scripts/prep_data.py first\n"
+            f"missing data file for split={name} - run scripts/prep_data.py first\n"
         )
         sys.exit(1)
     rows = []
@@ -127,7 +127,7 @@ def main() -> None:
             print(f"  {a.get('id')} verdict={a.get('verdict')} code_bytes={code_len}")
 
         if false_n == 0:
-            sys.stderr.write("WARN: zero FALSE answers — counterex pass empty\n")
+            sys.stderr.write("WARN: zero FALSE answers - counterex pass empty\n")
 
 
 if __name__ == "__main__":

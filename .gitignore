@@ -53,6 +53,5 @@ kaggle/smoke/lawforge_smoke.ipynb
 kaggle/marathon_smoke/lawforge_smoke_marathon.ipynb
 # kaggle marathon hard2 kernel (hardcoded HF token, local-only)
 kaggle/marathon_hard2/lawforge_marathon_hard2.ipynb
-# kaggle QLoRA finetune kernel (hardcoded HF token, local-only)
-kaggle/finetune/lawforge_finetune_goedel.ipynb
-kaggle/art_rl/lawforge_art_rl.ipynb
+# kaggle train kernel (hardcoded HF token, local-only)
+kaggle/train/lawforge_train.ipynb

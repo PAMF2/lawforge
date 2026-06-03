@@ -73,7 +73,7 @@ def _read_line_with_deadline(proc: subprocess.Popen, deadline: float) -> str | N
 
 
 def _format_history(judge_log: list[dict]) -> str:
-    """Mirror of pipeline/proxy.py _format_history — used to fill the
+    """Mirror of pipeline/proxy.py _format_history - used to fill the
     {history.attempts} placeholder in solver.PROMPT during local eval."""
     if not judge_log:
         return "(no prior attempts)"

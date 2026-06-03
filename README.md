@@ -1,6 +1,6 @@
 # lawforge
 
-Self-evolving Lean 4 prover for the SAIR Mathematics Distillation Challenge — Equational Theories, Stage 2.
+Self-evolving Lean 4 prover for the SAIR Mathematics Distillation Challenge - Equational Theories, Stage 2.
 
 Forge proofs of equational laws on magmas. Karpathy Loop outer driver + Agent57 bandit meta-controller + autoresearch arXiv scanner = open-ended evolution targeting `solved_rate` on the held-out hard split.
 
@@ -100,13 +100,13 @@ Strategy: lawforge optimizes the **cheatsheet + prompt + tactic library** to shi
 
 ## References
 
-- DeepSeek-Prover-V2 (arXiv:2504.21801) — subgoal decomposition + RL
-- Kimina-Prover Preview (arXiv:2504.11354) — `<think>` blocks + GRPO + Lean server
-- Leanabell-Prover-V2 (arXiv:2507.08649) — verifier-integrated reasoning
-- ETP (arXiv:2512.07087) — 22M magma implications, Lean formalization
-- Honda+ "Cheat-sheet ICL" (arXiv:2509.20820) — Stage 2 inspiration
-- Agent57 (arXiv:2003.13350) — meta-controller bandit
-- Karpathy Loop — minimal automated-research outer driver
+- DeepSeek-Prover-V2 (arXiv:2504.21801) - subgoal decomposition + RL
+- Kimina-Prover Preview (arXiv:2504.11354) - `<think>` blocks + GRPO + Lean server
+- Leanabell-Prover-V2 (arXiv:2507.08649) - verifier-integrated reasoning
+- ETP (arXiv:2512.07087) - 22M magma implications, Lean formalization
+- Honda+ "Cheat-sheet ICL" (arXiv:2509.20820) - Stage 2 inspiration
+- Agent57 (arXiv:2003.13350) - meta-controller bandit
+- Karpathy Loop - minimal automated-research outer driver
 
 ## License
 

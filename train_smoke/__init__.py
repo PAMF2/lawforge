@@ -1,4 +1,4 @@
-"""Calibration pass — not LLM training.
+"""Calibration pass - not LLM training.
 
 Pivot: Stage 2 doesn't host our weights. The eval model is the organizer's.
 So we don't GRPO our own model. Instead, this script runs the current solver

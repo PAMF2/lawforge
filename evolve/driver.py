@@ -68,7 +68,7 @@ def run_smoke(budget_sec: int) -> None:
     )
     if r is None:
         print(
-            f"[driver] train.py exceeded {TRAIN_HARD_CAP_S}s — killed pg",
+            f"[driver] train.py exceeded {TRAIN_HARD_CAP_S}s - killed pg",
             file=sys.stderr,
         )
 
@@ -96,7 +96,7 @@ def run_eval(gen: int = 0) -> float:
     r = _run_with_pg_kill(argv, EVAL_HARD_CAP_S)
     if r is None:
         print(
-            f"[driver] eval.py exceeded {EVAL_HARD_CAP_S}s — killed pg, using 0.0",
+            f"[driver] eval.py exceeded {EVAL_HARD_CAP_S}s - killed pg, using 0.0",
             file=sys.stderr,
         )
         return 0.0
@@ -105,7 +105,7 @@ def run_eval(gen: int = 0) -> float:
             return float(line.split("=", 1)[1])
     if os.environ.get("LAWFORGE_EVAL_VERBOSE", "0") == "1":
         print(
-            "[driver] eval produced no SOLVED_RATE — last 60 lines of stdout:",
+            "[driver] eval produced no SOLVED_RATE - last 60 lines of stdout:",
             file=sys.stderr,
         )
         for line in r.stdout.splitlines()[-60:]:

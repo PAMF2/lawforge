@@ -2,7 +2,7 @@
 
 For one TRUE problem and one FALSE problem from the dev split, this script:
   1. Builds an upstream-canonical Lean submission *by hand* (no model in the
-     loop) — exact bytes match equational-theories-lean-stage2/examples/solo/
+     loop) - exact bytes match equational-theories-lean-stage2/examples/solo/
      demos/baseline/solver.py:make_true_code / make_false_code.
   2. Builds the same submission via our wrappers (_wrap_true_submission /
      emit_lean_counterex) and our _normalize_lean_code / _to_diamond path.

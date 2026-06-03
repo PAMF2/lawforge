@@ -79,7 +79,7 @@ _PROSE_HEAD_RE = re.compile(
 )
 # Find ```lean4 / ```Lean4 / ```lean fences; case-insensitive on the tag.
 # Use a non-greedy body and re.DOTALL so newlines are captured. We will
-# pick the LAST match — Goedel emits a CoT scratch block first sometimes,
+# pick the LAST match - Goedel emits a CoT scratch block first sometimes,
 # the final fence is the one that holds the real submission.
 _FENCE_RE = re.compile(
     r"```(?:lean4?|Lean4?)\s*\n?(.*?)```",
@@ -151,13 +151,13 @@ def extract_body(text: str) -> str:
 
     fences = _FENCE_RE.findall(s)
     if fences:
-        # LAST fence wins — earlier ones are usually CoT scratch.
+        # LAST fence wins - earlier ones are usually CoT scratch.
         body = fences[-1]
         body = _strip_goedel_wrapper(body)
         body = _strip_leading_prose(body)
         return body.strip() or "sorry"
 
-    # No fence — fall back to raw-text prose stripping. Still try to strip
+    # No fence - fall back to raw-text prose stripping. Still try to strip
     # the wrapper in case the model emitted it without a fence.
     body = _strip_goedel_wrapper(s)
     body = _strip_leading_prose(body)

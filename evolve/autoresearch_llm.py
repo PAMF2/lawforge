@@ -98,7 +98,7 @@ Constraints:
 - file in {sorted(ALLOWED_FILES)}.
 - op in {sorted(ALLOWED_OPS)}; replace only if current content clearly broken.
 - payload: if file=cheatsheet.md, ONE Lean tactic-body snippet inside a ```lean
-  fence (NO `theorem`, NO `import`, NO `def submission` header — just the body).
+  fence (NO `theorem`, NO `import`, NO `def submission` header - just the body).
   if file=prompt_template.txt, terse English rules (no Lean code).
 - prefer append. Be minimal. One mutation.
 """

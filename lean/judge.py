@@ -165,7 +165,7 @@ def judge(
 
 
 def _mock_judge(lean_code: str) -> Verdict:
-    """Heuristic mock — TESTS ONLY. Never called from production paths
+    """Heuristic mock - TESTS ONLY. Never called from production paths
     (judge / judge_or_score raise instead). Kept for unit-test fixtures
     that explicitly import _mock_judge."""
     if "sorry" in lean_code or "admit" in lean_code:

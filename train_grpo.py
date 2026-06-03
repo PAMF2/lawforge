@@ -5,8 +5,8 @@ drives K rollouts per problem and saves accepted ones.
 
 Outputs
 =======
-- proofs/accepted/<hash>.lean — accepted candidate proofs (cheatsheet corpus).
-- proofs/grpo_log.jsonl       — per-step training log.
+- proofs/accepted/<hash>.lean - accepted candidate proofs (cheatsheet corpus).
+- proofs/grpo_log.jsonl       - per-step training log.
 """
 
 import argparse
