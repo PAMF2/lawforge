@@ -1,0 +1,15 @@
+{
+  "id": "pedroafonso2/lawforge-harvest-v2",
+  "title": "lawforge-harvest-v2",
+  "code_file": "lawforge_harvest_v2.ipynb",
+  "language": "python",
+  "kernel_type": "notebook",
+  "is_private": "true",
+  "enable_gpu": "true",
+  "enable_tpu": "false",
+  "enable_internet": "true",
+  "dataset_sources": [],
+  "competition_sources": [],
+  "kernel_sources": ["pedroafonso2/lawforge-finetune-etp-v2"],
+  "model_sources": []
+}
