@@ -1,0 +1,15 @@
+{
+  "id": "pedroafonso2/lawforge-verify-smoke",
+  "title": "lawforge-verify-smoke",
+  "code_file": "lawforge_verify_smoke.ipynb",
+  "language": "python",
+  "kernel_type": "notebook",
+  "is_private": "true",
+  "enable_gpu": "false",
+  "enable_tpu": "false",
+  "enable_internet": "true",
+  "dataset_sources": [],
+  "competition_sources": [],
+  "kernel_sources": ["pedroafonso2/lawforge-harvest-v2"],
+  "model_sources": []
+}
