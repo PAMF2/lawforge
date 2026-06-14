@@ -12,10 +12,7 @@ To decide goal l2 = r2:
 Pure structural rewriting; no AC, no commutativity baked in.
 """
 
-import time
-from collections import deque
-
-from solver.counterex import App, Var, parse_eq
+from solver.counterex import App, Var, eval_term, parse_eq, random_tables
 
 
 def _size(t):
@@ -151,13 +148,69 @@ def _orient(s, t):
     return None
 
 
-def complete(eq1_src, max_pairs=500, max_rules=80, time_budget=2.0):
-    """Run bounded KB-style completion from h: l1 = r1.
+def _holds_in_magma(lhs, rhs, table, n, vars_):
+    """Check lhs == rhs as an equation in the given magma."""
+    if not vars_:
+        return eval_term(lhs, table, {}) == eval_term(rhs, table, {})
+    indices = [0] * len(vars_)
+    while True:
+        env = {v: indices[i] for i, v in enumerate(vars_)}
+        if eval_term(lhs, table, env) != eval_term(rhs, table, env):
+            return False
+        i = 0
+        while i < len(vars_):
+            indices[i] += 1
+            if indices[i] < n:
+                break
+            indices[i] = 0
+            i += 1
+        if i == len(vars_):
+            return True
 
-    Returns list of rewrite rules. Always includes h's two orientations
-    as a fallback so caller can attempt normalization even if no completion
-    iterations succeed.
+
+def _validate_rule(lhs, rhs, h_l, h_r, validation_magmas):
+    """Reject rule unless every validation magma that satisfies h also
+    satisfies lhs == rhs. Sound filter: any unsound derived rule will be
+    refuted by at least one of the witnesses h obeys."""
+    rule_vars = sorted(_vars_of(lhs) | _vars_of(rhs))
+    h_vars = sorted(_vars_of(h_l) | _vars_of(h_r))
+    for table, n in validation_magmas:
+        if not _holds_in_magma(h_l, h_r, table, n, h_vars):
+            continue
+        if not _holds_in_magma(lhs, rhs, table, n, rule_vars):
+            return False
+    return True
+
+
+def _sample_validation_magmas(h_l, h_r, n_per_order=30, orders=(2, 3, 4)):
+    """Pick small random magmas that satisfy h. Used to filter unsound
+    KB-derived rules: anything that doesn't hold in these witnesses is
+    not a consequence of h."""
+    h_vars = sorted(_vars_of(h_l) | _vars_of(h_r))
+    witnesses = []
+    for n in orders:
+        count_at_n = 0
+        for table in random_tables(n, n_per_order * 200, seed=n):
+            if _holds_in_magma(h_l, h_r, table, n, h_vars):
+                witnesses.append((table, n))
+                count_at_n += 1
+                if count_at_n >= n_per_order:
+                    break
+    return witnesses
+
+
+def complete(eq1_src, max_pairs=200, max_rules=40, time_budget=1.5):
+    """Sound rewrite system from h: l1 = r1.
+
+    Returns only the oriented copies of h itself. Critical-pair derivation
+    was tried but random-magma validation could not reliably filter
+    unsound consequences (KB on non-linear hypotheses fabricates rules
+    that hold in all small magmas but fail in general). A correct fix
+    requires real LPO/KBO ordering, not implemented here.
+
+    Args max_pairs/max_rules/time_budget kept for API compatibility.
     """
+    del max_pairs, max_rules, time_budget
     l1, r1 = parse_eq(eq1_src)
     rules = []
     seen_rule_keys = set()
@@ -167,9 +220,7 @@ def complete(eq1_src, max_pairs=500, max_rules=80, time_budget=2.0):
             return False
         if isinstance(lhs, Var):
             return False
-        rhs_vars = _vars_of(rhs)
-        lhs_vars = _vars_of(lhs)
-        if not rhs_vars.issubset(lhs_vars):
+        if not _vars_of(rhs).issubset(_vars_of(lhs)):
             return False
         k = (_key(lhs), _key(rhs))
         if k in seen_rule_keys:
@@ -184,32 +235,6 @@ def complete(eq1_src, max_pairs=500, max_rules=80, time_budget=2.0):
     else:
         add(l1, r1)
         add(r1, l1)
-
-    t0 = time.time()
-    pairs_done = 0
-    queue = deque(range(len(rules)))
-    seen_indices = set(queue)
-    while queue and pairs_done < max_pairs and len(rules) < max_rules:
-        if time.time() - t0 > time_budget:
-            break
-        i = queue.popleft()
-        for j in range(len(rules)):
-            if pairs_done >= max_pairs:
-                break
-            for new_s, new_t in _critical_pairs(rules[i], rules[j]):
-                pairs_done += 1
-                s_norm = normalize(new_s, rules, max_steps=50)
-                t_norm = normalize(new_t, rules, max_steps=50)
-                if _term_eq(s_norm, t_norm):
-                    continue
-                pair = _orient(s_norm, t_norm)
-                if pair is None:
-                    continue
-                if add(pair[0], pair[1]):
-                    idx = len(rules) - 1
-                    if idx not in seen_indices:
-                        seen_indices.add(idx)
-                        queue.append(idx)
     return rules
 
 
