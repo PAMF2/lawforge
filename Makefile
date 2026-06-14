@@ -30,6 +30,16 @@ loop:
 lint:
 	ruff check evolve/ lean/ tests/ scripts/ solver/ || true
 
+submission:
+	mkdir -p dist
+	cd dist && rm -f lawforge_solo.zip && \
+	  zip -rq lawforge_solo.zip ../solver/ -x "*/__pycache__/*"
+	@du -h dist/lawforge_solo.zip
+
+eval-dev:
+	LAWFORGE_ALLOW_MOCK=1 $(PY) -m eval_harness --split dev --limit 200 \
+	  --workers 4 --timeout 60
+
 clean:
 	find . -type d -name __pycache__ -exec rm -rf {} + 2>/dev/null || true
 	rm -rf .pytest_cache .ruff_cache .mypy_cache
