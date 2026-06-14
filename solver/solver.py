@@ -21,6 +21,7 @@ from pathlib import Path
 
 from solver.counterex import emit_lean_counterex, search_counterex
 from solver.extract import extract_body as _extract_body
+from solver.proof_search import emit_lean_proof, search_proof
 from solver.proxy_client import call_llm_context, submit_judge
 
 HERE = Path(__file__).resolve().parent
@@ -100,6 +101,12 @@ def l1_syntactic(eq1: str, eq2: str) -> str | None:
     if eq1.replace(" ", "") == eq2.replace(" ", ""):
         return _wrap_true_submission("exact h")
     return None
+
+
+def l1_5_proof_search(eq1: str, eq2: str, max_depth: int = 4) -> str | None:
+    """Layer 1.5: bounded BFS rewrite search. Free, deterministic, true-side."""
+    ok, _depth, trace = search_proof(eq1, eq2, max_depth=max_depth, time_budget=1.5)
+    return _wrap_true_submission(emit_lean_proof(trace)) if ok else None
 
 
 def l2_counterex(eq1: str, eq2: str, max_order: int = 4) -> str | None:
@@ -251,6 +258,12 @@ def solve(problem: dict) -> dict:
         return {**v, "verdict": verdict, "code": code}
 
     code = l1_syntactic(eq1, eq2)
+    if code:
+        v = submit_judge("true", code)
+        if v.get("status") == "accepted":
+            return _accept("true", code, v)
+
+    code = l1_5_proof_search(eq1, eq2)
     if code:
         v = submit_judge("true", code)
         if v.get("status") == "accepted":
