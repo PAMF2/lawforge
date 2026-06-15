@@ -1,6 +1,5 @@
 """Unit tests for solver.solver L3+ layers and helpers."""
 
-import json
 from unittest.mock import patch
 
 from solver.solver import (

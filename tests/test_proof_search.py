@@ -28,5 +28,7 @@ def test_emit_lean_proof_steps():
 
 def test_depth_zero_budget_unprovable():
     # tiny budget forces termination without finding any rewrite
-    ok, depth, trace = search_proof("a*b = c", "(a*b)*c = d", max_depth=0, time_budget=0.1)
+    ok, depth, trace = search_proof(
+        "a*b = c", "(a*b)*c = d", max_depth=0, time_budget=0.1
+    )
     assert not ok and depth is None and trace is None
