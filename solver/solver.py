@@ -19,10 +19,11 @@ import sys
 import time
 from pathlib import Path
 
-from solver.counterex import emit_lean_counterex, search_counterex
+from solver.counterex import CounterEx, emit_lean_counterex, search_counterex
 from solver.extract import extract_body as _extract_body
 from solver.proof_search import emit_lean_proof, search_proof
 from solver.proxy_client import call_llm_context, submit_judge
+from solver.structured_ce import search_structured
 
 HERE = Path(__file__).resolve().parent
 _RAW_PROMPT_TPL = (HERE / "prompt_template.txt").read_text()
@@ -113,6 +114,17 @@ def l2_counterex(eq1: str, eq2: str, max_order: int = 4) -> str | None:
     """Layer 2: brute force finite-magma counterexample. Free, deterministic."""
     ce = search_counterex(eq1, eq2, max_order=max_order)
     return emit_lean_counterex(ce, eq1, eq2) if ce else None
+
+
+def l2_5_structured_ce(eq1: str, eq2: str) -> str | None:
+    """Layer 2.5: structured magma database. Catches false implications
+    that random order-4 search misses (Latin squares, projections, cyclic
+    groups, etc). Pure deterministic, 100% precision empirically."""
+    hit = search_structured(eq1, eq2)
+    if hit is None:
+        return None
+    table, n = hit
+    return emit_lean_counterex(CounterEx(order=n, table=table), eq1, eq2)
 
 
 def _llm_text(context: dict) -> str:
@@ -276,7 +288,12 @@ def solve(problem: dict) -> dict:
             if v.get("status") == "accepted":
                 return _accept("false", ce_code, v)
         else:
-            ce_hint = f"no counterex on Fin 2..{MAX_ORDER}"
+            ce_code = l2_5_structured_ce(eq1, eq2)
+            if ce_code:
+                v = submit_judge("false", ce_code)
+                if v.get("status") == "accepted":
+                    return _accept("false", ce_code, v)
+            ce_hint = f"no counterex on Fin 2..{MAX_ORDER} or structured zoo"
 
     code = l3_tactic_ladder(eq1, eq2, round_=rnd, ce_hint=ce_hint)
     rnd += 1
@@ -315,7 +332,9 @@ def solve(problem: dict) -> dict:
                 return _accept("true", code4, v)
             last_err = v.get("message", last_err)
 
-    ce_code = l2_counterex(eq1, eq2, max_order=MAX_ORDER)
+    ce_code = l2_counterex(eq1, eq2, max_order=MAX_ORDER) or l2_5_structured_ce(
+        eq1, eq2
+    )
     if ce_code:
         v = submit_judge("false", ce_code)
         if v.get("status") == "accepted":
