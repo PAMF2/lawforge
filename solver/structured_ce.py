@@ -82,6 +82,7 @@ def _latin_squares_4():
     """Generate all Latin squares of order 4 (576 total)."""
     rows = list(range(4))
     from itertools import permutations
+
     squares = []
     for r1 in permutations(rows):
         for r2 in permutations(rows):
@@ -97,21 +98,77 @@ def _latin_squares_4():
     return squares
 
 
+def _s3_left():
+    """Symmetric group S_3 = order 6 Cayley table (left compose).
+    Elements: e=0, (01)=1, (02)=2, (12)=3, (012)=4, (021)=5."""
+    return [
+        [0, 1, 2, 3, 4, 5],
+        [1, 0, 4, 5, 2, 3],
+        [2, 5, 0, 4, 3, 1],
+        [3, 4, 5, 0, 1, 2],
+        [4, 3, 1, 2, 5, 0],
+        [5, 2, 3, 1, 0, 4],
+    ]
+
+
+def _dihedral4():
+    """D_4 = order 8 dihedral group."""
+    n = 8
+    return [
+        [(i + j) % n if j < 4 else (i - j + 8) % n for j in range(n)] for i in range(n)
+    ]
+
+
+def _absorb_zero(n):
+    """0 absorbs: 0*x = x*0 = 0, else a*b = a."""
+    t = [[0 if i == 0 or j == 0 else i for j in range(n)] for i in range(n)]
+    return t
+
+
+def _flip(n):
+    """a*b = (n-1) - a."""
+    return [[(n - 1) - i for _ in range(n)] for i in range(n)]
+
+
+def _double(n):
+    """a*b = (2*a) mod n."""
+    return [[(2 * i) % n for _ in range(n)] for i in range(n)]
+
+
+def _double_plus(n):
+    """a*b = (a + 2*b) mod n."""
+    return [[(i + 2 * j) % n for j in range(n)] for i in range(n)]
+
+
+def _square_mul(n):
+    """a*b = (a*a + b) mod n (idempotent on squares)."""
+    return [[((i * i) + j) % n for j in range(n)] for i in range(n)]
+
+
 def _zoo():
     yield from (_const(2, c) for c in range(2))
     yield from (_const(3, c) for c in range(3))
     yield from (_const(4, c) for c in range(4))
     yield from (_const(5, c) for c in range(5))
-    for n in (2, 3, 4, 5):
+    yield from (_const(6, c) for c in range(6))
+    for n in (2, 3, 4, 5, 6, 7):
         yield _left_proj(n)
         yield _right_proj(n)
         yield _cyclic_add(n)
         yield _modular_mul(n)
         yield _diff(n)
+        yield _flip(n)
+        yield _double(n)
+        yield _double_plus(n)
+        yield _square_mul(n)
+        yield _absorb_zero(n)
     yield _xor(2)
     yield _xor(4)
     yield _klein4()
-    for n in (3, 4):
+    yield _s3_left()
+    yield _transpose(_s3_left())
+    yield _dihedral4()
+    for n in (3, 4, 5):
         for t in _idempotent_zoo(n):
             yield t
     # all order-2 magmas (16 brute)
