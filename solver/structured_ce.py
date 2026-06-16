@@ -145,13 +145,63 @@ def _square_mul(n):
     return [[((i * i) + j) % n for j in range(n)] for i in range(n)]
 
 
+def _max_op(n):
+    return [[max(i, j) for j in range(n)] for i in range(n)]
+
+
+def _min_op(n):
+    return [[min(i, j) for j in range(n)] for i in range(n)]
+
+
+def _gcd_op(n):
+    from math import gcd
+
+    return [[gcd(i, j) if (i or j) else 0 for j in range(n)] for i in range(n)]
+
+
+def _lcm_op(n):
+    from math import gcd
+
+    def lcm(a, b):
+        return 0 if a == 0 or b == 0 else (a * b) // gcd(a, b)
+
+    return [[lcm(i, j) % n for j in range(n)] for i in range(n)]
+
+
+def _quat8():
+    """Quaternion group Q_8 = {1, -1, i, -i, j, -j, k, -k}.
+    Indexed 0..7 as: 1, -1, i, -i, j, -j, k, -k."""
+    # Multiplication table for quaternion group
+    t = [
+        [0, 1, 2, 3, 4, 5, 6, 7],
+        [1, 0, 3, 2, 5, 4, 7, 6],
+        [2, 3, 1, 0, 6, 7, 5, 4],
+        [3, 2, 0, 1, 7, 6, 4, 5],
+        [4, 5, 7, 6, 1, 0, 2, 3],
+        [5, 4, 6, 7, 0, 1, 3, 2],
+        [6, 7, 4, 5, 3, 2, 1, 0],
+        [7, 6, 5, 4, 2, 3, 0, 1],
+    ]
+    return t
+
+
+def _self_inverse(n):
+    """a*b = (-a-b) mod n (a kind of inversion magma)."""
+    return [[(-i - j) % n for j in range(n)] for i in range(n)]
+
+
+def _shift_left(n, k):
+    """a*b = (a + k) mod n (constant shift, ignores b)."""
+    return [[(i + k) % n for _ in range(n)] for i in range(n)]
+
+
 def _zoo():
     yield from (_const(2, c) for c in range(2))
     yield from (_const(3, c) for c in range(3))
     yield from (_const(4, c) for c in range(4))
     yield from (_const(5, c) for c in range(5))
     yield from (_const(6, c) for c in range(6))
-    for n in (2, 3, 4, 5, 6, 7):
+    for n in (2, 3, 4, 5, 6, 7, 8, 9):
         yield _left_proj(n)
         yield _right_proj(n)
         yield _cyclic_add(n)
@@ -162,12 +212,21 @@ def _zoo():
         yield _double_plus(n)
         yield _square_mul(n)
         yield _absorb_zero(n)
+        yield _max_op(n)
+        yield _min_op(n)
+        yield _gcd_op(n)
+        yield _lcm_op(n)
+        yield _self_inverse(n)
+        for k in range(1, n):
+            yield _shift_left(n, k)
     yield _xor(2)
     yield _xor(4)
     yield _klein4()
     yield _s3_left()
     yield _transpose(_s3_left())
     yield _dihedral4()
+    yield _quat8()
+    yield _transpose(_quat8())
     for n in (3, 4, 5):
         for t in _idempotent_zoo(n):
             yield t
